@@ -35,5 +35,10 @@ namespace VectorEditor.Figures
             get;
             set;
         }
+
+        public Circle()
+        {
+
+        }
     }
 }
