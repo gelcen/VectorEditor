@@ -36,6 +36,9 @@ namespace VectorEditor.Figures
             set;
         }
 
+        /// <summary>
+        /// Конструктор
+        /// </summary>
         public Circle()
         {
 
