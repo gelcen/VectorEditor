@@ -30,6 +30,9 @@ namespace VectorEditor.Figures
             set;
         }
 
+        /// <summary>
+        /// Color of filling
+        /// </summary>
         public Color FillColor
         {
             get;
