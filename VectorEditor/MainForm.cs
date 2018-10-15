@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using VectorEditor.Drawers;
+using VectorEditor.Figures;
 
 namespace VectorEditor
 {
@@ -59,6 +61,12 @@ namespace VectorEditor
                 case Item.Polygon:
                     break;
                 case Item.Circle:
+                    float rad = (float)Math.Sqrt(Math.Pow((lx - x), 2) + Math.Pow((ly - y), 2));
+                    Circle circle = new Circle(x, y, rad, currentLineColor,
+                                              Convert.ToInt32(nudLineThickness.Value),
+                                              currentFillColor, currentLineType);
+                    CircleDrawer circleDrawer = new CircleDrawer(circle, pbCanvas);
+                    circleDrawer.Draw();
                     break;
                 case Item.Ellipse:
                     break;
@@ -119,6 +127,11 @@ namespace VectorEditor
         private void buttonCursor_Click(object sender, EventArgs e)
         {
             currentItem = Item.Cursor;
+        }
+
+        private void buttonCircle_Click(object sender, EventArgs e)
+        {
+            currentItem = Item.Circle;
         }
 
         private void pbCanvas_MouseMove(object sender, MouseEventArgs e)

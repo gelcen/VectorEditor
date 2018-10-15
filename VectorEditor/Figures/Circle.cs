@@ -78,11 +78,13 @@ namespace VectorEditor.Figures
                      float radius,
                      Color lineColor,
                      int lineThickness,
+                     Color fillColor,
                      LineType lineType)
         {
             CenterPoint = new MPoint(x, y);
             Radius = radius;
             LineColor = lineColor;
+            FillColor = fillColor;
             LineThickness = lineThickness;
             LineType = lineType;
         }
