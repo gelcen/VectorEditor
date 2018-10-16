@@ -69,6 +69,13 @@ namespace VectorEditor
                     circleDrawer.Draw();
                     break;
                 case Item.Ellipse:
+                    Ellipse ellipse = new Ellipse(x, y, lx - x, ly - y,
+                                                  currentLineColor,
+                                                  currentFillColor,
+                                                  Convert.ToInt32(nudLineThickness.Value),
+                                                  currentLineType);
+                    EllipseDrawer ellipseDrawer = new EllipseDrawer(ellipse, pbCanvas);
+                    ellipseDrawer.Draw();
                     break;
                 default:
                     break;
@@ -132,6 +139,11 @@ namespace VectorEditor
         private void buttonCircle_Click(object sender, EventArgs e)
         {
             currentItem = Item.Circle;
+        }
+
+        private void buttonEllipse_Click(object sender, EventArgs e)
+        {
+            currentItem = Item.Ellipse;
         }
 
         private void pbCanvas_MouseMove(object sender, MouseEventArgs e)

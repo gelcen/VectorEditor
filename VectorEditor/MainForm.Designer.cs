@@ -56,7 +56,7 @@
             // 
             this.pbCanvas.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.pbCanvas.Location = new System.Drawing.Point(7, 25);
-            this.pbCanvas.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.pbCanvas.Margin = new System.Windows.Forms.Padding(2);
             this.pbCanvas.Name = "pbCanvas";
             this.pbCanvas.Size = new System.Drawing.Size(551, 399);
             this.pbCanvas.TabIndex = 0;
@@ -76,9 +76,9 @@
             this.gpFigures.Controls.Add(this.buttonPolyLine);
             this.gpFigures.Controls.Add(this.buttonCursor);
             this.gpFigures.Location = new System.Drawing.Point(562, 27);
-            this.gpFigures.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.gpFigures.Margin = new System.Windows.Forms.Padding(2);
             this.gpFigures.Name = "gpFigures";
-            this.gpFigures.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.gpFigures.Padding = new System.Windows.Forms.Padding(2);
             this.gpFigures.Size = new System.Drawing.Size(227, 125);
             this.gpFigures.TabIndex = 1;
             this.gpFigures.TabStop = false;
@@ -87,17 +87,18 @@
             // buttonEllipse
             // 
             this.buttonEllipse.Location = new System.Drawing.Point(117, 85);
-            this.buttonEllipse.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonEllipse.Margin = new System.Windows.Forms.Padding(2);
             this.buttonEllipse.Name = "buttonEllipse";
             this.buttonEllipse.Size = new System.Drawing.Size(107, 31);
             this.buttonEllipse.TabIndex = 5;
             this.buttonEllipse.Text = "Эллипс";
             this.buttonEllipse.UseVisualStyleBackColor = true;
+            this.buttonEllipse.Click += new System.EventHandler(this.buttonEllipse_Click);
             // 
             // buttonCircle
             // 
             this.buttonCircle.Location = new System.Drawing.Point(4, 85);
-            this.buttonCircle.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonCircle.Margin = new System.Windows.Forms.Padding(2);
             this.buttonCircle.Name = "buttonCircle";
             this.buttonCircle.Size = new System.Drawing.Size(107, 31);
             this.buttonCircle.TabIndex = 4;
@@ -108,7 +109,7 @@
             // button4
             // 
             this.button4.Location = new System.Drawing.Point(117, 51);
-            this.button4.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.button4.Margin = new System.Windows.Forms.Padding(2);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(107, 31);
             this.button4.TabIndex = 3;
@@ -118,7 +119,7 @@
             // buttonLine
             // 
             this.buttonLine.Location = new System.Drawing.Point(117, 16);
-            this.buttonLine.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonLine.Margin = new System.Windows.Forms.Padding(2);
             this.buttonLine.Name = "buttonLine";
             this.buttonLine.Size = new System.Drawing.Size(107, 31);
             this.buttonLine.TabIndex = 2;
@@ -129,7 +130,7 @@
             // buttonPolyLine
             // 
             this.buttonPolyLine.Location = new System.Drawing.Point(4, 51);
-            this.buttonPolyLine.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonPolyLine.Margin = new System.Windows.Forms.Padding(2);
             this.buttonPolyLine.Name = "buttonPolyLine";
             this.buttonPolyLine.Size = new System.Drawing.Size(107, 31);
             this.buttonPolyLine.TabIndex = 1;
@@ -140,7 +141,7 @@
             // buttonCursor
             // 
             this.buttonCursor.Location = new System.Drawing.Point(4, 16);
-            this.buttonCursor.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonCursor.Margin = new System.Windows.Forms.Padding(2);
             this.buttonCursor.Name = "buttonCursor";
             this.buttonCursor.Size = new System.Drawing.Size(107, 31);
             this.buttonCursor.TabIndex = 0;
@@ -159,9 +160,9 @@
             this.gpProps.Controls.Add(this.label2);
             this.gpProps.Controls.Add(this.label1);
             this.gpProps.Location = new System.Drawing.Point(562, 162);
-            this.gpProps.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.gpProps.Margin = new System.Windows.Forms.Padding(2);
             this.gpProps.Name = "gpProps";
-            this.gpProps.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.gpProps.Padding = new System.Windows.Forms.Padding(2);
             this.gpProps.Size = new System.Drawing.Size(227, 155);
             this.gpProps.TabIndex = 2;
             this.gpProps.TabStop = false;
@@ -174,7 +175,7 @@
             "Пунктир",
             "Сплошная"});
             this.cbLineType.Location = new System.Drawing.Point(95, 111);
-            this.cbLineType.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.cbLineType.Margin = new System.Windows.Forms.Padding(2);
             this.cbLineType.Name = "cbLineType";
             this.cbLineType.Size = new System.Drawing.Size(79, 21);
             this.cbLineType.TabIndex = 7;
@@ -185,7 +186,7 @@
             // 
             this.buttonFillColor.BackColor = System.Drawing.SystemColors.Window;
             this.buttonFillColor.Location = new System.Drawing.Point(95, 79);
-            this.buttonFillColor.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonFillColor.Margin = new System.Windows.Forms.Padding(2);
             this.buttonFillColor.Name = "buttonFillColor";
             this.buttonFillColor.Size = new System.Drawing.Size(78, 23);
             this.buttonFillColor.TabIndex = 6;
@@ -196,7 +197,7 @@
             // 
             this.buttonLineColor.BackColor = System.Drawing.Color.Black;
             this.buttonLineColor.Location = new System.Drawing.Point(95, 48);
-            this.buttonLineColor.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonLineColor.Margin = new System.Windows.Forms.Padding(2);
             this.buttonLineColor.Name = "buttonLineColor";
             this.buttonLineColor.Size = new System.Drawing.Size(78, 23);
             this.buttonLineColor.TabIndex = 5;
@@ -206,7 +207,7 @@
             // nudLineThickness
             // 
             this.nudLineThickness.Location = new System.Drawing.Point(95, 20);
-            this.nudLineThickness.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.nudLineThickness.Margin = new System.Windows.Forms.Padding(2);
             this.nudLineThickness.Maximum = new decimal(new int[] {
             50,
             0,
@@ -274,7 +275,7 @@
             this.Controls.Add(this.gpProps);
             this.Controls.Add(this.gpFigures);
             this.Controls.Add(this.pbCanvas);
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "MainForm";
             this.Text = "VectorEditor";
             ((System.ComponentModel.ISupportInitialize)(this.pbCanvas)).EndInit();
