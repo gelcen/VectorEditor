@@ -146,6 +146,12 @@ namespace VectorEditor
             currentItem = Item.Ellipse;
         }
 
+        private void buttonClearCanvas_Click(object sender, EventArgs e)
+        {
+            currentItem = Item.Cursor;
+            pbCanvas.Image = null;
+        }
+
         private void pbCanvas_MouseMove(object sender, MouseEventArgs e)
         {
 

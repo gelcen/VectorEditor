@@ -32,7 +32,7 @@
             this.gpFigures = new System.Windows.Forms.GroupBox();
             this.buttonEllipse = new System.Windows.Forms.Button();
             this.buttonCircle = new System.Windows.Forms.Button();
-            this.button4 = new System.Windows.Forms.Button();
+            this.buttonPolygone = new System.Windows.Forms.Button();
             this.buttonLine = new System.Windows.Forms.Button();
             this.buttonPolyLine = new System.Windows.Forms.Button();
             this.buttonCursor = new System.Windows.Forms.Button();
@@ -46,6 +46,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.colorDialogLineColor = new System.Windows.Forms.ColorDialog();
+            this.buttonClearCanvas = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pbCanvas)).BeginInit();
             this.gpFigures.SuspendLayout();
             this.gpProps.SuspendLayout();
@@ -55,10 +56,10 @@
             // pbCanvas
             // 
             this.pbCanvas.BackColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.pbCanvas.Location = new System.Drawing.Point(7, 25);
+            this.pbCanvas.Location = new System.Drawing.Point(3, 27);
             this.pbCanvas.Margin = new System.Windows.Forms.Padding(2);
             this.pbCanvas.Name = "pbCanvas";
-            this.pbCanvas.Size = new System.Drawing.Size(551, 399);
+            this.pbCanvas.Size = new System.Drawing.Size(648, 505);
             this.pbCanvas.TabIndex = 0;
             this.pbCanvas.TabStop = false;
             this.pbCanvas.Click += new System.EventHandler(this.pbCanvas_Click);
@@ -69,24 +70,25 @@
             // 
             // gpFigures
             // 
+            this.gpFigures.Controls.Add(this.buttonClearCanvas);
             this.gpFigures.Controls.Add(this.buttonEllipse);
             this.gpFigures.Controls.Add(this.buttonCircle);
-            this.gpFigures.Controls.Add(this.button4);
+            this.gpFigures.Controls.Add(this.buttonPolygone);
             this.gpFigures.Controls.Add(this.buttonLine);
             this.gpFigures.Controls.Add(this.buttonPolyLine);
             this.gpFigures.Controls.Add(this.buttonCursor);
-            this.gpFigures.Location = new System.Drawing.Point(562, 27);
+            this.gpFigures.Location = new System.Drawing.Point(668, 11);
             this.gpFigures.Margin = new System.Windows.Forms.Padding(2);
             this.gpFigures.Name = "gpFigures";
             this.gpFigures.Padding = new System.Windows.Forms.Padding(2);
-            this.gpFigures.Size = new System.Drawing.Size(227, 125);
+            this.gpFigures.Size = new System.Drawing.Size(227, 180);
             this.gpFigures.TabIndex = 1;
             this.gpFigures.TabStop = false;
             this.gpFigures.Text = "Инструменты";
             // 
             // buttonEllipse
             // 
-            this.buttonEllipse.Location = new System.Drawing.Point(117, 85);
+            this.buttonEllipse.Location = new System.Drawing.Point(117, 51);
             this.buttonEllipse.Margin = new System.Windows.Forms.Padding(2);
             this.buttonEllipse.Name = "buttonEllipse";
             this.buttonEllipse.Size = new System.Drawing.Size(107, 31);
@@ -106,15 +108,15 @@
             this.buttonCircle.UseVisualStyleBackColor = true;
             this.buttonCircle.Click += new System.EventHandler(this.buttonCircle_Click);
             // 
-            // button4
+            // buttonPolygone
             // 
-            this.button4.Location = new System.Drawing.Point(117, 51);
-            this.button4.Margin = new System.Windows.Forms.Padding(2);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(107, 31);
-            this.button4.TabIndex = 3;
-            this.button4.Text = "Многоугольник";
-            this.button4.UseVisualStyleBackColor = true;
+            this.buttonPolygone.Location = new System.Drawing.Point(4, 120);
+            this.buttonPolygone.Margin = new System.Windows.Forms.Padding(2);
+            this.buttonPolygone.Name = "buttonPolygone";
+            this.buttonPolygone.Size = new System.Drawing.Size(107, 31);
+            this.buttonPolygone.TabIndex = 3;
+            this.buttonPolygone.Text = "Многоугольник";
+            this.buttonPolygone.UseVisualStyleBackColor = true;
             // 
             // buttonLine
             // 
@@ -159,7 +161,7 @@
             this.gpProps.Controls.Add(this.label3);
             this.gpProps.Controls.Add(this.label2);
             this.gpProps.Controls.Add(this.label1);
-            this.gpProps.Location = new System.Drawing.Point(562, 162);
+            this.gpProps.Location = new System.Drawing.Point(668, 195);
             this.gpProps.Margin = new System.Windows.Forms.Padding(2);
             this.gpProps.Name = "gpProps";
             this.gpProps.Padding = new System.Windows.Forms.Padding(2);
@@ -267,11 +269,21 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Толщина линии:";
             // 
+            // buttonClearCanvas
+            // 
+            this.buttonClearCanvas.Location = new System.Drawing.Point(117, 85);
+            this.buttonClearCanvas.Name = "buttonClearCanvas";
+            this.buttonClearCanvas.Size = new System.Drawing.Size(107, 31);
+            this.buttonClearCanvas.TabIndex = 6;
+            this.buttonClearCanvas.Text = "Очистить канву";
+            this.buttonClearCanvas.UseVisualStyleBackColor = true;
+            this.buttonClearCanvas.Click += new System.EventHandler(this.buttonClearCanvas_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(797, 432);
+            this.ClientSize = new System.Drawing.Size(906, 543);
             this.Controls.Add(this.gpProps);
             this.Controls.Add(this.gpFigures);
             this.Controls.Add(this.pbCanvas);
@@ -293,7 +305,7 @@
         private System.Windows.Forms.GroupBox gpFigures;
         private System.Windows.Forms.Button buttonEllipse;
         private System.Windows.Forms.Button buttonCircle;
-        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Button buttonPolygone;
         private System.Windows.Forms.Button buttonLine;
         private System.Windows.Forms.Button buttonPolyLine;
         private System.Windows.Forms.Button buttonCursor;
@@ -307,6 +319,7 @@
         private System.Windows.Forms.Button buttonFillColor;
         private System.Windows.Forms.Button buttonLineColor;
         private System.Windows.Forms.ColorDialog colorDialogLineColor;
+        private System.Windows.Forms.Button buttonClearCanvas;
     }
 }
 
