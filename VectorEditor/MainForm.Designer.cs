@@ -55,11 +55,17 @@
             // 
             // pbCanvas
             // 
+            this.pbCanvas.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.pbCanvas.BackColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.pbCanvas.Location = new System.Drawing.Point(3, 27);
+            this.pbCanvas.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.pbCanvas.Cursor = System.Windows.Forms.Cursors.Default;
+            this.pbCanvas.Location = new System.Drawing.Point(3, 11);
             this.pbCanvas.Margin = new System.Windows.Forms.Padding(2);
             this.pbCanvas.Name = "pbCanvas";
-            this.pbCanvas.Size = new System.Drawing.Size(648, 505);
+            this.pbCanvas.Size = new System.Drawing.Size(648, 521);
+            this.pbCanvas.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pbCanvas.TabIndex = 0;
             this.pbCanvas.TabStop = false;
             this.pbCanvas.Click += new System.EventHandler(this.pbCanvas_Click);
@@ -70,6 +76,7 @@
             // 
             // gpFigures
             // 
+            this.gpFigures.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.gpFigures.Controls.Add(this.buttonClearCanvas);
             this.gpFigures.Controls.Add(this.buttonEllipse);
             this.gpFigures.Controls.Add(this.buttonCircle);
@@ -153,6 +160,7 @@
             // 
             // gpProps
             // 
+            this.gpProps.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.gpProps.Controls.Add(this.cbLineType);
             this.gpProps.Controls.Add(this.buttonFillColor);
             this.gpProps.Controls.Add(this.buttonLineColor);
