@@ -53,6 +53,7 @@
     <Compile Include="Figures\Ellipse.cs" />
     <Compile Include="Figures\IFillable.cs" />
     <Compile Include="Figures\ILineProperty.cs" />
+    <Compile Include="Figures\Polygone.cs" />
     <Compile Include="Item.cs" />
     <Compile Include="Figures\Line.cs" />
     <Compile Include="Drawers\LineDrawer.cs" />

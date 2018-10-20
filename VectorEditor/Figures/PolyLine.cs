@@ -14,12 +14,12 @@ namespace VectorEditor
     {
         public List<Point> points = new List<Point>();
 
-        public void Add(int x, int y)
+        public virtual void Add(int x, int y)
         {
             points.Add(new Point(x, y));
         }
 
-        public void SetProperties(int lineThickness, 
+        public virtual void SetProperties(int lineThickness, 
                         Color lineColor,
                         LineType lineType)
         {
