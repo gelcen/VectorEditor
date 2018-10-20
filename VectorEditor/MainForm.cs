@@ -14,12 +14,36 @@ namespace VectorEditor
 {
     public partial class MainForm : Form
     {
+        /// <summary>
+        /// Переменная для хранения текущего цвета линии
+        /// </summary>
         Color currentLineColor;
+
+        /// <summary>
+        /// Переменная для хранения текущего цвета заполнения
+        /// </summary>
         Color currentFillColor;
+
+        /// <summary>
+        /// Переменная для хранения текущего типа линии
+        /// </summary>
         LineType currentLineType;
+
         bool drawing;
+
+        /// <summary>
+        /// Начальные и конечные координаты
+        /// </summary>
         int x, y, lx, ly = 0;
+
+        /// <summary>
+        /// Текущий элемент
+        /// </summary>
         Item currentItem;
+
+        /// <summary>
+        /// Полилиния
+        /// </summary>
         PolyLine polyLine;
 
         Control draggedPiece = null;
@@ -40,6 +64,11 @@ namespace VectorEditor
             drawing = false;
         }
 
+        /// <summary>
+        /// Обработчик события в момент нажатия кнопки мыши, когда указатель над канвой
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void pbCanvas_MouseDown(object sender, MouseEventArgs e)
         {
             draggedPiece = sender as Control;
@@ -69,6 +98,11 @@ namespace VectorEditor
             this.startDraggingPoint = e.Location;                      
         }
 
+        /// <summary>
+        /// Обработчик события в момента отпускания кнопки мышки, когда указатель над канвой
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void pbCanvas_MouseUp(object sender, MouseEventArgs e)
         {
             drawing = false;
