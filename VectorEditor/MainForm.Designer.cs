@@ -30,6 +30,7 @@
         {
             this.pbCanvas = new System.Windows.Forms.PictureBox();
             this.gpFigures = new System.Windows.Forms.GroupBox();
+            this.buttonClearCanvas = new System.Windows.Forms.Button();
             this.buttonEllipse = new System.Windows.Forms.Button();
             this.buttonCircle = new System.Windows.Forms.Button();
             this.buttonPolygone = new System.Windows.Forms.Button();
@@ -46,7 +47,6 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.colorDialogLineColor = new System.Windows.Forms.ColorDialog();
-            this.buttonClearCanvas = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pbCanvas)).BeginInit();
             this.gpFigures.SuspendLayout();
             this.gpProps.SuspendLayout();
@@ -59,7 +59,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.pbCanvas.BackColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.pbCanvas.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.pbCanvas.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pbCanvas.Cursor = System.Windows.Forms.Cursors.Default;
             this.pbCanvas.Location = new System.Drawing.Point(3, 11);
             this.pbCanvas.Margin = new System.Windows.Forms.Padding(2);
@@ -92,6 +92,16 @@
             this.gpFigures.TabIndex = 1;
             this.gpFigures.TabStop = false;
             this.gpFigures.Text = "Инструменты";
+            // 
+            // buttonClearCanvas
+            // 
+            this.buttonClearCanvas.Location = new System.Drawing.Point(117, 85);
+            this.buttonClearCanvas.Name = "buttonClearCanvas";
+            this.buttonClearCanvas.Size = new System.Drawing.Size(107, 31);
+            this.buttonClearCanvas.TabIndex = 6;
+            this.buttonClearCanvas.Text = "Очистить канву";
+            this.buttonClearCanvas.UseVisualStyleBackColor = true;
+            this.buttonClearCanvas.Click += new System.EventHandler(this.buttonClearCanvas_Click);
             // 
             // buttonEllipse
             // 
@@ -276,16 +286,6 @@
             this.label1.Size = new System.Drawing.Size(89, 13);
             this.label1.TabIndex = 0;
             this.label1.Text = "Толщина линии:";
-            // 
-            // buttonClearCanvas
-            // 
-            this.buttonClearCanvas.Location = new System.Drawing.Point(117, 85);
-            this.buttonClearCanvas.Name = "buttonClearCanvas";
-            this.buttonClearCanvas.Size = new System.Drawing.Size(107, 31);
-            this.buttonClearCanvas.TabIndex = 6;
-            this.buttonClearCanvas.Text = "Очистить канву";
-            this.buttonClearCanvas.UseVisualStyleBackColor = true;
-            this.buttonClearCanvas.Click += new System.EventHandler(this.buttonClearCanvas_Click);
             // 
             // MainForm
             // 
