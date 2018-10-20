@@ -47,9 +47,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Drawers\CanvasDrawer.cs" />
+    <Compile Include="Drawers\CircleDrawer.cs" />
+    <Compile Include="Drawers\EllipseDrawer.cs" />
     <Compile Include="Figures\Circle.cs" />
+    <Compile Include="Figures\Ellipse.cs" />
     <Compile Include="Figures\IFillable.cs" />
     <Compile Include="Figures\ILineProperty.cs" />
+    <Compile Include="Figures\Polygone.cs" />
     <Compile Include="Item.cs" />
     <Compile Include="Figures\Line.cs" />
     <Compile Include="Drawers\LineDrawer.cs" />

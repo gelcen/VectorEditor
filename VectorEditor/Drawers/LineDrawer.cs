@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Drawing;
 using System.Windows.Forms;
 
 namespace VectorEditor
 {
     class LineDrawer:CanvasDrawer
     {
+        // Неизвестно, понадобится ли изменять линию после конструктора
         public Line line;
 
         public LineDrawer(Line line, PictureBox canvas)

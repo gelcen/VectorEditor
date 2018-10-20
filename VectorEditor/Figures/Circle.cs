@@ -12,6 +12,12 @@ namespace VectorEditor.Figures
     /// </summary>
     class Circle : ILineProperty, IFillable
     {
+
+        private MPoint _centerPoint;
+
+        private float _radius;
+
+
         public Color LineColor
         {
             get;
@@ -39,12 +45,48 @@ namespace VectorEditor.Figures
             set;
         }
 
+        public MPoint CenterPoint
+        {
+            get
+            {
+                return _centerPoint;
+            }
+
+            set
+            {
+                _centerPoint = value;
+            }
+        }
+
+        public float Radius
+        {
+            get
+            {
+                return _radius;
+            }
+
+            set
+            {
+                _radius = value;
+            }
+        }
+
         /// <summary>
         /// Конструктор
         /// </summary>
-        public Circle()
+        public Circle(int x, int y, 
+                     float radius,
+                     Color lineColor,
+                     int lineThickness,
+                     Color fillColor,
+                     LineType lineType)
         {
-
+            CenterPoint = new MPoint(x, y);
+            Radius = radius;
+            LineColor = lineColor;
+            FillColor = fillColor;
+            LineThickness = lineThickness;
+            LineType = lineType;
         }
     }
 }
