@@ -7,7 +7,7 @@ namespace VectorEditor.Drawers
     /// <summary>
     /// Класс для рисовки эллипса
     /// </summary>
-    class EllipseDrawer:CanvasDrawer
+    class EllipseDrawer:Drawer
     {
         /// <summary>
         /// Эллипс

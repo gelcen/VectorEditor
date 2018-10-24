@@ -11,8 +11,11 @@ namespace VectorEditor
     /// <summary>
     /// Класс для рисовки
     /// </summary>
-    class CanvasDrawer
+    class Drawer
     {
+        /// <summary>
+        /// Убрать свойство
+        /// </summary>
         public PictureBox Canvas
         {
             get;

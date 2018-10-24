@@ -3,7 +3,7 @@ using System.Windows.Forms;
 
 namespace VectorEditor
 {
-    class LineDrawer:CanvasDrawer
+    class LineDrawer:Drawer
     {
         // Неизвестно, понадобится ли изменять линию после конструктора
         public Line line;

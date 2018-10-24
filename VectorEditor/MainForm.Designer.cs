@@ -47,10 +47,12 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.colorDialogLineColor = new System.Windows.Forms.ColorDialog();
+            this.nudVertexCount = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.pbCanvas)).BeginInit();
             this.gpFigures.SuspendLayout();
             this.gpProps.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudLineThickness)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudVertexCount)).BeginInit();
             this.SuspendLayout();
             // 
             // pbCanvas
@@ -77,6 +79,7 @@
             // gpFigures
             // 
             this.gpFigures.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.gpFigures.Controls.Add(this.nudVertexCount);
             this.gpFigures.Controls.Add(this.buttonClearCanvas);
             this.gpFigures.Controls.Add(this.buttonEllipse);
             this.gpFigures.Controls.Add(this.buttonCircle);
@@ -134,6 +137,7 @@
             this.buttonPolygone.TabIndex = 3;
             this.buttonPolygone.Text = "Многоугольник";
             this.buttonPolygone.UseVisualStyleBackColor = true;
+            this.buttonPolygone.Click += new System.EventHandler(this.buttonPolygone_Click);
             // 
             // buttonLine
             // 
@@ -287,6 +291,28 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Толщина линии:";
             // 
+            // nudVertexCount
+            // 
+            this.nudVertexCount.Location = new System.Drawing.Point(117, 122);
+            this.nudVertexCount.Maximum = new decimal(new int[] {
+            6,
+            0,
+            0,
+            0});
+            this.nudVertexCount.Minimum = new decimal(new int[] {
+            3,
+            0,
+            0,
+            0});
+            this.nudVertexCount.Name = "nudVertexCount";
+            this.nudVertexCount.Size = new System.Drawing.Size(47, 20);
+            this.nudVertexCount.TabIndex = 7;
+            this.nudVertexCount.Value = new decimal(new int[] {
+            3,
+            0,
+            0,
+            0});
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -303,6 +329,7 @@
             this.gpProps.ResumeLayout(false);
             this.gpProps.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudLineThickness)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudVertexCount)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -328,6 +355,7 @@
         private System.Windows.Forms.Button buttonLineColor;
         private System.Windows.Forms.ColorDialog colorDialogLineColor;
         private System.Windows.Forms.Button buttonClearCanvas;
+        private System.Windows.Forms.NumericUpDown nudVertexCount;
     }
 }
 

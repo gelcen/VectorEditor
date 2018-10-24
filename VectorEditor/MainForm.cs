@@ -46,6 +46,11 @@ namespace VectorEditor
         /// </summary>
         PolyLine polyLine;
 
+        /// <summary>
+        /// Многоугольник
+        /// </summary>
+        Polygone polygone;
+
         Control draggedPiece = null;
         bool resizing = false;
         private Point startDraggingPoint;
@@ -73,8 +78,9 @@ namespace VectorEditor
         {
             draggedPiece = sender as Control;
 
-            if ((e.X <= resizingMargin) || (e.X >= draggedPiece.Width - resizingMargin) ||
-                (e.Y <= resizingMargin) || (e.Y >= draggedPiece.Height - resizingMargin))
+            if (((e.X <= resizingMargin) || (e.X >= draggedPiece.Width - resizingMargin) ||
+                (e.Y <= resizingMargin) || (e.Y >= draggedPiece.Height - resizingMargin)) 
+                && (currentItem == Item.Cursor))
             {
                 resizing = true;
 
@@ -120,7 +126,8 @@ namespace VectorEditor
                 }
                 else
                 {
-                    this.draggedPiece.Size = new Size((int)Math.Max(10, rectProposedSize.Width), Math.Max(10, rectProposedSize.Height));
+                    this.draggedPiece.Size = new Size((int)Math.Max(10, rectProposedSize.Width), 
+                        Math.Max(10, rectProposedSize.Height));
                 }
             }            
             switch (currentItem)
@@ -184,6 +191,26 @@ namespace VectorEditor
                 PolyLineDrawer drawer = new PolyLineDrawer(polyLine, pbCanvas);
                 drawer.Draw();
             }
+            else if (currentItem == Item.Polygon)
+            {
+                x = e.X;
+                y = e.Y;
+                polygone = new Polygone(Convert.ToInt32(nudVertexCount.Value),
+                                    Convert.ToInt32(nudVertexCount.Value),
+                                    currentLineColor,
+                                    currentLineType,
+                                    currentFillColor);                              
+                if (polygone.points.Count < polygone.PointsCount)
+                {
+                    polygone.Add(x, y);
+                }
+                else if (polygone.points.Count == polygone.PointsCount)
+                {
+                    PolygoneDrawer polygoneDrawer = new PolygoneDrawer(polygone, pbCanvas);
+                    polygoneDrawer.Draw();
+                    currentItem = Item.Cursor;
+                }
+            }
             else
             {
                 polyLine = new PolyLine();
@@ -239,6 +266,13 @@ namespace VectorEditor
         private void pbCanvas_Paint(object sender, PaintEventArgs e)
         {
             pbCanvas.Invalidate();
+        }
+
+        private void buttonPolygone_Click(object sender, EventArgs e)
+        {
+            currentItem = Item.Polygon;
+            
+
         }
 
         private void pbCanvas_MouseMove(object sender, MouseEventArgs e)

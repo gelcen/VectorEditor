@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 namespace VectorEditor
 {
-    class PolyLineDrawer:CanvasDrawer
+    class PolyLineDrawer:Drawer
     {
         public PolyLine polyLine;
 
@@ -29,17 +29,13 @@ namespace VectorEditor
                 {
                     if (i == polyLine.points.Count-2)
                     {
-                        g.DrawLine(pen, new Point(polyLine.points[i].X,
+                        g.DrawLine(pen, new PointF(polyLine.points[i].X,
                                     polyLine.points[i].Y),
-                            new Point(polyLine.points[i + 1].X,
+                            new PointF(polyLine.points[i + 1].X,
                                     polyLine.points[i + 1].Y));
                         g.Dispose();
                     }                    
                 }
-                //foreach (var Point in polyLine.points)
-                //{
-                //    if 
-                //}
             }
         }
     }

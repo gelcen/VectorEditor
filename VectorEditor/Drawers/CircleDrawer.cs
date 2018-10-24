@@ -9,7 +9,7 @@ using VectorEditor.Figures;
 
 namespace VectorEditor.Drawers
 {
-    class CircleDrawer:CanvasDrawer
+    class CircleDrawer:Drawer
     {
         Circle circle;
 

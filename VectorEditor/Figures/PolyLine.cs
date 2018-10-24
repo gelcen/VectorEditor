@@ -12,7 +12,7 @@ namespace VectorEditor
     /// </summary>
     class PolyLine:ILineProperty
     {
-        public List<Point> points = new List<Point>();
+        public List<PointF> points = new List<PointF>();
 
         public virtual void Add(int x, int y)
         {
