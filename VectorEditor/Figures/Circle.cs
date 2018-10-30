@@ -10,42 +10,22 @@ namespace VectorEditor.Figures
     /// <summary>
     /// Класс для окружности
     /// </summary>
-    class Circle : ILineProperty, IFillable
+    class Circle : Figure
     {
-
-        private MPoint _centerPoint;
-
-        private float _radius;
-
-
-        public Color LineColor
-        {
-            get;
-            set;
-        }
-
-        public int LineThickness
-        {
-            get;
-            set;
-        }
-
-        public LineType LineType
-        {
-            get;
-            set;
-        }
+        /// <summary>
+        /// Центральная точка окружности
+        /// </summary>
+        private PointF _centerPoint;
 
         /// <summary>
-        /// Color of filling
+        /// Радиус
         /// </summary>
-        public Color FillColor
-        {
-            get;
-            set;
-        }
+        private float _radius;       
 
-        public MPoint CenterPoint
+        /// <summary>
+        /// Свойство для центральной точки
+        /// </summary>
+        public PointF CenterPoint
         {
             get
             {
@@ -58,6 +38,9 @@ namespace VectorEditor.Figures
             }
         }
 
+        /// <summary>
+        /// Свойство для радиуса
+        /// </summary>
         public float Radius
         {
             get
@@ -72,21 +55,19 @@ namespace VectorEditor.Figures
         }
 
         /// <summary>
-        /// Конструктор
+        /// Установка параметров
         /// </summary>
-        public Circle(int x, int y, 
+        public void SetParameters(float x, float y, 
                      float radius,
                      Color lineColor,
                      int lineThickness,
                      Color fillColor,
                      LineType lineType)
         {
-            CenterPoint = new MPoint(x, y);
+            CenterPoint = new PointF(x, y);
             Radius = radius;
-            LineColor = lineColor;
             FillColor = fillColor;
-            LineThickness = lineThickness;
-            LineType = lineType;
+            SetLineParameters(lineColor, lineThickness, lineType);
         }
     }
 }

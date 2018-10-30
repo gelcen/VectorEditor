@@ -51,6 +51,10 @@ namespace VectorEditor
         /// </summary>
         Polygone polygone;
 
+        List<PointF> points;
+
+        Figure figure;
+
         Control draggedPiece = null;
         bool resizing = false;
         private Point startDraggingPoint;
@@ -67,6 +71,7 @@ namespace VectorEditor
             currentItem = Item.Cursor;
             polyLine = new PolyLine();
             drawing = false;
+
         }
 
         /// <summary>
@@ -133,10 +138,11 @@ namespace VectorEditor
             switch (currentItem)
             {
                 case Item.Line:
-                    Line line = new Line(x, y, lx, ly, 
+                    Figure line = FigureFactory.CreateFigure(Item.Line);
+                    line = FigureFactory.SetParameters(line, x, y, lx, ly, 
                                         Convert.ToInt32(nudLineThickness.Value), 
                                         currentLineColor, currentLineType);
-                    LineDrawer lineDrawer = new LineDrawer(line, pbCanvas);
+                    LineDrawer lineDrawer = new LineDrawer((Line)line, pbCanvas);
                     lineDrawer.Draw();
                     break;
                 case Item.Polyline:
@@ -145,19 +151,21 @@ namespace VectorEditor
                     break;
                 case Item.Circle:
                     float rad = (float)Math.Sqrt(Math.Pow((lx - x), 2) + Math.Pow((ly - y), 2));
-                    Circle circle = new Circle(x, y, rad, currentLineColor,
+                    Figure circle = FigureFactory.CreateFigure(Item.Circle);
+                    circle = FigureFactory.SetParameters(circle, x, y, rad, currentLineColor,
                                               Convert.ToInt32(nudLineThickness.Value),
                                               currentFillColor, currentLineType);
-                    CircleDrawer circleDrawer = new CircleDrawer(circle, pbCanvas);
+                    CircleDrawer circleDrawer = new CircleDrawer((Circle)circle, pbCanvas);
                     circleDrawer.Draw();
                     break;
                 case Item.Ellipse:
-                    Ellipse ellipse = new Ellipse(x, y, lx - x, ly - y,
+                    Figure ellipse = FigureFactory.CreateFigure(Item.Ellipse);
+                    ellipse = FigureFactory.SetParameters(ellipse, x, y, lx - x, ly - y,
                                                   currentLineColor,
                                                   currentFillColor,
                                                   Convert.ToInt32(nudLineThickness.Value),
                                                   currentLineType);
-                    EllipseDrawer ellipseDrawer = new EllipseDrawer(ellipse, pbCanvas);
+                    EllipseDrawer ellipseDrawer = new EllipseDrawer((Ellipse)ellipse, pbCanvas);
                     ellipseDrawer.Draw();
                     break;
                 default:
@@ -185,21 +193,23 @@ namespace VectorEditor
             {
                 x = e.X;
                 y = e.Y;
-                polyLine.SetProperties(Convert.ToInt32(nudLineThickness.Value),
-                                        currentLineColor, currentLineType);
-                polyLine.Add(x, y);
-                PolyLineDrawer drawer = new PolyLineDrawer(polyLine, pbCanvas);
+                points.Add(new PointF(x, y));
+                figure = FigureFactory.SetParameters(figure, points,
+                                                    Convert.ToInt32(nudLineThickness.Value),
+                                                    currentLineColor, currentLineType);                
+                PolyLineDrawer drawer = new PolyLineDrawer((PolyLine)figure, pbCanvas);
                 drawer.Draw();
             }
             else if (currentItem == Item.Polygon)
             {
                 x = e.X;
                 y = e.Y;
-                polygone = new Polygone(Convert.ToInt32(nudVertexCount.Value),
-                                    Convert.ToInt32(nudVertexCount.Value),
-                                    currentLineColor,
-                                    currentLineType,
-                                    currentFillColor);                              
+
+                //polygone = new Polygone(Convert.ToInt32(nudVertexCount.Value),
+                //                    Convert.ToInt32(nudVertexCount.Value),
+                //                    currentLineColor,
+                //                    currentLineType,
+                //                    currentFillColor);                              
                 if (polygone.points.Count < polygone.PointsCount)
                 {
                     polygone.Add(x, y);
@@ -214,12 +224,16 @@ namespace VectorEditor
             else
             {
                 polyLine = new PolyLine();
+                figure = null;
+                points.Clear();
             }
         }
 
         private void buttonPolyLine_Click(object sender, EventArgs e)
         {
             currentItem = Item.Polyline;
+            figure = FigureFactory.CreateFigure(Item.Polyline);
+            points = new List<PointF>();
         }
 
         private void cbLineType_SelectedIndexChanged(object sender, EventArgs e)
