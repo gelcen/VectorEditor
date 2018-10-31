@@ -21,8 +21,8 @@ namespace VectorEditor.Drawers
 
         public override void Draw()
         {
-            int x = circle.CenterPoint.X;
-            int y = circle.CenterPoint.Y;
+            float x = circle.CenterPoint.X;
+            float y = circle.CenterPoint.Y;
             float rad = circle.Radius;
             
             Graphics g = Canvas.CreateGraphics();

@@ -32,7 +32,8 @@ namespace VectorEditor.Figures
         {
             PointsCount = pointsCount;
             FillColor = fillColor;
-            SetLineParameters(lineColor, lineThickness, lineType);            
+            SetLineParameters(lineColor, lineThickness, lineType);     
+                   
         }
 
         /// <summary>

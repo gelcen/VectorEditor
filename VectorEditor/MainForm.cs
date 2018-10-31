@@ -70,6 +70,7 @@ namespace VectorEditor
             currentLineType = LineType.Solid;
             currentItem = Item.Cursor;
             polyLine = new PolyLine();
+            
             drawing = false;
 
         }
@@ -218,14 +219,17 @@ namespace VectorEditor
                 {
                     PolygoneDrawer polygoneDrawer = new PolygoneDrawer(polygone, pbCanvas);
                     polygoneDrawer.Draw();
-                    currentItem = Item.Cursor;
+                    //currentItem = Item.Cursor;
                 }
             }
             else
             {
                 polyLine = new PolyLine();
                 figure = null;
-                points.Clear();
+                if (points != null)
+                {
+                    points.Clear();
+                }
             }
         }
 
@@ -285,7 +289,10 @@ namespace VectorEditor
         private void buttonPolygone_Click(object sender, EventArgs e)
         {
             currentItem = Item.Polygon;
-            
+            polygone = new Polygone();
+            polygone.SetParameters(Convert.ToInt32(nudVertexCount.Value),
+                Convert.ToInt32(nudLineThickness.Value), currentLineColor,
+                currentLineType, currentFillColor);
 
         }
 
