@@ -19,8 +19,8 @@ namespace VectorEditor
             Graphics g = Canvas.CreateGraphics();
             Pen pen = new Pen(line.LineColor, line.LineThickness);
             PickLineType(line.LineType, pen);
-            g.DrawLine(pen, new Point(line.A.X, line.A.Y), 
-                            new Point(line.B.X, line.B.Y));
+            g.DrawLine(pen, new PointF(line.A.X, line.A.Y), 
+                            new PointF(line.B.X, line.B.Y));
             g.Dispose();
         }
     }
