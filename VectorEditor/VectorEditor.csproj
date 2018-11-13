@@ -70,6 +70,8 @@
     <Compile Include="Figures\MPoint.cs" />
     <Compile Include="Figures\PolyLine.cs" />
     <Compile Include="Drawers\PolyLineDrawer.cs" />
+    <Compile Include="Model\IModel.cs" />
+    <Compile Include="Model\FigureModel.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="MainForm.resx">

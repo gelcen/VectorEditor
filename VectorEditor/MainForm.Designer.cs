@@ -30,6 +30,7 @@
         {
             this.pbCanvas = new System.Windows.Forms.PictureBox();
             this.gpFigures = new System.Windows.Forms.GroupBox();
+            this.nudVertexCount = new System.Windows.Forms.NumericUpDown();
             this.buttonClearCanvas = new System.Windows.Forms.Button();
             this.buttonEllipse = new System.Windows.Forms.Button();
             this.buttonCircle = new System.Windows.Forms.Button();
@@ -47,19 +48,15 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.colorDialogLineColor = new System.Windows.Forms.ColorDialog();
-            this.nudVertexCount = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.pbCanvas)).BeginInit();
             this.gpFigures.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudVertexCount)).BeginInit();
             this.gpProps.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudLineThickness)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudVertexCount)).BeginInit();
             this.SuspendLayout();
             // 
             // pbCanvas
             // 
-            this.pbCanvas.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.pbCanvas.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.pbCanvas.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pbCanvas.Cursor = System.Windows.Forms.Cursors.Default;
@@ -67,14 +64,12 @@
             this.pbCanvas.Margin = new System.Windows.Forms.Padding(2);
             this.pbCanvas.Name = "pbCanvas";
             this.pbCanvas.Size = new System.Drawing.Size(648, 521);
-            this.pbCanvas.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pbCanvas.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pbCanvas.TabIndex = 0;
             this.pbCanvas.TabStop = false;
             this.pbCanvas.Click += new System.EventHandler(this.pbCanvas_Click);
-            this.pbCanvas.MouseClick += new System.Windows.Forms.MouseEventHandler(this.pbCanvas_MouseClick);
             this.pbCanvas.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pbCanvas_MouseDown);
             this.pbCanvas.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pbCanvas_MouseMove);
-            this.pbCanvas.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pbCanvas_MouseUp);
             // 
             // gpFigures
             // 
@@ -95,6 +90,28 @@
             this.gpFigures.TabIndex = 1;
             this.gpFigures.TabStop = false;
             this.gpFigures.Text = "Инструменты";
+            // 
+            // nudVertexCount
+            // 
+            this.nudVertexCount.Location = new System.Drawing.Point(117, 122);
+            this.nudVertexCount.Maximum = new decimal(new int[] {
+            6,
+            0,
+            0,
+            0});
+            this.nudVertexCount.Minimum = new decimal(new int[] {
+            3,
+            0,
+            0,
+            0});
+            this.nudVertexCount.Name = "nudVertexCount";
+            this.nudVertexCount.Size = new System.Drawing.Size(47, 20);
+            this.nudVertexCount.TabIndex = 7;
+            this.nudVertexCount.Value = new decimal(new int[] {
+            3,
+            0,
+            0,
+            0});
             // 
             // buttonClearCanvas
             // 
@@ -291,28 +308,6 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Толщина линии:";
             // 
-            // nudVertexCount
-            // 
-            this.nudVertexCount.Location = new System.Drawing.Point(117, 122);
-            this.nudVertexCount.Maximum = new decimal(new int[] {
-            6,
-            0,
-            0,
-            0});
-            this.nudVertexCount.Minimum = new decimal(new int[] {
-            3,
-            0,
-            0,
-            0});
-            this.nudVertexCount.Name = "nudVertexCount";
-            this.nudVertexCount.Size = new System.Drawing.Size(47, 20);
-            this.nudVertexCount.TabIndex = 7;
-            this.nudVertexCount.Value = new decimal(new int[] {
-            3,
-            0,
-            0,
-            0});
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -324,12 +319,13 @@
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "MainForm";
             this.Text = "VectorEditor";
+            this.SizeChanged += new System.EventHandler(this.MainForm_SizeChanged);
             ((System.ComponentModel.ISupportInitialize)(this.pbCanvas)).EndInit();
             this.gpFigures.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.nudVertexCount)).EndInit();
             this.gpProps.ResumeLayout(false);
             this.gpProps.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudLineThickness)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudVertexCount)).EndInit();
             this.ResumeLayout(false);
 
         }
