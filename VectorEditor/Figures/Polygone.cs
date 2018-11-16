@@ -10,7 +10,7 @@ namespace VectorEditor.Figures
     /// <summary>
     /// Класс для хранения параметров многоугольника
     /// </summary>
-    class Polygone : PolyLine, IFillable
+    class Polygone : PolyLine
     {
         /// <summary>
         /// Количество вершин
@@ -18,21 +18,22 @@ namespace VectorEditor.Figures
         int _pointsCount;
 
         /// <summary>
-        /// Конструктор класса для многоугольника
+        /// Функция для установки параметров многоугольника
         /// </summary>
         /// <param name="pointsCount">Количество вершин</param>
         /// <param name="lineThickness">Толщина линии</param>
         /// <param name="lineColor">Цвет линии</param>
         /// <param name="lineType">Тип линии</param>
         /// <param name="fillColor">Цвет заливки</param>
-        public Polygone(int pointsCount, int lineThickness,
+        public void SetParameters(int pointsCount, int lineThickness,
                         Color lineColor,
                         LineType lineType,
                         Color fillColor)
         {
             PointsCount = pointsCount;
-            SetProperties(lineThickness, lineColor, lineType);
             FillColor = fillColor;
+            SetLineParameters(lineColor, lineThickness, lineType);     
+                   
         }
 
         /// <summary>
@@ -50,15 +51,6 @@ namespace VectorEditor.Figures
             {
                 throw new Exception("Количество вершин больше заданного.");
             }
-        }
-
-        /// <summary>
-        /// Свойство для цвета заливки
-        /// </summary>
-        public Color FillColor
-        {
-            get;
-            set;
         }
 
         /// <summary>

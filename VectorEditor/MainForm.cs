@@ -51,6 +51,49 @@ namespace VectorEditor
         /// </summary>
         Polygone polygone;
 
+        /// <summary>
+        /// Список точек
+        /// </summary>
+        List<PointF> points;
+
+        /// <summary>
+        /// Буффер для канваса, используется при изменении размеров формы
+        /// </summary>
+        PictureBox bufferCanvas;
+
+        /// <summary>
+        /// События прорисовки многоугольника
+        /// </summary>
+        event EventHandler polygoneDrawed;
+
+        /// <summary>
+        /// Текущий обработчик нажатия мышкой по канве
+        /// </summary>
+        MouseEventHandler currentMouseClickHandler;
+
+        /// <summary>
+        /// Отписка обработчика события нажатия на канву
+        /// </summary>
+        private void RemoveMouseClickHandler()
+        {
+            pbCanvas.MouseClick -= currentMouseClickHandler;            
+        }
+
+        /// <summary>
+        /// Текущий обработчик при отпускании кнопки мышки
+        /// </summary>
+        MouseEventHandler currentMouseUpHandler;
+
+        /// <summary>
+        /// Отписка обработчика события отпускания кнопки мышки от канвы
+        /// </summary>
+        private void RemoveMouseUpHandler()
+        {
+            pbCanvas.MouseUp -= currentMouseUpHandler;
+        }
+
+        Figure figure;
+
         Control draggedPiece = null;
         bool resizing = false;
         private Point startDraggingPoint;
@@ -65,8 +108,19 @@ namespace VectorEditor
             currentFillColor = Color.White;
             currentLineType = LineType.Solid;
             currentItem = Item.Cursor;
-            polyLine = new PolyLine();
+            polyLine = new PolyLine();           
+            bufferCanvas = new PictureBox();
+
+            currentMouseClickHandler = MouseClickCursor;         
+            pbCanvas.MouseClick += MouseClickCursor;
+
+            currentMouseUpHandler = pbCanvas_MouseUp;
+            pbCanvas.MouseUp += pbCanvas_MouseUp;
+
+            polygoneDrawed += buttonPolygone_Click;
+
             drawing = false;
+
         }
 
         /// <summary>
@@ -133,32 +187,14 @@ namespace VectorEditor
             switch (currentItem)
             {
                 case Item.Line:
-                    Line line = new Line(x, y, lx, ly, 
-                                        Convert.ToInt32(nudLineThickness.Value), 
-                                        currentLineColor, currentLineType);
-                    LineDrawer lineDrawer = new LineDrawer(line, pbCanvas);
-                    lineDrawer.Draw();
                     break;
                 case Item.Polyline:
                     break;
                 case Item.Polygon:
                     break;
                 case Item.Circle:
-                    float rad = (float)Math.Sqrt(Math.Pow((lx - x), 2) + Math.Pow((ly - y), 2));
-                    Circle circle = new Circle(x, y, rad, currentLineColor,
-                                              Convert.ToInt32(nudLineThickness.Value),
-                                              currentFillColor, currentLineType);
-                    CircleDrawer circleDrawer = new CircleDrawer(circle, pbCanvas);
-                    circleDrawer.Draw();
                     break;
                 case Item.Ellipse:
-                    Ellipse ellipse = new Ellipse(x, y, lx - x, ly - y,
-                                                  currentLineColor,
-                                                  currentFillColor,
-                                                  Convert.ToInt32(nudLineThickness.Value),
-                                                  currentLineType);
-                    EllipseDrawer ellipseDrawer = new EllipseDrawer(ellipse, pbCanvas);
-                    ellipseDrawer.Draw();
                     break;
                 default:
                     break;
@@ -174,9 +210,84 @@ namespace VectorEditor
             
         }
 
+        private void MouseClickCursor(object sender, MouseEventArgs e)
+        {
+            
+        }
+
+        private void MouseUpCursor(object sender, MouseEventArgs e)
+        {
+
+        }
+
         private void buttonLine_Click(object sender, EventArgs e)
         {
+            RemoveMouseUpHandler();
+            pbCanvas.MouseUp += MouseUpLine;
+            currentMouseUpHandler = MouseUpLine;
             currentItem = Item.Line;
+        }
+
+        private void MouseUpLine(object sender, MouseEventArgs e)
+        {
+            lx = e.X;
+            ly = e.Y;
+            Figure line = FigureFactory.CreateFigure(Item.Line);
+            line = FigureFactory.SetParameters(line, x, y, lx, ly,
+                                Convert.ToInt32(nudLineThickness.Value),
+                                currentLineColor, currentLineType);
+            LineDrawer lineDrawer = new LineDrawer((Line)line, pbCanvas);
+            lineDrawer.Draw();
+            CopyCanvas();
+        }
+
+        /// <summary>
+        /// Обработчик события нажатия по канве для инструмента "Полилиния"
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void MouseClickPolyline(object sender, MouseEventArgs e)
+        {
+            x = e.X;
+            y = e.Y;
+            points.Add(new PointF(x, y));
+            figure = FigureFactory.SetParameters(figure, points,
+                                                    Convert.ToInt32(nudLineThickness.Value),
+                                                    currentLineColor, currentLineType);
+            PolyLineDrawer drawer = new PolyLineDrawer((PolyLine)figure, pbCanvas);
+            drawer.Draw();
+        }
+
+        /// <summary>
+        /// Обработчик события нажатия по канве для инструмента "Полигон"
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void MouseClickPolygone(object sender, MouseEventArgs e)
+        {
+            x = e.X;
+            y = e.Y;
+
+            //polygone = new Polygone(Convert.ToInt32(nudVertexCount.Value),
+            //                    Convert.ToInt32(nudVertexCount.Value),
+            //                    currentLineColor,
+            //                    currentLineType,
+            //                    currentFillColor);                              
+            if (polygone.points.Count < polygone.PointsCount)
+            {
+                polygone.Add(x, y);
+            }
+            else if (polygone.points.Count == polygone.PointsCount)
+            {
+                PolygoneDrawer polygoneDrawer = new PolygoneDrawer(polygone, pbCanvas);
+                polygoneDrawer.Draw();
+                if (polygoneDrawed != null)
+                {
+                    polygoneDrawed(sender, e);
+                }
+                CopyCanvas();
+                //currentItem = Item.Cursor;
+            }
         }
 
         private void pbCanvas_MouseClick(object sender, MouseEventArgs e)
@@ -185,21 +296,28 @@ namespace VectorEditor
             {
                 x = e.X;
                 y = e.Y;
-                polyLine.SetProperties(Convert.ToInt32(nudLineThickness.Value),
-                                        currentLineColor, currentLineType);
-                polyLine.Add(x, y);
-                PolyLineDrawer drawer = new PolyLineDrawer(polyLine, pbCanvas);
+                points.Add(new PointF(x, y));
+                figure = FigureFactory.SetParameters(figure, points,
+                                                    Convert.ToInt32(nudLineThickness.Value),
+                                                    currentLineColor, currentLineType);                
+                PolyLineDrawer drawer = new PolyLineDrawer((PolyLine)figure, pbCanvas);
                 drawer.Draw();
             }
             else if (currentItem == Item.Polygon)
             {
                 x = e.X;
                 y = e.Y;
-                polygone = new Polygone(Convert.ToInt32(nudVertexCount.Value),
-                                    Convert.ToInt32(nudVertexCount.Value),
-                                    currentLineColor,
-                                    currentLineType,
-                                    currentFillColor);                              
+
+                //polygone = new Polygone(Convert.ToInt32(nudVertexCount.Value),
+                //                    Convert.ToInt32(nudVertexCount.Value),
+                //                    currentLineColor,
+                //                    currentLineType,
+                //                    currentFillColor);      
+                polygone = new Polygone();
+                polygone.SetParameters(Convert.ToInt32(nudVertexCount.Value),
+                    Convert.ToInt32(nudLineThickness.Value), currentLineColor,
+                    currentLineType, currentFillColor);
+                //TODO Сделать событие нажатия на кнопку многоугольника заново, после рисовки многоугольника
                 if (polygone.points.Count < polygone.PointsCount)
                 {
                     polygone.Add(x, y);
@@ -208,18 +326,57 @@ namespace VectorEditor
                 {
                     PolygoneDrawer polygoneDrawer = new PolygoneDrawer(polygone, pbCanvas);
                     polygoneDrawer.Draw();
-                    currentItem = Item.Cursor;
+                    //currentItem = Item.Cursor;
                 }
             }
             else
             {
                 polyLine = new PolyLine();
+                figure = null;
+                if (points != null)
+                {
+                    points.Clear();
+                }
             }
         }
 
+        /// <summary>
+        /// Обработчик нажатия по кнопке "Полилиния"
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void buttonPolyLine_Click(object sender, EventArgs e)
         {
+            RemoveMouseClickHandler();
+            RemoveMouseUpHandler();
             currentItem = Item.Polyline;
+
+            figure = FigureFactory.CreateFigure(Item.Polyline);
+            points = new List<PointF>();  
+                      
+            pbCanvas.MouseClick += MouseClickPolyline;
+            currentMouseClickHandler = MouseClickPolyline;
+        }
+
+        /// <summary>
+        /// Обработчик нажатия по кнопке "Многоугольник"
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void buttonPolygone_Click(object sender, EventArgs e)
+        {
+            RemoveMouseClickHandler();
+            RemoveMouseUpHandler();
+            currentItem = Item.Polygon;
+
+            polygone = new Polygone();
+            polygone.SetParameters(Convert.ToInt32(nudVertexCount.Value),
+                Convert.ToInt32(nudLineThickness.Value), currentLineColor,
+                currentLineType, currentFillColor);
+
+            pbCanvas.MouseClick += MouseClickPolygone;
+            currentMouseClickHandler = MouseClickPolygone;
+
         }
 
         private void cbLineType_SelectedIndexChanged(object sender, EventArgs e)
@@ -237,19 +394,87 @@ namespace VectorEditor
             }
         }
 
+        /// <summary>
+        /// Обработчик события нажатия на кнопку "Указатель"
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void buttonCursor_Click(object sender, EventArgs e)
         {
+            RemoveMouseClickHandler();
+            currentMouseClickHandler = MouseClickCursor;
+
+            RemoveMouseUpHandler();
+            currentMouseUpHandler = pbCanvas_MouseUp;
+
             currentItem = Item.Cursor;
         }
 
+        /// <summary>
+        /// Обработчик события нажатия на кнопку "Окружность"
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void buttonCircle_Click(object sender, EventArgs e)
         {
+            RemoveMouseUpHandler();
+            RemoveMouseClickHandler();
+            pbCanvas.MouseUp += MouseUpCircle;
+            currentMouseUpHandler = MouseUpCircle;
             currentItem = Item.Circle;
         }
 
+        /// <summary>
+        /// Обработчик события отпускания кнопки мышки для инструмента "Окружность"
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void MouseUpCircle(object sender, MouseEventArgs e)
+        {
+            lx = e.X;
+            ly = e.Y;
+            float rad = (float)Math.Sqrt(Math.Pow((lx - x), 2) + Math.Pow((ly - y), 2));
+            Figure circle = FigureFactory.CreateFigure(Item.Circle);
+            circle = FigureFactory.SetParameters(circle, x, y, rad, currentLineColor,
+                                      Convert.ToInt32(nudLineThickness.Value),
+                                      currentFillColor, currentLineType);
+            CircleDrawer circleDrawer = new CircleDrawer((Circle)circle, pbCanvas);
+            circleDrawer.Draw();
+            CopyCanvas();
+        }
+
+        /// <summary>
+        /// Обработчик события нажатия на кнопку "Эллипс"
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void buttonEllipse_Click(object sender, EventArgs e)
         {
+            RemoveMouseUpHandler();
+            RemoveMouseClickHandler();
+            pbCanvas.MouseUp += MouseUpEllipse;
+            currentMouseUpHandler = MouseUpEllipse;
             currentItem = Item.Ellipse;
+        }
+
+        /// <summary>
+        /// Обработчик события отпускания кнопки мышки для инструмента "Эллипс"
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void MouseUpEllipse(object sender, MouseEventArgs e)
+        {
+            lx = e.X;
+            ly = e.Y;
+            Figure ellipse = FigureFactory.CreateFigure(Item.Ellipse);
+            ellipse = FigureFactory.SetParameters(ellipse, x, y, lx - x, ly - y,
+                                          currentLineColor,
+                                          currentFillColor,
+                                          Convert.ToInt32(nudLineThickness.Value),
+                                          currentLineType);
+            EllipseDrawer ellipseDrawer = new EllipseDrawer((Ellipse)ellipse, pbCanvas);
+            ellipseDrawer.Draw();
+            CopyCanvas();
         }
 
         private void buttonClearCanvas_Click(object sender, EventArgs e)
@@ -268,11 +493,12 @@ namespace VectorEditor
             pbCanvas.Invalidate();
         }
 
-        private void buttonPolygone_Click(object sender, EventArgs e)
+        
+        private void MainForm_SizeChanged(object sender, EventArgs e)
         {
-            currentItem = Item.Polygon;
-            
-
+            pbCanvas.Image = bufferCanvas.Image;
+            pbCanvas.Refresh();
+            pbCanvas.Invalidate();
         }
 
         private void pbCanvas_MouseMove(object sender, MouseEventArgs e)
@@ -292,6 +518,19 @@ namespace VectorEditor
             }
         }
 
+        /// <summary>
+        /// Копирования изображения канваса, нужна для MainForm_SizeChanged
+        /// </summary>
+        private void CopyCanvas()
+        {
+            bufferCanvas.Image = pbCanvas.Image;
+        }
+
+        /// <summary>
+        /// Обработчик события выбора цвета линии
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void buttonLineColor_Click(object sender, EventArgs e)
         {
             if (colorDialogLineColor.ShowDialog()==DialogResult.OK)
@@ -301,6 +540,11 @@ namespace VectorEditor
             }
         }
 
+        /// <summary>
+        /// Обработчик события выбора цвета заливки
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void buttonFillColor_Click(object sender, EventArgs e)
         {
             if(colorDialogLineColor.ShowDialog()==DialogResult.OK)

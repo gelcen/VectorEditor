@@ -10,48 +10,27 @@ namespace VectorEditor.Figures
     /// <summary>
     /// Класс, содержащий параметры эллипса
     /// </summary>
-    class Ellipse : ILineProperty, IFillable
+    class Ellipse : Figure
     {
         /// <summary>
         /// Координаты верхнего левого угла
         /// </summary>
-        MPoint _A;
+        PointF _a;
 
         /// <summary>
         /// Ширина прямоугольника, описывающего эллипс
         /// </summary>
-        int width;
+        float width;
 
         /// <summary>
         /// Высота прямоугольника, описывающего эллипс
         /// </summary>
-        int height;
+        float height;
 
-        public Color FillColor
-        {
-            get;
-            set;
-        }
-
-        public Color LineColor
-        {
-            get;
-            set;
-        }
-
-        public int LineThickness
-        {
-            get;
-            set;
-        }
-
-        public LineType LineType
-        {
-            get;
-            set;
-        }
-
-        public int Width
+        /// <summary>
+        /// Свойство для ширины
+        /// </summary>
+        public float Width
         {
             get
             {
@@ -64,7 +43,10 @@ namespace VectorEditor.Figures
             }
         }
 
-        public int Height
+        /// <summary>
+        /// Свойство для высоты
+        /// </summary>
+        public float Height
         {
             get
             {
@@ -77,21 +59,24 @@ namespace VectorEditor.Figures
             }
         }
 
-        public MPoint A
+        /// <summary>
+        /// Свойство для точки
+        /// </summary>
+        public PointF A
         {
             get
             {
-                return _A;
+                return _a;
             }
 
             set
             {
-                _A = value;
+                _a = value;
             }
         }
 
         /// <summary>
-        /// Конструктор класса Эллипс
+        /// Установка свойств
         /// </summary>
         /// <param name="x">Координата х верхнего левого угла</param>
         /// <param name="y">Координата у верхнего левого угла</param>
@@ -101,17 +86,15 @@ namespace VectorEditor.Figures
         /// <param name="fillColor">Цвет заливки</param>
         /// <param name="lineThickness">Толщина линии</param>
         /// <param name="lineType">Тип линии</param>
-        public Ellipse(int x, int y, int width, int height,
+        public void SetParameters(float x, float y, float width, float height,
                        Color lineColor, Color fillColor,
                        int lineThickness, LineType lineType)
         {
-            A = new MPoint(x, y);
+            A = new PointF(x, y);
             Width = width;
-            Height = height;
-            LineColor = lineColor;
+            Height = height;            
             FillColor = fillColor;
-            LineThickness = lineThickness;
-            LineType = lineType;
+            SetLineParameters(lineColor, lineThickness, lineType);            
         }
     }
 }

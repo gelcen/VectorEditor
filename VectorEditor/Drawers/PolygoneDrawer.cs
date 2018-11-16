@@ -50,12 +50,15 @@ namespace VectorEditor.Drawers
         /// </summary>
         public override void Draw()
         {
-            Graphics g = Canvas.CreateGraphics();
-            Pen pen = new Pen(polygone.LineColor, polygone.LineThickness);
-            PickLineType(polygone.LineType, pen);
-            PointF[] pointsArray = ConvertPoints(polygone.points);           
-            g.DrawPolygon(pen, pointsArray);
-            g.Dispose();
+            if (polygone.points.Count >= 3)
+            {
+                Graphics g = Canvas.CreateGraphics();
+                Pen pen = new Pen(polygone.LineColor, polygone.LineThickness);
+                PickLineType(polygone.LineType, pen);
+                PointF[] pointsArray = ConvertPoints(polygone.points);
+                g.DrawPolygon(pen, pointsArray);
+                g.Dispose();
+            }
         }
     }
 }
