@@ -67,7 +67,6 @@
             this.pbCanvas.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pbCanvas.TabIndex = 0;
             this.pbCanvas.TabStop = false;
-            this.pbCanvas.Click += new System.EventHandler(this.pbCanvas_Click);
             this.pbCanvas.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pbCanvas_MouseDown);
             this.pbCanvas.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pbCanvas_MouseMove);
             // 
@@ -112,6 +111,7 @@
             0,
             0,
             0});
+            this.nudVertexCount.ValueChanged += new System.EventHandler(this.nudVertexCount_ValueChanged);
             // 
             // buttonClearCanvas
             // 
@@ -319,7 +319,6 @@
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "MainForm";
             this.Text = "VectorEditor";
-            this.SizeChanged += new System.EventHandler(this.MainForm_SizeChanged);
             ((System.ComponentModel.ISupportInitialize)(this.pbCanvas)).EndInit();
             this.gpFigures.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.nudVertexCount)).EndInit();

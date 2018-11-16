@@ -92,7 +92,14 @@ namespace VectorEditor
             pbCanvas.MouseUp -= currentMouseUpHandler;
         }
 
+        /// <summary>
+        /// Фигура
+        /// </summary>
         Figure figure;
+
+        /// <summary>
+        /// TODO: Вынести обработчики в отдельный класс с возможностью расширения
+        /// </summary>
 
         Control draggedPiece = null;
         bool resizing = false;
@@ -114,8 +121,8 @@ namespace VectorEditor
             currentMouseClickHandler = MouseClickCursor;         
             pbCanvas.MouseClick += MouseClickCursor;
 
-            currentMouseUpHandler = pbCanvas_MouseUp;
-            pbCanvas.MouseUp += pbCanvas_MouseUp;
+            currentMouseUpHandler = MouseUpCursor;
+            pbCanvas.MouseUp += MouseUpCursor;
 
             polygoneDrawed += buttonPolygone_Click;
 
@@ -159,11 +166,11 @@ namespace VectorEditor
         }
 
         /// <summary>
-        /// Обработчик события в момента отпускания кнопки мышки, когда указатель над канвой
+        /// Обработчик события отпускания кнопки мышки для "Курсор"
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void pbCanvas_MouseUp(object sender, MouseEventArgs e)
+        private void MouseUpCursor(object sender, MouseEventArgs e)
         {
             drawing = false;
             lx = e.X;
@@ -184,42 +191,34 @@ namespace VectorEditor
                         Math.Max(10, rectProposedSize.Height));
                 }
             }            
-            switch (currentItem)
-            {
-                case Item.Line:
-                    break;
-                case Item.Polyline:
-                    break;
-                case Item.Polygon:
-                    break;
-                case Item.Circle:
-                    break;
-                case Item.Ellipse:
-                    break;
-                default:
-                    break;
-            }
             this.draggedPiece = null;
             this.startDraggingPoint = Point.Empty;
             pbCanvas.Cursor = Cursors.Default;
             this.Cursor = Cursors.Default;
         }
 
-        private void pbCanvas_Click(object sender, EventArgs e)
-        {
-            
-        }
-
+        /// <summary>
+        /// Обработчик нажатия по канве для "Курсор"
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MouseClickCursor(object sender, MouseEventArgs e)
         {
             
         }
 
-        private void MouseUpCursor(object sender, MouseEventArgs e)
-        {
+        /// <summary>
+        /// Обработчик события отпускания кнопки мышки для "Курсор"
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
 
-        }
 
+        /// <summary>
+        /// Обработчик события нажатия на кнопку "Линия"
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void buttonLine_Click(object sender, EventArgs e)
         {
             RemoveMouseUpHandler();
@@ -228,6 +227,11 @@ namespace VectorEditor
             currentItem = Item.Line;
         }
 
+        /// <summary>
+        /// Обработчик события отпускания кнопки мышки для инструмента "Линия"
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MouseUpLine(object sender, MouseEventArgs e)
         {
             lx = e.X;
@@ -267,12 +271,7 @@ namespace VectorEditor
         {
             x = e.X;
             y = e.Y;
-
-            //polygone = new Polygone(Convert.ToInt32(nudVertexCount.Value),
-            //                    Convert.ToInt32(nudVertexCount.Value),
-            //                    currentLineColor,
-            //                    currentLineType,
-            //                    currentFillColor);                              
+                           
             if (polygone.points.Count < polygone.PointsCount)
             {
                 polygone.Add(x, y);
@@ -290,6 +289,11 @@ namespace VectorEditor
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void pbCanvas_MouseClick(object sender, MouseEventArgs e)
         {
             if (currentItem == Item.Polyline)
@@ -307,17 +311,11 @@ namespace VectorEditor
             {
                 x = e.X;
                 y = e.Y;
-
-                //polygone = new Polygone(Convert.ToInt32(nudVertexCount.Value),
-                //                    Convert.ToInt32(nudVertexCount.Value),
-                //                    currentLineColor,
-                //                    currentLineType,
-                //                    currentFillColor);      
+    
                 polygone = new Polygone();
                 polygone.SetParameters(Convert.ToInt32(nudVertexCount.Value),
                     Convert.ToInt32(nudLineThickness.Value), currentLineColor,
                     currentLineType, currentFillColor);
-                //TODO Сделать событие нажатия на кнопку многоугольника заново, после рисовки многоугольника
                 if (polygone.points.Count < polygone.PointsCount)
                 {
                     polygone.Add(x, y);
@@ -379,6 +377,11 @@ namespace VectorEditor
 
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void cbLineType_SelectedIndexChanged(object sender, EventArgs e)
         {
             switch (cbLineType.Text)
@@ -402,11 +405,15 @@ namespace VectorEditor
         private void buttonCursor_Click(object sender, EventArgs e)
         {
             RemoveMouseClickHandler();
+            pbCanvas.MouseClick += MouseClickCursor;
             currentMouseClickHandler = MouseClickCursor;
 
-            RemoveMouseUpHandler();
-            currentMouseUpHandler = pbCanvas_MouseUp;
 
+            RemoveMouseUpHandler();
+            pbCanvas.MouseUp += MouseUpCursor;
+            currentMouseUpHandler = MouseUpCursor;
+
+            pbCanvas.Cursor = Cursors.Default;
             currentItem = Item.Cursor;
         }
 
@@ -477,30 +484,22 @@ namespace VectorEditor
             CopyCanvas();
         }
 
+        /// <summary>
+        /// Обработчик события нажатия на кнопку очистки канвы
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void buttonClearCanvas_Click(object sender, EventArgs e)
         {
             currentItem = Item.Cursor;
             pbCanvas.Image = null;
         }
 
-        private void pbCanvas_SizeChanged(object sender, EventArgs e)
-        {
-            pbCanvas.Invalidate();
-        }
-
-        private void pbCanvas_Paint(object sender, PaintEventArgs e)
-        {
-            pbCanvas.Invalidate();
-        }
-
-        
-        private void MainForm_SizeChanged(object sender, EventArgs e)
-        {
-            pbCanvas.Image = bufferCanvas.Image;
-            pbCanvas.Refresh();
-            pbCanvas.Invalidate();
-        }
-
+        /// <summary>
+        /// Обработчик события движения указателя мышки над канвой
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void pbCanvas_MouseMove(object sender, MouseEventArgs e)
         {
             if (draggedPiece != null)
@@ -515,6 +514,19 @@ namespace VectorEditor
                         ControlPaint.DrawReversibleFrame(rectProposedSize, this.ForeColor, FrameStyle.Dashed);
                 }
 
+            }
+        }
+
+        /// <summary>
+        /// Обработчик события изменения значения количества вершин многоугольника
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void nudVertexCount_ValueChanged(object sender, EventArgs e)
+        {
+            if (polygoneDrawed != null)
+            {
+                polygoneDrawed(sender, e);
             }
         }
 
