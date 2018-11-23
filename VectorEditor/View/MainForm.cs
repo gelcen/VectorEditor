@@ -456,8 +456,7 @@ namespace VectorEditor
                                           currentFillColor,
                                           Convert.ToInt32(nudLineThickness.Value),
                                           currentLineType);
-            EllipseDrawer ellipseDrawer = new EllipseDrawer((Ellipse)ellipse, pbCanvas);
-            ellipseDrawer.Draw();
+            OnFigureCreated(SetArgument(ellipse));
         }
 
         #endregion
