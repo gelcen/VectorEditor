@@ -10,7 +10,7 @@ namespace VectorEditor.Drawers
 {
     public static class FigureDrawer
     {
-        static void DrawFigure(Figure figure, PictureBox canvas)
+        public static void DrawFigure(Figure figure, PictureBox canvas)
         {
             if (figure.GetType() == typeof(Line))
             {

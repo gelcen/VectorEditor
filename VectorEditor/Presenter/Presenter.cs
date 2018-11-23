@@ -21,6 +21,8 @@ namespace VectorEditor.Model
             _view = view;
             _model = model;
 
+            _model.NewProject();
+
             _view.FigureCreated += _view_FigureCreated;
             _model.RegisterObserver(this);
         }

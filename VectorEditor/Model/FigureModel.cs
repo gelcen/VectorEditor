@@ -13,8 +13,18 @@ namespace VectorEditor.Model
     /// </summary>
     class FigureModel:IModel, ISubject
     {
-
+        /// <summary>
+        /// Список подписчиков
+        /// </summary>
         private List<IObserver> _observers;
+
+        /// <summary>
+        /// Конструктор
+        /// </summary>
+        public FigureModel()
+        {
+            _observers = new List<IObserver>();
+        }
 
         /// <summary>
         /// Флаг для обозначения внесения изменений

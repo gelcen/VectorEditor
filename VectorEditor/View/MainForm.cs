@@ -287,8 +287,10 @@ namespace VectorEditor
             line = FigureFactory.SetParameters(line, x, y, lx, ly,
                                 Convert.ToInt32(nudLineThickness.Value),
                                 currentLineColor, currentLineType);
-            LineDrawer lineDrawer = new LineDrawer((Line)line, pbCanvas);
-            lineDrawer.Draw();
+
+            FigureCreatedEventArgs arg = new FigureCreatedEventArgs();
+            arg.Figure = line;
+            OnFigureCreated(arg);
         }
 
         #endregion
@@ -454,6 +456,33 @@ namespace VectorEditor
         #endregion
 
         /// <summary>
+        /// Обертка для вызова обработчика события создания фигуры
+        /// </summary>
+        /// <param name="e"></param>
+        private void OnFigureCreated(FigureCreatedEventArgs e)
+        {
+            EventHandler<FigureCreatedEventArgs> handler = FigureCreated;
+            if (handler != null)
+            {
+                handler(this, e);
+            }
+        }
+
+        /// <summary>
+        /// Рисовка модели
+        /// </summary>
+        /// <param name="figures"></param>
+        public void DrawModel(List<Figure> figures)
+        {
+            foreach (var Figure in figures)
+            {
+                FigureDrawer.DrawFigure(Figure, pbCanvas);
+            }
+        }
+
+
+
+        /// <summary>
         /// Обработчик события изменения значения типа линии
         /// </summary>
         /// <param name="sender"></param>
@@ -527,12 +556,5 @@ namespace VectorEditor
             }
         }
 
-        public void DrawModel(List<Figure> figures)
-        {
-            foreach (var Figure in figures)
-            {
-
-            }
-        }
     }
 }
