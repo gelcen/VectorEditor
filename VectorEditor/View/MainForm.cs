@@ -418,8 +418,7 @@ namespace VectorEditor
             circle = FigureFactory.SetParameters(circle, x, y, rad, currentLineColor,
                                       Convert.ToInt32(nudLineThickness.Value),
                                       currentFillColor, currentLineType);
-            CircleDrawer circleDrawer = new CircleDrawer((Circle)circle, pbCanvas);
-            circleDrawer.Draw();
+            OnFigureCreated(SetArgument(circle));
         }
 
         #endregion
