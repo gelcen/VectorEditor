@@ -178,6 +178,8 @@ namespace VectorEditor
         /// <param name="e"></param>
         private void buttonCursor_Click(object sender, EventArgs e)
         {
+            CheckPolyline();
+
             RemoveMouseClickHandler();
             pbCanvas.MouseClick += MouseClickCursor;
             currentMouseClickHandler = MouseClickCursor;
@@ -268,6 +270,8 @@ namespace VectorEditor
         /// <param name="e"></param>
         private void buttonLine_Click(object sender, EventArgs e)
         {
+            CheckPolyline();
+
             RemoveMouseUpHandler();
             pbCanvas.MouseUp += MouseUpLine;
             currentMouseUpHandler = MouseUpLine;
@@ -340,6 +344,8 @@ namespace VectorEditor
         /// <param name="e"></param>
         private void buttonPolygone_Click(object sender, EventArgs e)
         {
+            CheckPolyline();
+
             RemoveMouseClickHandler();
             RemoveMouseUpHandler();
             currentItem = Item.Polygon;
@@ -389,6 +395,8 @@ namespace VectorEditor
         /// <param name="e"></param>
         private void buttonCircle_Click(object sender, EventArgs e)
         {
+            CheckPolyline();
+
             RemoveMouseUpHandler();
             RemoveMouseClickHandler();
             pbCanvas.MouseUp += MouseUpCircle;
@@ -425,6 +433,8 @@ namespace VectorEditor
         /// <param name="e"></param>
         private void buttonEllipse_Click(object sender, EventArgs e)
         {
+            CheckPolyline();
+
             RemoveMouseUpHandler();
             RemoveMouseClickHandler();
             pbCanvas.MouseUp += MouseUpEllipse;
@@ -475,6 +485,19 @@ namespace VectorEditor
             foreach (var Figure in figures)
             {
                 FigureDrawer.DrawFigure(Figure, pbCanvas);
+            }
+        }
+
+        /// <summary>
+        /// Проверяет последний инструмент при переключении инструментов. 
+        /// Если это полилиния, то чистит канву и передает созданную полилинию в модель.
+        /// </summary>
+        private void CheckPolyline()
+        {
+            if (currentItem == Item.Polyline)
+            {
+                //pbCanvas.Image = null;
+                OnFigureCreated(SetArgument(figure));
             }
         }
 
