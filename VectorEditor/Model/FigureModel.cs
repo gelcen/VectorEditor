@@ -4,14 +4,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using VectorEditor.Figures;
+using VectorEditor.Observer;
 
 namespace VectorEditor.Model
 {
     /// <summary>
     /// Класс для модели
     /// </summary>
-    class FigureModel:IModel
+    class FigureModel:IModel, ISubject
     {
+
+        private List<IObserver> _observers;
+
         /// <summary>
         /// Флаг для обозначения внесения изменений
         /// </summary>
@@ -29,6 +33,8 @@ namespace VectorEditor.Model
         public void AddFigure(Figure figure)
         {
             _figures.Add(figure);
+            HasChanged();
+            NotifyObservers();
         }
 
         /// <summary>
@@ -106,7 +112,8 @@ namespace VectorEditor.Model
         /// </summary>
         public void NewProject()
         {
-
+            _figures = new List<Figure>();
+            _isChanged = false;
         }
 
         /// <summary>
@@ -120,6 +127,25 @@ namespace VectorEditor.Model
         public List<Figure> getFigureList()
         {
             throw new NotImplementedException();
+        }
+
+        public void RegisterObserver(IObserver o)
+        {
+            _observers.Add(o);
+        }
+
+        public void RemoveObserver(IObserver o)
+        {
+            _observers.Remove(o);
+        }
+
+        public void NotifyObservers()
+        {
+            for (int i = 0; i < _observers.Count; i++)
+            {
+                IObserver observer = _observers[i];
+                observer.Update(_figures);
+            }
         }
 
         //public void registerObserver(Observer observer)
