@@ -375,8 +375,8 @@ namespace VectorEditor
             }
             else if (polygone.points.Count == polygone.PointsCount)
             {
-                PolygoneDrawer polygoneDrawer = new PolygoneDrawer(polygone, pbCanvas);
-                polygoneDrawer.Draw();
+                OnFigureCreated(SetArgument(polygone));
+
                 if (polygoneDrawed != null)
                 {
                     polygoneDrawed(sender, e);
