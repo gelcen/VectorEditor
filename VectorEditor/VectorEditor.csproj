@@ -49,6 +49,7 @@
     <Compile Include="Drawers\Drawer.cs" />
     <Compile Include="Drawers\CircleDrawer.cs" />
     <Compile Include="Drawers\EllipseDrawer.cs" />
+    <Compile Include="Drawers\FigureDrawer.cs" />
     <Compile Include="Drawers\PolygoneDrawer.cs" />
     <Compile Include="Figures\Circle.cs" />
     <Compile Include="Figures\Ellipse.cs" />

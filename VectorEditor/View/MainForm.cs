@@ -9,10 +9,11 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using VectorEditor.Drawers;
 using VectorEditor.Figures;
+using VectorEditor.Model;
 
 namespace VectorEditor
 {
-    public partial class MainForm : Form
+    public partial class MainForm : Form, IView
     {
         /// <summary>
         /// Переменная для хранения текущего цвета линии
@@ -65,6 +66,7 @@ namespace VectorEditor
         /// События прорисовки многоугольника
         /// </summary>
         event EventHandler polygoneDrawed;
+        public event EventHandler<FigureCreatedEventArgs> FigureCreated;
 
         /// <summary>
         /// Текущий обработчик нажатия мышкой по канве
@@ -522,6 +524,14 @@ namespace VectorEditor
             {
                 buttonFillColor.BackColor = colorDialogLineColor.Color;
                 currentFillColor = colorDialogLineColor.Color;
+            }
+        }
+
+        public void DrawModel(List<Figure> figures)
+        {
+            foreach (var Figure in figures)
+            {
+
             }
         }
     }
