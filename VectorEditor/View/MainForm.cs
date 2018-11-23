@@ -286,11 +286,9 @@ namespace VectorEditor
             Figure line = FigureFactory.CreateFigure(Item.Line);
             line = FigureFactory.SetParameters(line, x, y, lx, ly,
                                 Convert.ToInt32(nudLineThickness.Value),
-                                currentLineColor, currentLineType);
+                                currentLineColor, currentLineType);              
 
-            FigureCreatedEventArgs arg = new FigureCreatedEventArgs();
-            arg.Figure = line;
-            OnFigureCreated(arg);
+            OnFigureCreated(SetArgument(line));
         }
 
         #endregion
@@ -480,7 +478,17 @@ namespace VectorEditor
             }
         }
 
-
+        /// <summary>
+        /// Создание аргумента для события FigureCreated
+        /// </summary>
+        /// <param name="figure"></param>
+        /// <returns></returns>
+        private FigureCreatedEventArgs SetArgument(Figure figure)
+        {
+            FigureCreatedEventArgs arg = new FigureCreatedEventArgs();
+            arg.Figure = figure;
+            return arg;
+        }
 
         /// <summary>
         /// Обработчик события изменения значения типа линии
