@@ -49,6 +49,7 @@
     <Compile Include="Drawers\Drawer.cs" />
     <Compile Include="Drawers\CircleDrawer.cs" />
     <Compile Include="Drawers\EllipseDrawer.cs" />
+    <Compile Include="Drawers\FigureDrawer.cs" />
     <Compile Include="Drawers\PolygoneDrawer.cs" />
     <Compile Include="Figures\Circle.cs" />
     <Compile Include="Figures\Ellipse.cs" />
@@ -61,20 +62,26 @@
     <Compile Include="Figures\Line.cs" />
     <Compile Include="Drawers\LineDrawer.cs" />
     <Compile Include="LineType.cs" />
-    <Compile Include="MainForm.cs">
+    <Compile Include="View\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MainForm.Designer.cs">
+    <Compile Include="View\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Figures\MPoint.cs" />
     <Compile Include="Figures\PolyLine.cs" />
     <Compile Include="Drawers\PolyLineDrawer.cs" />
+    <Compile Include="View\FigureCreatedEventArgs.cs" />
     <Compile Include="Model\IModel.cs" />
     <Compile Include="Model\FigureModel.cs" />
+    <Compile Include="View\IView.cs" />
+    <Compile Include="Model\ModelChangedEventArgs.cs" />
+    <Compile Include="Presenter\Presenter.cs" />
+    <Compile Include="Observer\IObserver.cs" />
+    <Compile Include="Observer\ISubject.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="MainForm.resx">
+    <EmbeddedResource Include="View\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">

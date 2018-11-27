@@ -57,6 +57,11 @@ namespace VectorEditor.Drawers
                 PickLineType(polygone.LineType, pen);
                 PointF[] pointsArray = ConvertPoints(polygone.points);
                 g.DrawPolygon(pen, pointsArray);
+                if (polygone.FillColor != Color.White)
+                {
+                    SolidBrush brush = new SolidBrush(polygone.FillColor);                    
+                    g.FillPolygon(brush, pointsArray);
+                }
                 g.Dispose();
             }
         }

@@ -4,13 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using VectorEditor.Figures;
+using VectorEditor.Observer;
 
 namespace VectorEditor.Model
 {
     /// <summary>
     /// Интерфейс для взаимодействия модели и представления
     /// </summary>
-    public interface IModel
+    public interface IModel: ISubject
     {
         /// <summary>
         /// Добавление фигуры

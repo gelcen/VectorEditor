@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using VectorEditor.Model;
 
 namespace VectorEditor
 {
@@ -16,7 +17,13 @@ namespace VectorEditor
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainForm());
+
+            MainForm mainForm = new MainForm();
+            FigureModel figureModel = new FigureModel();
+
+            Presenter presenter = new Presenter(mainForm, figureModel);
+
+            Application.Run(mainForm);
         }
     }
 }

@@ -9,10 +9,11 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using VectorEditor.Drawers;
 using VectorEditor.Figures;
+using VectorEditor.Model;
 
 namespace VectorEditor
 {
-    public partial class MainForm : Form
+    public partial class MainForm : Form, IView
     {
         /// <summary>
         /// Переменная для хранения текущего цвета линии
@@ -65,6 +66,7 @@ namespace VectorEditor
         /// События прорисовки многоугольника
         /// </summary>
         event EventHandler polygoneDrawed;
+        public event EventHandler<FigureCreatedEventArgs> FigureCreated;
 
         /// <summary>
         /// Текущий обработчик нажатия мышкой по канве
@@ -176,6 +178,8 @@ namespace VectorEditor
         /// <param name="e"></param>
         private void buttonCursor_Click(object sender, EventArgs e)
         {
+            CheckPolyline();
+
             RemoveMouseClickHandler();
             pbCanvas.MouseClick += MouseClickCursor;
             currentMouseClickHandler = MouseClickCursor;
@@ -266,6 +270,8 @@ namespace VectorEditor
         /// <param name="e"></param>
         private void buttonLine_Click(object sender, EventArgs e)
         {
+            CheckPolyline();
+
             RemoveMouseUpHandler();
             pbCanvas.MouseUp += MouseUpLine;
             currentMouseUpHandler = MouseUpLine;
@@ -284,9 +290,9 @@ namespace VectorEditor
             Figure line = FigureFactory.CreateFigure(Item.Line);
             line = FigureFactory.SetParameters(line, x, y, lx, ly,
                                 Convert.ToInt32(nudLineThickness.Value),
-                                currentLineColor, currentLineType);
-            LineDrawer lineDrawer = new LineDrawer((Line)line, pbCanvas);
-            lineDrawer.Draw();
+                                currentLineColor, currentLineType);              
+
+            OnFigureCreated(SetArgument(line));
         }
 
         #endregion
@@ -338,6 +344,8 @@ namespace VectorEditor
         /// <param name="e"></param>
         private void buttonPolygone_Click(object sender, EventArgs e)
         {
+            CheckPolyline();
+
             RemoveMouseClickHandler();
             RemoveMouseUpHandler();
             currentItem = Item.Polygon;
@@ -367,8 +375,8 @@ namespace VectorEditor
             }
             else if (polygone.points.Count == polygone.PointsCount)
             {
-                PolygoneDrawer polygoneDrawer = new PolygoneDrawer(polygone, pbCanvas);
-                polygoneDrawer.Draw();
+                OnFigureCreated(SetArgument(polygone));
+
                 if (polygoneDrawed != null)
                 {
                     polygoneDrawed(sender, e);
@@ -387,6 +395,8 @@ namespace VectorEditor
         /// <param name="e"></param>
         private void buttonCircle_Click(object sender, EventArgs e)
         {
+            CheckPolyline();
+
             RemoveMouseUpHandler();
             RemoveMouseClickHandler();
             pbCanvas.MouseUp += MouseUpCircle;
@@ -408,8 +418,7 @@ namespace VectorEditor
             circle = FigureFactory.SetParameters(circle, x, y, rad, currentLineColor,
                                       Convert.ToInt32(nudLineThickness.Value),
                                       currentFillColor, currentLineType);
-            CircleDrawer circleDrawer = new CircleDrawer((Circle)circle, pbCanvas);
-            circleDrawer.Draw();
+            OnFigureCreated(SetArgument(circle));
         }
 
         #endregion
@@ -423,6 +432,8 @@ namespace VectorEditor
         /// <param name="e"></param>
         private void buttonEllipse_Click(object sender, EventArgs e)
         {
+            CheckPolyline();
+
             RemoveMouseUpHandler();
             RemoveMouseClickHandler();
             pbCanvas.MouseUp += MouseUpEllipse;
@@ -445,11 +456,60 @@ namespace VectorEditor
                                           currentFillColor,
                                           Convert.ToInt32(nudLineThickness.Value),
                                           currentLineType);
-            EllipseDrawer ellipseDrawer = new EllipseDrawer((Ellipse)ellipse, pbCanvas);
-            ellipseDrawer.Draw();
+            OnFigureCreated(SetArgument(ellipse));
         }
 
         #endregion
+
+        /// <summary>
+        /// Обертка для вызова обработчика события создания фигуры
+        /// </summary>
+        /// <param name="e"></param>
+        private void OnFigureCreated(FigureCreatedEventArgs e)
+        {
+            EventHandler<FigureCreatedEventArgs> handler = FigureCreated;
+            if (handler != null)
+            {
+                handler(this, e);
+            }
+        }
+
+        /// <summary>
+        /// Рисовка модели
+        /// </summary>
+        /// <param name="figures"></param>
+        public void DrawModel(List<Figure> figures)
+        {
+            foreach (var Figure in figures)
+            {
+                FigureDrawer.DrawFigure(Figure, pbCanvas);
+            }
+        }
+
+        /// <summary>
+        /// Проверяет последний инструмент при переключении инструментов. 
+        /// Если это полилиния, то чистит канву и передает созданную полилинию в модель.
+        /// </summary>
+        private void CheckPolyline()
+        {
+            if (currentItem == Item.Polyline)
+            {
+                //pbCanvas.Image = null;
+                OnFigureCreated(SetArgument(figure));
+            }
+        }
+
+        /// <summary>
+        /// Создание аргумента для события FigureCreated
+        /// </summary>
+        /// <param name="figure"></param>
+        /// <returns></returns>
+        private FigureCreatedEventArgs SetArgument(Figure figure)
+        {
+            FigureCreatedEventArgs arg = new FigureCreatedEventArgs();
+            arg.Figure = figure;
+            return arg;
+        }
 
         /// <summary>
         /// Обработчик события изменения значения типа линии
@@ -524,5 +584,6 @@ namespace VectorEditor
                 currentFillColor = colorDialogLineColor.Color;
             }
         }
+
     }
 }
