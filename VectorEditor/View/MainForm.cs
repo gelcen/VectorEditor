@@ -100,6 +100,11 @@ namespace VectorEditor
         Figure figure;
 
         /// <summary>
+        /// Фигуры
+        /// </summary>
+        private List<Figure> _figures;
+
+        /// <summary>
         /// TODO: Вынести обработчики в отдельный класс с возможностью расширения
         /// </summary>
 
@@ -127,6 +132,12 @@ namespace VectorEditor
             pbCanvas.MouseUp += MouseUpCursor;
 
             polygoneDrawed += buttonPolygone_Click;
+
+            pbCanvas.ResumeLayout();
+
+            this.DoubleBuffered = true;
+
+            _figures = new List<Figure>();
 
             drawing = false;
 
@@ -480,10 +491,22 @@ namespace VectorEditor
         /// <param name="figures"></param>
         public void DrawModel(List<Figure> figures)
         {
-            foreach (var Figure in figures)
+            _figures = figures;
+            DrawFigures();
+            
+        }
+
+        private void DrawFigures()
+        {
+            foreach (var Figure in _figures)
             {
                 FigureDrawer.DrawFigure(Figure, pbCanvas);
             }
+        }
+
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            DrawFigures();
         }
 
         /// <summary>
@@ -540,6 +563,22 @@ namespace VectorEditor
         {
             currentItem = Item.Cursor;
             pbCanvas.Image = null;
+        }
+
+        private void btnHeightResize_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                btnHeightResize.Location = new Point(btnHeightResize.Location.X,
+                                                     PointToClient(Cursor.Position).Y);
+                pbCanvas.SetBounds(pbCanvas.Location.X, pbCanvas.Location.Y,
+                                   pbCanvas.Width,
+                                   btnHeightResize.Location.Y - pbCanvas.Location.Y);
+                btnDiagonalResize.Location = new Point(pbCanvas.Location.X + pbCanvas.Width,
+                                                       pbCanvas.Location.Y + pbCanvas.Height);
+                btnWidthResize.Location = new Point(btnWidthResize.Location.X, 
+                                                    pbCanvas.Location.Y + pbCanvas.Height / 2);
+            }
         }
 
 

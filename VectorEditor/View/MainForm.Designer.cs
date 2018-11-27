@@ -48,6 +48,9 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.colorDialogLineColor = new System.Windows.Forms.ColorDialog();
+            this.btnHeightResize = new System.Windows.Forms.Button();
+            this.btnDiagonalResize = new System.Windows.Forms.Button();
+            this.btnWidthResize = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pbCanvas)).BeginInit();
             this.gpFigures.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudVertexCount)).BeginInit();
@@ -63,7 +66,7 @@
             this.pbCanvas.Location = new System.Drawing.Point(3, 11);
             this.pbCanvas.Margin = new System.Windows.Forms.Padding(2);
             this.pbCanvas.Name = "pbCanvas";
-            this.pbCanvas.Size = new System.Drawing.Size(648, 521);
+            this.pbCanvas.Size = new System.Drawing.Size(640, 480);
             this.pbCanvas.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pbCanvas.TabIndex = 0;
             this.pbCanvas.TabStop = false;
@@ -308,11 +311,39 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Толщина линии:";
             // 
+            // btnHeightResize
+            // 
+            this.btnHeightResize.Location = new System.Drawing.Point(310, 484);
+            this.btnHeightResize.Name = "btnHeightResize";
+            this.btnHeightResize.Size = new System.Drawing.Size(12, 12);
+            this.btnHeightResize.TabIndex = 3;
+            this.btnHeightResize.UseVisualStyleBackColor = true;
+            this.btnHeightResize.MouseMove += new System.Windows.Forms.MouseEventHandler(this.btnHeightResize_MouseMove);
+            // 
+            // btnDiagonalResize
+            // 
+            this.btnDiagonalResize.Location = new System.Drawing.Point(636, 484);
+            this.btnDiagonalResize.Name = "btnDiagonalResize";
+            this.btnDiagonalResize.Size = new System.Drawing.Size(12, 12);
+            this.btnDiagonalResize.TabIndex = 4;
+            this.btnDiagonalResize.UseVisualStyleBackColor = true;
+            // 
+            // btnWidthResize
+            // 
+            this.btnWidthResize.Location = new System.Drawing.Point(636, 240);
+            this.btnWidthResize.Name = "btnWidthResize";
+            this.btnWidthResize.Size = new System.Drawing.Size(12, 12);
+            this.btnWidthResize.TabIndex = 5;
+            this.btnWidthResize.UseVisualStyleBackColor = true;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(906, 543);
+            this.Controls.Add(this.btnWidthResize);
+            this.Controls.Add(this.btnDiagonalResize);
+            this.Controls.Add(this.btnHeightResize);
             this.Controls.Add(this.gpProps);
             this.Controls.Add(this.gpFigures);
             this.Controls.Add(this.pbCanvas);
@@ -351,6 +382,9 @@
         private System.Windows.Forms.ColorDialog colorDialogLineColor;
         private System.Windows.Forms.Button buttonClearCanvas;
         private System.Windows.Forms.NumericUpDown nudVertexCount;
+        private System.Windows.Forms.Button btnHeightResize;
+        private System.Windows.Forms.Button btnDiagonalResize;
+        private System.Windows.Forms.Button btnWidthResize;
     }
 }
 

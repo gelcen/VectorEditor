@@ -17,6 +17,7 @@ namespace VectorEditor
         public override void Draw()
         {
             Graphics g = Canvas.CreateGraphics();
+            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
             Pen pen = new Pen(line.LineColor, line.LineThickness);
             PickLineType(line.LineType, pen);
             g.DrawLine(pen, new PointF(line.A.X, line.A.Y), 
