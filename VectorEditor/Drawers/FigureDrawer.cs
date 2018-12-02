@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using System.Drawing;
 using VectorEditor.Figures;
 
-namespace VectorEditor.Drawers
+namespace VectorEditor
 {
     public static class FigureDrawer
     {
-        public static void DrawFigure(Figure figure, PictureBox canvas)
+        public static void DrawFigure(Figure figure, Graphics canvas)
         {
             if (figure.GetType() == typeof(Line))
             {

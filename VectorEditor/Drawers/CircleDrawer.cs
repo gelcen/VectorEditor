@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using VectorEditor.Figures;
 
-namespace VectorEditor.Drawers
+namespace VectorEditor
 {
     class CircleDrawer:Drawer
     {
         Circle circle;
 
-        public CircleDrawer(Circle circle, PictureBox canvas)
+        public CircleDrawer(Circle circle, Graphics canvas)
         {
             SetCanvas(canvas);
             this.circle = circle;
@@ -25,7 +25,7 @@ namespace VectorEditor.Drawers
             float y = circle.CenterPoint.Y;
             float rad = circle.Radius;
             
-            Graphics g = Canvas.CreateGraphics();
+            Graphics g = Canvas;
             Pen pen = new Pen(circle.LineColor, circle.LineThickness);
             PickLineType(circle.LineType, pen);
             g.DrawEllipse(pen, x - rad, y - rad, rad + rad, rad + rad);

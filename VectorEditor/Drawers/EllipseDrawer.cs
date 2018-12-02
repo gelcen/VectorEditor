@@ -2,7 +2,7 @@
 using System.Windows.Forms;
 using VectorEditor.Figures;
 
-namespace VectorEditor.Drawers
+namespace VectorEditor
 {
     /// <summary>
     /// Класс для рисовки эллипса
@@ -19,7 +19,7 @@ namespace VectorEditor.Drawers
         /// </summary>
         /// <param name="ellipse">Класс, содержащий параметры эллипса</param>
         /// <param name="canvas">Канва для рисования</param>
-        public EllipseDrawer(Ellipse ellipse, PictureBox canvas)
+        public EllipseDrawer(Ellipse ellipse, Graphics canvas)
         {
             this.ellipse = ellipse;
             SetCanvas(canvas);
@@ -30,7 +30,7 @@ namespace VectorEditor.Drawers
         /// </summary>
         public override void Draw()
         {
-            Graphics g = Canvas.CreateGraphics();
+            Graphics g = Canvas;
             Pen pen = new Pen(ellipse.LineColor, ellipse.LineThickness);
             PickLineType(ellipse.LineType, pen);
             g.DrawEllipse(pen, ellipse.A.X, ellipse.A.Y, 

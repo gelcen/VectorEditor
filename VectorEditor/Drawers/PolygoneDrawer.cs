@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using VectorEditor.Figures;
 
-namespace VectorEditor.Drawers
+namespace VectorEditor
 {
     /// <summary>
     /// Класс для рисования многоугольника
@@ -24,7 +24,7 @@ namespace VectorEditor.Drawers
         /// </summary>
         /// <param name="polygone"></param>
         /// <param name="canvas"></param>
-        public PolygoneDrawer(Polygone polygone, PictureBox canvas)
+        public PolygoneDrawer(Polygone polygone, Graphics canvas)
         {
             this.polygone = polygone;
             SetCanvas(canvas);
@@ -52,7 +52,7 @@ namespace VectorEditor.Drawers
         {
             if (polygone.points.Count >= 3)
             {
-                Graphics g = Canvas.CreateGraphics();
+                Graphics g = Canvas;
                 Pen pen = new Pen(polygone.LineColor, polygone.LineThickness);
                 PickLineType(polygone.LineType, pen);
                 PointF[] pointsArray = ConvertPoints(polygone.points);

@@ -16,13 +16,13 @@ namespace VectorEditor
         /// <summary>
         /// Убрать свойство
         /// </summary>
-        public PictureBox Canvas
+        public Graphics Canvas
         {
             get;
             set;
         }
         
-        public void SetCanvas(PictureBox canvas)
+        public void SetCanvas(Graphics canvas)
         {
             Canvas = canvas;
         }

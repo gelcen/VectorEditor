@@ -58,10 +58,18 @@
     <Compile Include="Figures\IFillable.cs" />
     <Compile Include="Figures\ILineProperty.cs" />
     <Compile Include="Figures\Polygone.cs" />
+    <Compile Include="FigureEntity.cs" />
     <Compile Include="Item.cs" />
     <Compile Include="Figures\Line.cs" />
     <Compile Include="Drawers\LineDrawer.cs" />
     <Compile Include="LineType.cs" />
+    <Compile Include="PolylineEntity.cs" />
+    <Compile Include="View\Canvas.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="View\Canvas.Designer.cs">
+      <DependentUpon>Canvas.cs</DependentUpon>
+    </Compile>
     <Compile Include="View\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>

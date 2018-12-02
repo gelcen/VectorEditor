@@ -12,7 +12,7 @@ namespace VectorEditor
     {
         public PolyLine polyLine;
 
-        public PolyLineDrawer(PolyLine polyLine, PictureBox canvas)
+        public PolyLineDrawer(PolyLine polyLine, Graphics canvas)
         {
             this.polyLine = polyLine;
             SetCanvas(canvas);
@@ -22,7 +22,7 @@ namespace VectorEditor
         {
             if (polyLine.points.Count > 1)
             {
-                Graphics g = Canvas.CreateGraphics();
+                Graphics g = Canvas;
                 Pen pen = new Pen(polyLine.LineColor, polyLine.LineThickness);
                 PickLineType(polyLine.LineType, pen);
                 for (int i=0; i < polyLine.points.Count; i++)

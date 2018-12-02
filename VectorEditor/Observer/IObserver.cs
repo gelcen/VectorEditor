@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using VectorEditor.Figures;
 
-namespace VectorEditor.Observer
+namespace VectorEditor
 {
     public interface IObserver
     {

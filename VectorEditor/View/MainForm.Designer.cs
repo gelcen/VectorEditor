@@ -327,6 +327,7 @@
             this.btnDiagonalResize.Size = new System.Drawing.Size(12, 12);
             this.btnDiagonalResize.TabIndex = 4;
             this.btnDiagonalResize.UseVisualStyleBackColor = true;
+            this.btnDiagonalResize.MouseMove += new System.Windows.Forms.MouseEventHandler(this.btnDiagonalResize_MouseMove);
             // 
             // btnWidthResize
             // 
@@ -335,6 +336,7 @@
             this.btnWidthResize.Size = new System.Drawing.Size(12, 12);
             this.btnWidthResize.TabIndex = 5;
             this.btnWidthResize.UseVisualStyleBackColor = true;
+            this.btnWidthResize.MouseMove += new System.Windows.Forms.MouseEventHandler(this.btnWidthResize_MouseMove);
             // 
             // MainForm
             // 

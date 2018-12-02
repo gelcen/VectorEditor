@@ -1,13 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using VectorEditor.Drawers;
 using VectorEditor.Figures;
 using VectorEditor.Model;
 
@@ -136,6 +130,7 @@ namespace VectorEditor
             pbCanvas.ResumeLayout();
 
             this.DoubleBuffered = true;
+           
 
             _figures = new List<Figure>();
 
@@ -237,6 +232,7 @@ namespace VectorEditor
             this.Cursor = Cursors.Default;
         }
 
+        
 
         /// <summary>
         /// Обработчик события MouseMove для всех инструментов.
@@ -340,7 +336,7 @@ namespace VectorEditor
             figure = FigureFactory.SetParameters(figure, points,
                                                     Convert.ToInt32(nudLineThickness.Value),
                                                     currentLineColor, currentLineType);
-            PolyLineDrawer drawer = new PolyLineDrawer((PolyLine)figure, pbCanvas);
+            PolyLineDrawer drawer = new PolyLineDrawer((PolyLine)figure, pbCanvas.CreateGraphics());
             drawer.Draw();
         }
 
@@ -500,12 +496,13 @@ namespace VectorEditor
         {
             foreach (var Figure in _figures)
             {
-                FigureDrawer.DrawFigure(Figure, pbCanvas);
+                FigureDrawer.DrawFigure(Figure, pbCanvas.CreateGraphics());
             }
         }
-
+         
         protected override void OnPaint(PaintEventArgs e)
         {
+            pbCanvas.Refresh();
             DrawFigures();
         }
 
@@ -565,6 +562,11 @@ namespace VectorEditor
             pbCanvas.Image = null;
         }
 
+        /// <summary>
+        /// Изменение размера по высоте
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnHeightResize_MouseMove(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
@@ -580,6 +582,51 @@ namespace VectorEditor
                                                     pbCanvas.Location.Y + pbCanvas.Height / 2);
             }
         }
+
+        /// <summary>
+        /// Изменение размера канвы по ширине
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnWidthResize_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                btnWidthResize.Location = new Point(PointToClient(Cursor.Position).X,
+                                                    btnWidthResize.Location.Y);
+                pbCanvas.SetBounds(pbCanvas.Location.X, pbCanvas.Location.Y,
+                                   btnWidthResize.Location.X - pbCanvas.Location.X,
+                                   pbCanvas.Height);
+                btnDiagonalResize.Location = new Point(pbCanvas.Location.X + pbCanvas.Width,
+                                                       pbCanvas.Location.Y + pbCanvas.Height);
+                btnHeightResize.Location = new Point(pbCanvas.Location.X + pbCanvas.Width / 2,
+                                                     btnHeightResize.Location.Y);
+            }
+        }
+
+        /// <summary>
+        /// Изменение размера по диагонали
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnDiagonalResize_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                btnDiagonalResize.Location = PointToClient(Cursor.Position);
+                btnHeightResize.Location = new Point(pbCanvas.Location.X + pbCanvas.Width / 2,
+                                                     btnDiagonalResize.Location.Y);
+                btnWidthResize.Location = new Point(btnDiagonalResize.Location.X, 
+                                                    pbCanvas.Location.Y + pbCanvas.Height / 2);
+                pbCanvas.SetBounds(pbCanvas.Location.X, pbCanvas.Location.Y,
+                                   btnDiagonalResize.Location.X - pbCanvas.Location.X,
+                                   btnDiagonalResize.Location.Y - pbCanvas.Location.Y);
+                
+            }
+        }
+
+
+
 
 
         /// <summary>

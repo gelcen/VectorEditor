@@ -8,7 +8,7 @@ namespace VectorEditor
         // Неизвестно, понадобится ли изменять линию после конструктора
         public Line line;
 
-        public LineDrawer(Line line, PictureBox canvas)
+        public LineDrawer(Line line, Graphics canvas)
         {
             SetCanvas(canvas);
             this.line = line;            
@@ -16,7 +16,7 @@ namespace VectorEditor
 
         public override void Draw()
         {
-            Graphics g = Canvas.CreateGraphics();
+            Graphics g = Canvas;
             g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
             Pen pen = new Pen(line.LineColor, line.LineThickness);
             PickLineType(line.LineType, pen);
