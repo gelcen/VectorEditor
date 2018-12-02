@@ -70,6 +70,7 @@
     <Compile Include="View\Canvas.Designer.cs">
       <DependentUpon>Canvas.cs</DependentUpon>
     </Compile>
+    <Compile Include="View\FigureParameters.cs" />
     <Compile Include="View\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>

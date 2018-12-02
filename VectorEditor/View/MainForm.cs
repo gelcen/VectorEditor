@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using VectorEditor.Figures;
 using VectorEditor.Model;
+using VectorEditor.View;
 
 namespace VectorEditor
 {
@@ -102,12 +103,29 @@ namespace VectorEditor
         /// TODO: Вынести обработчики в отдельный класс с возможностью расширения
         /// </summary>
 
-        Control draggedPiece = null;
-        bool resizing = false;
-        private Point startDraggingPoint;
-        private Size startSize;
-        Rectangle rectProposedSize = Rectangle.Empty;
-        int resizingMargin = 5;
+        #region Реализация IView
+        public PictureBox Canvas
+        {
+            get
+            {
+                return pbCanvas;
+            }
+        }
+
+        public FigureParameters FigureParameters
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public void SetTool(Item tool)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
 
         public MainForm()
         {
@@ -148,32 +166,11 @@ namespace VectorEditor
         /// <param name="e"></param>
         private void pbCanvas_MouseDown(object sender, MouseEventArgs e)
         {
-            draggedPiece = sender as Control;
 
-            if (((e.X <= resizingMargin) || (e.X >= draggedPiece.Width - resizingMargin) ||
-                (e.Y <= resizingMargin) || (e.Y >= draggedPiece.Height - resizingMargin)) 
-                && (currentItem == Item.Cursor))
-            {
-                resizing = true;
-
-                this.Cursor = Cursors.SizeNWSE;
-
-                this.startSize = new Size(e.X, e.Y);
-                Point pt = this.PointToScreen(draggedPiece.Location);
-                rectProposedSize = new Rectangle(pt, startSize);
-
-                ControlPaint.DrawReversibleFrame(rectProposedSize, this.ForeColor, FrameStyle.Dashed);
-            }
-            else
-            {
-                resizing = false;
                 drawing = true;
                 x = e.X;
                 y = e.Y;
-                pbCanvas.Cursor = Cursors.Cross;
-            }
-
-            this.startDraggingPoint = e.Location;                      
+                pbCanvas.Cursor = Cursors.Cross;                      
         }
 
         /// <summary>
@@ -210,24 +207,6 @@ namespace VectorEditor
             drawing = false;
             lx = e.X;
             ly = e.Y;
-            if (resizing)
-            {
-                if (rectProposedSize.Width > 0 && rectProposedSize.Height > 0)
-                {
-                    ControlPaint.DrawReversibleFrame(rectProposedSize, this.ForeColor, FrameStyle.Dashed);
-                }
-                if (rectProposedSize.Width > 10 && rectProposedSize.Height > 10)
-                {
-                    this.draggedPiece.Size = rectProposedSize.Size;
-                }
-                else
-                {
-                    this.draggedPiece.Size = new Size((int)Math.Max(10, rectProposedSize.Width), 
-                        Math.Max(10, rectProposedSize.Height));
-                }
-            }            
-            this.draggedPiece = null;
-            this.startDraggingPoint = Point.Empty;
             pbCanvas.Cursor = Cursors.Default;
             this.Cursor = Cursors.Default;
         }
@@ -242,19 +221,7 @@ namespace VectorEditor
         /// <param name="e"></param>
         private void pbCanvas_MouseMove(object sender, MouseEventArgs e)
         {
-            if (draggedPiece != null)
-            {
-                if (resizing)
-                {
-                    if (rectProposedSize.Width > 0 && rectProposedSize.Height > 0)
-                        ControlPaint.DrawReversibleFrame(rectProposedSize, this.ForeColor, FrameStyle.Dashed);
-                    rectProposedSize.Width = e.X - this.startDraggingPoint.X + this.startSize.Width;
-                    rectProposedSize.Height = e.Y - this.startDraggingPoint.Y + this.startSize.Height;
-                    if (rectProposedSize.Width > 0 && rectProposedSize.Height > 0)
-                        ControlPaint.DrawReversibleFrame(rectProposedSize, this.ForeColor, FrameStyle.Dashed);
-                }
 
-            }
         }
 
         /// <summary>
@@ -562,6 +529,7 @@ namespace VectorEditor
             pbCanvas.Image = null;
         }
 
+        #region Изменение размера канвы
         /// <summary>
         /// Изменение размера по высоте
         /// </summary>
@@ -624,9 +592,10 @@ namespace VectorEditor
                 
             }
         }
+        
+        #endregion
 
-
-
+        
 
 
         /// <summary>

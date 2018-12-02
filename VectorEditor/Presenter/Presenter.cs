@@ -18,7 +18,7 @@ namespace VectorEditor.Model
 
             _model.NewProject();
 
-            _view.FigureCreated += _view_FigureCreated;
+
             _model.RegisterObserver(this);
         }
 
@@ -38,7 +38,7 @@ namespace VectorEditor.Model
         /// <param name="figures"></param>
         public void Update(List<Figure> figures)
         {
-            _view.DrawModel(figures);
+
         }
     }
 }
