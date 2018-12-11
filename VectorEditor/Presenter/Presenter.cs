@@ -49,6 +49,12 @@ namespace VectorEditor.Presenter
                 _currentHandler.FigureCreated += _currentHandler_FigureCreated;
                 _view.CurrentHandler = (PolylineHandler)_currentHandler;
             }
+            else if (e == Item.Circle)
+            {
+                _currentHandler = new CircleHandler(_view.Canvas, _view.FigureParameters);
+                _currentHandler.FigureCreated += _currentHandler_FigureCreated;
+                _view.CurrentHandler = (CircleHandler)_currentHandler;
+            }
         }
 
         private void _currentHandler_FigureCreated(object sender, BaseFigure e)

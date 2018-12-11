@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Drawers\BaseDrawer.cs" />
+    <Compile Include="Drawers\CircleDrawer.cs" />
     <Compile Include="Drawers\FigureDrawer.cs" />
     <Compile Include="Drawers\LineDrawer.cs" />
     <Compile Include="Drawers\PolylineDrawer.cs" />
@@ -65,6 +66,7 @@
     <Compile Include="Item.cs" />
     <Compile Include="LineType.cs" />
     <Compile Include="PolylineEntity.cs" />
+    <Compile Include="Presenter\CircleHandler.cs" />
     <Compile Include="Presenter\IBaseHandler.cs" />
     <Compile Include="Presenter\LineHandler.cs" />
     <Compile Include="Presenter\PolylineHandler.cs" />

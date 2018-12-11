@@ -130,6 +130,7 @@
             this.buttonCircle.TabIndex = 4;
             this.buttonCircle.Text = "Окружность";
             this.buttonCircle.UseVisualStyleBackColor = true;
+            this.buttonCircle.Click += new System.EventHandler(this.buttonCircle_Click);
             // 
             // buttonPolygone
             // 

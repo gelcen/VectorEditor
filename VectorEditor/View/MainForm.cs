@@ -113,7 +113,7 @@ namespace VectorEditor
             this.DoubleBuffered = true;
 
             _figureParameters.LineColor = Color.Black;
-            _figureParameters.FillColor = Color.White;
+            _figureParameters.FillColor = Color.Transparent;
             _figureParameters.LineThickness = 1;
             _figureParameters.LineType = 0;
 
@@ -231,6 +231,11 @@ namespace VectorEditor
             OnToolPicked(Item.Polyline);
         }
 
+        private void buttonCircle_Click(object sender, EventArgs e)
+        {
+            OnToolPicked(Item.Circle);
+        }
+
         #region Изменение параметров фигуры
         private void nudLineThickness_ValueChanged(object sender, EventArgs e)
         {
@@ -330,6 +335,7 @@ namespace VectorEditor
             }
             //Сделать фабрику для рисования разных фигур
         }
+
 
         #endregion
 
