@@ -142,6 +142,7 @@
             this.buttonPolygone.TabIndex = 3;
             this.buttonPolygone.Text = "Многоугольник";
             this.buttonPolygone.UseVisualStyleBackColor = true;
+            this.buttonPolygone.Click += new System.EventHandler(this.buttonPolygone_Click);
             // 
             // buttonLine
             // 

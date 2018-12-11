@@ -61,6 +61,12 @@ namespace VectorEditor.Presenter
                 _currentHandler.FigureCreated += _currentHandler_FigureCreated;
                 _view.CurrentHandler = (EllipseHandler)_currentHandler;
             }
+            else if (e == Item.Polygon)
+            {
+                _currentHandler = new PolygonHandler(_view.Canvas, _view.FigureParameters);
+                _currentHandler.FigureCreated += _currentHandler_FigureCreated;
+                _view.CurrentHandler = (PolygonHandler)_currentHandler;
+            }
         }
 
         private void _currentHandler_FigureCreated(object sender, BaseFigure e)

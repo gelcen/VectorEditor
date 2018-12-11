@@ -28,11 +28,11 @@ namespace VectorEditor.Drawers
                 EllipseDrawer ellipseDrawer = new EllipseDrawer();
                 ellipseDrawer.DrawFigure(figure, canvas);
             }
-            //else if (figure.GetType() == typeof(Polygone))
-            //{
-            //    PolygoneDrawer polygoneDrawer = new PolygoneDrawer((Polygone)figure, canvas);
-            //    polygoneDrawer.Draw();
-            //}
+            else if (figure.GetType() == typeof(Polygon))
+            {
+                PolygonDrawer polygonDrawer = new PolygonDrawer();
+                polygonDrawer.DrawFigure(figure, canvas);
+            }
         }
     }
 }

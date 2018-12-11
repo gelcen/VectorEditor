@@ -241,6 +241,11 @@ namespace VectorEditor
             OnToolPicked(Item.Ellipse);
         }
 
+        private void buttonPolygone_Click(object sender, EventArgs e)
+        {
+            OnToolPicked(Item.Polygon);
+        }
+
         #region Изменение параметров фигуры
         private void nudLineThickness_ValueChanged(object sender, EventArgs e)
         {
@@ -340,6 +345,7 @@ namespace VectorEditor
             }
             //Сделать фабрику для рисования разных фигур
         }
+
 
 
 
