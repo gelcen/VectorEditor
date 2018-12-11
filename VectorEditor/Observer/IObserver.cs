@@ -9,6 +9,6 @@ namespace VectorEditor
 {
     public interface IObserver
     {
-        void Update(List<Figure> figures);
+        void Update(List<BaseFigure> figures);
     }
 }

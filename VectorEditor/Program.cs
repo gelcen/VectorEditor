@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using VectorEditor.Model;
+using VectorEditor.Presenter;
 
 namespace VectorEditor
 {
@@ -21,7 +22,7 @@ namespace VectorEditor
             MainForm mainForm = new MainForm();
             FigureModel figureModel = new FigureModel();
 
-            Presenter presenter = new Presenter(mainForm, figureModel);
+            Presenter.Presenter presenter = new Presenter.Presenter(mainForm, figureModel);
 
             Application.Run(mainForm);
         }

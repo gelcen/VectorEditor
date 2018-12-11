@@ -30,13 +30,13 @@ namespace VectorEditor.Model
         /// <summary>
         /// Список фигур
         /// </summary>
-        private List<Figure> _figures;
+        private List<BaseFigure> _figures;
 
         /// <summary>
         /// Добавление фигуры в список фигур
         /// </summary>
         /// <param name="figure">Добавляемая фигура</param>
-        public void AddFigure(Figure figure)
+        public void AddFigure(BaseFigure figure)
         {
             _figures.Add(figure);
             HasChanged();
@@ -55,7 +55,7 @@ namespace VectorEditor.Model
         /// Копирование объекта
         /// </summary>
         /// <param name="figure"></param>
-        public void CopyFigure(Figure figure)
+        public void CopyFigure(BaseFigure figure)
         {
 
         }
@@ -64,7 +64,7 @@ namespace VectorEditor.Model
         /// Вырезание объекта
         /// </summary>
         /// <param name="figure"></param>
-        public void CutFigure(Figure figure)
+        public void CutFigure(BaseFigure figure)
         {
 
         }
@@ -73,7 +73,7 @@ namespace VectorEditor.Model
         /// Удаление объекта
         /// </summary>
         /// <param name="figure"></param>
-        public void DeleteFigure(Figure figure)
+        public void DeleteFigure(BaseFigure figure)
         {
 
         }
@@ -82,7 +82,7 @@ namespace VectorEditor.Model
         /// Изменение размеров фигуры
         /// </summary>
         /// <param name="figure"></param>
-        public void ChangeFigureSize(Figure figure)
+        public void ChangeFigureSize(BaseFigure figure)
         {
 
         }
@@ -91,7 +91,7 @@ namespace VectorEditor.Model
         /// Перемещение объекта
         /// </summary>
         /// <param name="figure"></param>
-        public void MoveFigure(Figure figure)
+        public void MoveFigure(BaseFigure figure)
         {
 
         }
@@ -118,7 +118,7 @@ namespace VectorEditor.Model
         /// </summary>
         public void NewProject()
         {
-            _figures = new List<Figure>();
+            _figures = new List<BaseFigure>();
             _isChanged = false;
         }
 
@@ -130,9 +130,9 @@ namespace VectorEditor.Model
             _figures.Clear();
         }
 
-        public List<Figure> getFigureList()
+        public List<BaseFigure> getFigureList()
         {
-            throw new NotImplementedException();
+            return _figures;
         }
 
         public void RegisterObserver(IObserver o)

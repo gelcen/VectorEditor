@@ -9,14 +9,18 @@ namespace VectorEditor.View
 {
     public struct FigureParameters
     {
-        public Pen LinePen;
+        public int LineThickness;
+        public int LineType;
+        public Color LineColor;
         public Color FillColor;
-        public List<PointF> Points;
-        public FigureParameters(Pen pen, Color fillColor, List<PointF> points)
+        
+        public FigureParameters(int lineThickness, int lineType,
+                                Color lineColor, Color fillColor)
         {
-            LinePen = pen;
+            this.LineThickness = lineThickness;
+            LineType = lineType;
+            LineColor = lineColor;
             FillColor = fillColor;
-            Points = points == null ? new List<PointF>() : new List<PointF>(points);
         }
     }
 }

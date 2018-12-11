@@ -49,7 +49,7 @@ namespace VectorEditor
         {
             if (e.Button == MouseButtons.Left)
             {
-                _points.Add(Canvas.GetCanvasPoint(e.Location));
+                //_points.Add(Canvas.GetCanvasPoint(e.Location));
             }
         }
 
@@ -65,7 +65,7 @@ namespace VectorEditor
 
         protected override void OnCanvasMouseMove(object sender, MouseEventArgs e)
         {
-            _points[_points.Count - 1] = Canvas.GetCanvasPoint(e.Location);
+           // _points[_points.Count - 1] = Canvas.GetCanvasPoint(e.Location);
             Canvas.Refresh();
         }
 
@@ -76,7 +76,7 @@ namespace VectorEditor
 
         protected override void OnCanvasMouseUp(object sender, MouseEventArgs e)
         {
-            _points[_points.Count - 1] = Canvas.GetCanvasPoint(e.Location);
+           // _points[_points.Count - 1] = Canvas.GetCanvasPoint(e.Location);
             Canvas.Refresh();
         }
     }

@@ -8,21 +8,24 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using VectorEditor.Figures;
+using VectorEditor.Presenter;
 
 namespace VectorEditor.View
 {
-    public partial class Canvas : UserControl, IObserver
+    public partial class Canvas : UserControl
     {
         /// <summary>
         /// Список фигур в представлении
         /// </summary>
-        private List<Figure> _figures = new List<Figure>();
+        private List<BaseFigure> _figures = new List<BaseFigure>();
+
+        public LineHandler CurrentHandler;
 
         #region Current Parameters
         /// <summary>
         /// Текущий тип линии
         /// </summary>
-        private int _currentDashStyle = 0;
+        private int _currentDashStyle = 1;
 
         /// <summary>
         /// Текущая толщина линии
@@ -65,12 +68,7 @@ namespace VectorEditor.View
 
         #endregion
 
-        public void Update(List<Figure> figures)
-        {
-            _figures = figures;
-            Refresh();
-        }
-
+        
         /// <summary>
         /// Текущий инструмент
         /// </summary>
@@ -82,12 +80,16 @@ namespace VectorEditor.View
             ResumeLayout();
             DoubleBuffered = true;
             ResizeRedraw = true;
-
         }
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            DrawModel(e.Graphics);
+            Graphics g = e.Graphics;
+            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            if (CurrentHandler != null)
+            {
+                CurrentHandler.Draw(g);
+            }
         }
 
         private void DrawModel(Graphics g)
@@ -97,50 +99,37 @@ namespace VectorEditor.View
             {
                 foreach (var figure in _figures)
                 {
-                    FigureDrawer.DrawFigure(figure, g);
+                    //FigureDrawer.DrawFigure(figure, g);
                 }
             }
         }
-
-        public Point GetCanvasPoint(Point point)
-        {
-            Point resultPoint = point;
-            if (resultPoint.X < 0)
-                resultPoint.X = 0;
-            if (resultPoint.X > Width)
-                resultPoint.X = Width;
-            if (resultPoint.Y < 0)
-                resultPoint.Y = 0;
-            if (resultPoint.Y > Height)
-                resultPoint.Y = Height;
-            return resultPoint;
-        }
-
-        private int x, y, lx, ly = 0;
 
         protected override void OnMouseDown(MouseEventArgs e)
         {
             base.OnMouseDown(e);
-            Focus();
-            if (e.Button == MouseButtons.Left)
+            if (CurrentHandler != null)
             {
-                switch (_currentItem)
-                {
-                    case Item.Line:
-
-                        break;
-                    case Item.Polyline:
-                        break;
-                    case Item.Polygon:
-                        break;
-                    case Item.Circle:
-                        break;
-                    case Item.Ellipse:
-                        break;
-                }
+                CurrentHandler.MouseDown(null, e);
             }
         }
 
+        protected override void OnMouseMove(MouseEventArgs e)
+        {
+            base.OnMouseMove(e);
+            if (CurrentHandler != null)
+            {
+                CurrentHandler.MouseMove(null, e);
+            }
+        }
+
+        protected override void OnMouseUp(MouseEventArgs e)
+        {
+            base.OnMouseUp(e);
+            if (CurrentHandler != null)
+            {
+                CurrentHandler.MouseUp(null, e);
+            }
+        }
 
     }
 }

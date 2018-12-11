@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.pbCanvas = new System.Windows.Forms.PictureBox();
             this.gpFigures = new System.Windows.Forms.GroupBox();
             this.nudVertexCount = new System.Windows.Forms.NumericUpDown();
             this.buttonClearCanvas = new System.Windows.Forms.Button();
@@ -51,27 +50,13 @@
             this.btnHeightResize = new System.Windows.Forms.Button();
             this.btnDiagonalResize = new System.Windows.Forms.Button();
             this.btnWidthResize = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.pbCanvas)).BeginInit();
+            this.pbCanvas = new System.Windows.Forms.PictureBox();
             this.gpFigures.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudVertexCount)).BeginInit();
             this.gpProps.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudLineThickness)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbCanvas)).BeginInit();
             this.SuspendLayout();
-            // 
-            // pbCanvas
-            // 
-            this.pbCanvas.BackColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.pbCanvas.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pbCanvas.Cursor = System.Windows.Forms.Cursors.Default;
-            this.pbCanvas.Location = new System.Drawing.Point(3, 11);
-            this.pbCanvas.Margin = new System.Windows.Forms.Padding(2);
-            this.pbCanvas.Name = "pbCanvas";
-            this.pbCanvas.Size = new System.Drawing.Size(640, 480);
-            this.pbCanvas.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pbCanvas.TabIndex = 0;
-            this.pbCanvas.TabStop = false;
-            this.pbCanvas.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pbCanvas_MouseDown);
-            this.pbCanvas.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pbCanvas_MouseMove);
             // 
             // gpFigures
             // 
@@ -135,7 +120,6 @@
             this.buttonEllipse.TabIndex = 5;
             this.buttonEllipse.Text = "Эллипс";
             this.buttonEllipse.UseVisualStyleBackColor = true;
-            this.buttonEllipse.Click += new System.EventHandler(this.buttonEllipse_Click);
             // 
             // buttonCircle
             // 
@@ -146,7 +130,6 @@
             this.buttonCircle.TabIndex = 4;
             this.buttonCircle.Text = "Окружность";
             this.buttonCircle.UseVisualStyleBackColor = true;
-            this.buttonCircle.Click += new System.EventHandler(this.buttonCircle_Click);
             // 
             // buttonPolygone
             // 
@@ -157,7 +140,6 @@
             this.buttonPolygone.TabIndex = 3;
             this.buttonPolygone.Text = "Многоугольник";
             this.buttonPolygone.UseVisualStyleBackColor = true;
-            this.buttonPolygone.Click += new System.EventHandler(this.buttonPolygone_Click);
             // 
             // buttonLine
             // 
@@ -179,7 +161,6 @@
             this.buttonPolyLine.TabIndex = 1;
             this.buttonPolyLine.Text = "Полилиния";
             this.buttonPolyLine.UseVisualStyleBackColor = true;
-            this.buttonPolyLine.Click += new System.EventHandler(this.buttonPolyLine_Click);
             // 
             // buttonCursor
             // 
@@ -190,7 +171,6 @@
             this.buttonCursor.TabIndex = 0;
             this.buttonCursor.Text = "Указатель";
             this.buttonCursor.UseVisualStyleBackColor = true;
-            this.buttonCursor.Click += new System.EventHandler(this.buttonCursor_Click);
             // 
             // gpProps
             // 
@@ -216,14 +196,16 @@
             // 
             this.cbLineType.FormattingEnabled = true;
             this.cbLineType.Items.AddRange(new object[] {
-            "Пунктир",
-            "Сплошная"});
+            "Solid",
+            "Dash",
+            "Dot",
+            "DashDot",
+            "DashDotDot"});
             this.cbLineType.Location = new System.Drawing.Point(95, 111);
             this.cbLineType.Margin = new System.Windows.Forms.Padding(2);
             this.cbLineType.Name = "cbLineType";
             this.cbLineType.Size = new System.Drawing.Size(79, 21);
             this.cbLineType.TabIndex = 7;
-            this.cbLineType.Text = "Выбрать";
             this.cbLineType.SelectedIndexChanged += new System.EventHandler(this.cbLineType_SelectedIndexChanged);
             // 
             // buttonFillColor
@@ -270,6 +252,7 @@
             0,
             0,
             0});
+            this.nudLineThickness.ValueChanged += new System.EventHandler(this.nudLineThickness_ValueChanged);
             // 
             // label4
             // 
@@ -313,7 +296,7 @@
             // 
             // btnHeightResize
             // 
-            this.btnHeightResize.Location = new System.Drawing.Point(310, 484);
+            this.btnHeightResize.Location = new System.Drawing.Point(310, 492);
             this.btnHeightResize.Name = "btnHeightResize";
             this.btnHeightResize.Size = new System.Drawing.Size(12, 12);
             this.btnHeightResize.TabIndex = 3;
@@ -322,7 +305,7 @@
             // 
             // btnDiagonalResize
             // 
-            this.btnDiagonalResize.Location = new System.Drawing.Point(636, 484);
+            this.btnDiagonalResize.Location = new System.Drawing.Point(647, 489);
             this.btnDiagonalResize.Name = "btnDiagonalResize";
             this.btnDiagonalResize.Size = new System.Drawing.Size(12, 12);
             this.btnDiagonalResize.TabIndex = 4;
@@ -331,40 +314,52 @@
             // 
             // btnWidthResize
             // 
-            this.btnWidthResize.Location = new System.Drawing.Point(636, 240);
+            this.btnWidthResize.Location = new System.Drawing.Point(647, 241);
             this.btnWidthResize.Name = "btnWidthResize";
             this.btnWidthResize.Size = new System.Drawing.Size(12, 12);
             this.btnWidthResize.TabIndex = 5;
             this.btnWidthResize.UseVisualStyleBackColor = true;
             this.btnWidthResize.MouseMove += new System.Windows.Forms.MouseEventHandler(this.btnWidthResize_MouseMove);
             // 
+            // pbCanvas
+            // 
+            this.pbCanvas.BackColor = System.Drawing.SystemColors.HighlightText;
+            this.pbCanvas.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pbCanvas.Location = new System.Drawing.Point(11, 13);
+            this.pbCanvas.Name = "pbCanvas";
+            this.pbCanvas.Size = new System.Drawing.Size(639, 480);
+            this.pbCanvas.TabIndex = 6;
+            this.pbCanvas.TabStop = false;
+            this.pbCanvas.Paint += new System.Windows.Forms.PaintEventHandler(this.pbCanvas_Paint);
+            this.pbCanvas.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pbCanvas_MouseDown);
+            this.pbCanvas.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pbCanvas_MouseMove);
+            this.pbCanvas.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pbCanvas_MouseUp);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(906, 543);
+            this.Controls.Add(this.pbCanvas);
             this.Controls.Add(this.btnWidthResize);
             this.Controls.Add(this.btnDiagonalResize);
             this.Controls.Add(this.btnHeightResize);
             this.Controls.Add(this.gpProps);
             this.Controls.Add(this.gpFigures);
-            this.Controls.Add(this.pbCanvas);
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "MainForm";
             this.Text = "VectorEditor";
-            ((System.ComponentModel.ISupportInitialize)(this.pbCanvas)).EndInit();
             this.gpFigures.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.nudVertexCount)).EndInit();
             this.gpProps.ResumeLayout(false);
             this.gpProps.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudLineThickness)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbCanvas)).EndInit();
             this.ResumeLayout(false);
 
         }
 
         #endregion
-
-        private System.Windows.Forms.PictureBox pbCanvas;
         private System.Windows.Forms.GroupBox gpFigures;
         private System.Windows.Forms.Button buttonEllipse;
         private System.Windows.Forms.Button buttonCircle;
@@ -387,6 +382,7 @@
         private System.Windows.Forms.Button btnHeightResize;
         private System.Windows.Forms.Button btnDiagonalResize;
         private System.Windows.Forms.Button btnWidthResize;
+        private System.Windows.Forms.PictureBox pbCanvas;
     }
 }
 

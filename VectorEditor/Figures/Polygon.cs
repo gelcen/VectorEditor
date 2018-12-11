@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace VectorEditor.Figures
 {
-    public class Circle:FillableFigure
+    public class Polygon:FillableFigure
     {
-        public Circle()
+        public Polygon()
         {
             _lineProperties = new LineProperties();
-            _points = new Points(2);
+            _points = new Points();
             _fillProperty = new FillProperty();
         }
     }
