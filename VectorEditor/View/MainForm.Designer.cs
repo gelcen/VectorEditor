@@ -120,6 +120,7 @@
             this.buttonEllipse.TabIndex = 5;
             this.buttonEllipse.Text = "Эллипс";
             this.buttonEllipse.UseVisualStyleBackColor = true;
+            this.buttonEllipse.Click += new System.EventHandler(this.buttonEllipse_Click);
             // 
             // buttonCircle
             // 

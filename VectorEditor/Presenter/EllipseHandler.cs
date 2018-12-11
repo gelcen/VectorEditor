@@ -1,6 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using VectorEditor.Drawers;
 using VectorEditor.Figures;
@@ -8,13 +12,13 @@ using VectorEditor.View;
 
 namespace VectorEditor.Presenter
 {
-    public class CircleHandler : IBaseHandler
+    public class EllipseHandler : IBaseHandler
     {
         private FigureParameters _figureParameters;
 
         private PictureBox _canvas;
 
-        private BaseFigure _circle;
+        private BaseFigure _ellipse;
 
 
         public FigureParameters FigureParameters
@@ -37,12 +41,12 @@ namespace VectorEditor.Presenter
             }
         }
 
-        public CircleHandler(PictureBox canvas, FigureParameters figureParameters)
+        public EllipseHandler(PictureBox canvas, FigureParameters figureParameters)
         {
             FigureParameters = figureParameters;
             Canvas = canvas;
 
-            _circle = null;
+            _ellipse = null;
         }
 
         public event EventHandler<BaseFigure> FigureCreated;
@@ -59,9 +63,9 @@ namespace VectorEditor.Presenter
 
         public void Draw(Graphics g)
         {
-            if (_circle != null)
+            if (_ellipse != null)
             {
-                FigureDrawer.DrawFigure(_circle, g);
+                FigureDrawer.DrawFigure(_ellipse, g);
             }
         }
 
@@ -69,17 +73,17 @@ namespace VectorEditor.Presenter
         {
             if (e.Button == MouseButtons.Left)
             {
-                var circle = FigureFactory.CreateFillableFigure(Item.Circle) as FillableFigure;
+                var ellipse = FigureFactory.CreateFillableFigure(Item.Ellipse) as FillableFigure;
 
-                circle.LineProperties.Color = _figureParameters.LineColor;
-                circle.LineProperties.Style = (DashStyle)_figureParameters.LineType;
-                circle.LineProperties.Thickness = _figureParameters.LineThickness;
-                circle.FillProperty.FillColor = _figureParameters.FillColor;
+                ellipse.LineProperties.Color = _figureParameters.LineColor;
+                ellipse.LineProperties.Style = (DashStyle)_figureParameters.LineType;
+                ellipse.LineProperties.Thickness = _figureParameters.LineThickness;
+                ellipse.FillProperty.FillColor = _figureParameters.FillColor;
 
-                _circle = circle;
+                _ellipse = ellipse;
 
-                _circle.Points.AddPoint(new PointF(e.X, e.Y));
-                _circle.Points.AddPoint(new PointF(e.X, e.Y));
+                _ellipse.Points.AddPoint(new PointF(e.X, e.Y));
+                _ellipse.Points.AddPoint(new PointF(e.X, e.Y));
 
                 Canvas.Refresh();
             }
@@ -87,19 +91,19 @@ namespace VectorEditor.Presenter
 
         public void MouseMove(object sender, MouseEventArgs e)
         {
-            if (_circle == null) return;
+            if (_ellipse == null) return;
             PointF temp = new PointF(e.Location.X, e.Location.Y);
-            _circle.Points.RemoveLast();
-            _circle.Points.AddPoint(temp);
+            _ellipse.Points.RemoveLast();
+            _ellipse.Points.AddPoint(temp);
 
             Canvas.Refresh();
         }
 
         public void MouseUp(object sender, MouseEventArgs e)
         {
-            if (_circle == null) return;
-            OnFigureCreated(_circle);
-            _circle = null;
+            if (_ellipse == null) return;
+            OnFigureCreated(_ellipse);
+            _ellipse = null;
 
             Canvas.Refresh();
         }

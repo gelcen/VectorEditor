@@ -55,6 +55,12 @@ namespace VectorEditor.Presenter
                 _currentHandler.FigureCreated += _currentHandler_FigureCreated;
                 _view.CurrentHandler = (CircleHandler)_currentHandler;
             }
+            else if (e == Item.Ellipse)
+            {
+                _currentHandler = new EllipseHandler(_view.Canvas, _view.FigureParameters);
+                _currentHandler.FigureCreated += _currentHandler_FigureCreated;
+                _view.CurrentHandler = (EllipseHandler)_currentHandler;
+            }
         }
 
         private void _currentHandler_FigureCreated(object sender, BaseFigure e)
