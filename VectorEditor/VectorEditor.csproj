@@ -69,6 +69,7 @@
     <Compile Include="LineType.cs" />
     <Compile Include="PolylineEntity.cs" />
     <Compile Include="Presenter\CircleHandler.cs" />
+    <Compile Include="Presenter\CursorHandler.cs" />
     <Compile Include="Presenter\EllipseHandler.cs" />
     <Compile Include="Presenter\IBaseHandler.cs" />
     <Compile Include="Presenter\LineHandler.cs" />

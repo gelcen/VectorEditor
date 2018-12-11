@@ -13,6 +13,7 @@ namespace VectorEditor.Presenter
         private readonly IView _view;
         private readonly IModel _model;
         private IBaseHandler _currentHandler;
+        private List<BaseFigure> _figures;
 
         public Presenter(IView view, IModel model)
         {
@@ -23,11 +24,12 @@ namespace VectorEditor.Presenter
 
             _model.NewProject();
 
+
             _view.ToolPicked += _view_ToolPicked;
             _view.ParametersChanged += _view_ParametersChanged;
             
-
             _model.RegisterObserver(this);
+            _model.RegisterObserver((IObserver)_view);
         }
 
         private void _view_ParametersChanged(object sender, View.FigureParameters e)
@@ -67,22 +69,15 @@ namespace VectorEditor.Presenter
                 _currentHandler.FigureCreated += _currentHandler_FigureCreated;
                 _view.CurrentHandler = (PolygonHandler)_currentHandler;
             }
+            else if (e == Item.Cursor)
+            {
+
+            }
         }
 
         private void _currentHandler_FigureCreated(object sender, BaseFigure e)
         {
             _model.AddFigure(e);
-            _view.Figures = _model.getFigureList();
-        }
-
-        /// <summary>
-        /// Обработчик события создания фигуры в представлении
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void _view_FigureCreated(object sender, FigureCreatedEventArgs e)
-        {
-            _model.AddFigure(e.Figure);
         }
 
         /// <summary>
@@ -91,7 +86,12 @@ namespace VectorEditor.Presenter
         /// <param name="figures"></param>
         public void Update(List<BaseFigure> figures)
         {
+            _figures = figures;
+        }
 
+        private List<BaseFigure> GetFigures()
+        {
+            return _figures;
         }
     }
 }

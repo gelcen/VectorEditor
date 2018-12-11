@@ -39,20 +39,7 @@ namespace VectorEditor.Model
             get;
             set;
         }
-
-        List<BaseFigure> Figures
-        {
-            get;
-            set;
-        }
-        
-
-        /// <summary>
-        /// Установка текущего инструмента
-        /// </summary>
-        /// <param name="tool"></param>
-        void SetTool(Item tool);
-
+       
         event EventHandler<Item> ToolPicked;
     }
 }

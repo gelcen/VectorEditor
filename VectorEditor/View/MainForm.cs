@@ -10,17 +10,8 @@ using VectorEditor.View;
 
 namespace VectorEditor
 {
-    public partial class MainForm : Form, IView
+    public partial class MainForm : Form, IView, IObserver
     {
-
-
-        /// <summary>
-        /// События прорисовки многоугольника
-        /// </summary>
-        event EventHandler polygoneDrawed;
-
-        public event EventHandler<FigureCreatedEventArgs> FigureCreated;       
-
         private IBaseHandler _currentHandler;
 
         private List<BaseFigure> _figures;
@@ -47,11 +38,6 @@ namespace VectorEditor
             }
         }
 
-        public void SetTool(Item tool)
-        {
-            throw new NotImplementedException();
-        }
-
         public IBaseHandler CurrentHandler
         {
             get
@@ -61,18 +47,6 @@ namespace VectorEditor
             set
             {
                 _currentHandler = value;
-            }
-        }
-
-        public List<BaseFigure> Figures
-        {
-            get
-            {
-                return _figures;
-            }
-            set
-            {
-                _figures = value;
             }
         }
 
@@ -120,30 +94,6 @@ namespace VectorEditor
 
             pbCanvas.Parent = this;
 
-        }
-
-        /// <summary>
-        /// Обертка для вызова обработчика события создания фигуры
-        /// </summary>
-        /// <param name="e"></param>
-        private void OnFigureCreated(FigureCreatedEventArgs e)
-        {
-            EventHandler<FigureCreatedEventArgs> handler = FigureCreated;
-            if (handler != null)
-            {
-                handler(this, e);
-            }
-        }
-
-        /// <summary>
-        /// Обработчик события изменения значения типа линии
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void cbLineType_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            _figureParameters.LineType = cbLineType.SelectedIndex;
-            OnParametersChanged(_figureParameters);
         }
 
         /// <summary>
@@ -247,23 +197,22 @@ namespace VectorEditor
         }
 
         #region Изменение параметров фигуры
+
         private void nudLineThickness_ValueChanged(object sender, EventArgs e)
         {
             _figureParameters.LineThickness = Convert.ToInt32(nudLineThickness.Value);
             OnParametersChanged(_figureParameters);
         }
-                    
+
         /// <summary>
-        /// Обработчик события изменения значения количества вершин многоугольника
+        /// Обработчик события изменения значения типа линии
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void nudVertexCount_ValueChanged(object sender, EventArgs e)
+        private void cbLineType_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (polygoneDrawed != null)
-            {
-                polygoneDrawed(sender, e);
-            }
+            _figureParameters.LineType = cbLineType.SelectedIndex;
+            OnParametersChanged(_figureParameters);
         }
 
         /// <summary>
@@ -349,8 +298,18 @@ namespace VectorEditor
 
 
 
+
         #endregion
 
-        
+        private void buttonCursor_Click(object sender, EventArgs e)
+        {
+            OnToolPicked(Item.Cursor);
+        }
+
+        //IObserver
+        public void Update(List<BaseFigure> figures)
+        {
+            _figures = figures;
+        }
     }
 }

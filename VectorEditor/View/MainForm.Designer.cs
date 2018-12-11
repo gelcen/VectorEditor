@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.gpFigures = new System.Windows.Forms.GroupBox();
-            this.nudVertexCount = new System.Windows.Forms.NumericUpDown();
             this.buttonClearCanvas = new System.Windows.Forms.Button();
             this.buttonEllipse = new System.Windows.Forms.Button();
             this.buttonCircle = new System.Windows.Forms.Button();
@@ -52,7 +51,6 @@
             this.btnWidthResize = new System.Windows.Forms.Button();
             this.pbCanvas = new System.Windows.Forms.PictureBox();
             this.gpFigures.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudVertexCount)).BeginInit();
             this.gpProps.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudLineThickness)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbCanvas)).BeginInit();
@@ -61,7 +59,6 @@
             // gpFigures
             // 
             this.gpFigures.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.gpFigures.Controls.Add(this.nudVertexCount);
             this.gpFigures.Controls.Add(this.buttonClearCanvas);
             this.gpFigures.Controls.Add(this.buttonEllipse);
             this.gpFigures.Controls.Add(this.buttonCircle);
@@ -77,29 +74,6 @@
             this.gpFigures.TabIndex = 1;
             this.gpFigures.TabStop = false;
             this.gpFigures.Text = "Инструменты";
-            // 
-            // nudVertexCount
-            // 
-            this.nudVertexCount.Location = new System.Drawing.Point(117, 122);
-            this.nudVertexCount.Maximum = new decimal(new int[] {
-            6,
-            0,
-            0,
-            0});
-            this.nudVertexCount.Minimum = new decimal(new int[] {
-            3,
-            0,
-            0,
-            0});
-            this.nudVertexCount.Name = "nudVertexCount";
-            this.nudVertexCount.Size = new System.Drawing.Size(47, 20);
-            this.nudVertexCount.TabIndex = 7;
-            this.nudVertexCount.Value = new decimal(new int[] {
-            3,
-            0,
-            0,
-            0});
-            this.nudVertexCount.ValueChanged += new System.EventHandler(this.nudVertexCount_ValueChanged);
             // 
             // buttonClearCanvas
             // 
@@ -175,6 +149,7 @@
             this.buttonCursor.TabIndex = 0;
             this.buttonCursor.Text = "Указатель";
             this.buttonCursor.UseVisualStyleBackColor = true;
+            this.buttonCursor.Click += new System.EventHandler(this.buttonCursor_Click);
             // 
             // gpProps
             // 
@@ -354,7 +329,6 @@
             this.Name = "MainForm";
             this.Text = "VectorEditor";
             this.gpFigures.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.nudVertexCount)).EndInit();
             this.gpProps.ResumeLayout(false);
             this.gpProps.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudLineThickness)).EndInit();
@@ -382,7 +356,6 @@
         private System.Windows.Forms.Button buttonLineColor;
         private System.Windows.Forms.ColorDialog colorDialogLineColor;
         private System.Windows.Forms.Button buttonClearCanvas;
-        private System.Windows.Forms.NumericUpDown nudVertexCount;
         private System.Windows.Forms.Button btnHeightResize;
         private System.Windows.Forms.Button btnDiagonalResize;
         private System.Windows.Forms.Button btnWidthResize;

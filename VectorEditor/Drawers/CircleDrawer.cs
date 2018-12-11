@@ -29,14 +29,15 @@ namespace VectorEditor.Drawers
             Rectangle circleRect = new Rectangle(x, y, radius, radius);
 
             Brush brush = new SolidBrush(circle.FillProperty.FillColor);
-
             canvas.FillEllipse(brush, circleRect);
+            brush.Dispose();
 
             Pen pen = new Pen(circle.LineProperties.Color,
                               circle.LineProperties.Thickness);
             pen.DashStyle = circle.LineProperties.Style;
 
             canvas.DrawEllipse(pen, circleRect);
+            pen.Dispose();
         }
 
         public override void DrawSelection(BaseFigure figure, Graphics canvas)

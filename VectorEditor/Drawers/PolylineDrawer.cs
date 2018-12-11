@@ -20,6 +20,7 @@ namespace VectorEditor.Drawers
             pen.DashStyle = figure.LineProperties.Style;
 
             canvas.DrawLines(pen, points.ToArray());
+            pen.Dispose();
         }
 
         public override void DrawSelection(BaseFigure figure, Graphics canvas)

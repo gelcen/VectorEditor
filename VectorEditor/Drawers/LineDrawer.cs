@@ -19,6 +19,7 @@ namespace VectorEditor.Drawers
 
             canvas.DrawLine(pen, figure.Points.GetPoints()[0],
                             figure.Points.GetPoints()[1]);
+            pen.Dispose();
         }
 
         public override void DrawSelection(BaseFigure figure, Graphics canvas)
