@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using VectorEditor.Drawers;
 using VectorEditor.Figures;
 using VectorEditor.View;
 
@@ -14,8 +11,6 @@ namespace VectorEditor.Presenter
     public class LineHandler : IBaseHandler
     {
         private FigureParameters _figureParameters;
-
-        private List<PointF> _points;
 
         private PictureBox _canvas;
 
@@ -27,14 +22,6 @@ namespace VectorEditor.Presenter
             set
             {
                 _figureParameters = value;
-            }
-        }
-
-        public List<PointF> Points
-        {
-            get
-            {
-                return _points;
             }
         }
 
@@ -54,19 +41,11 @@ namespace VectorEditor.Presenter
         {
             FigureParameters = figureParameters;
             Canvas = canvas;
-            _points = new List<PointF>();
 
             _line = null;
         }
 
-        public event EventHandler<BaseFigure> FigureChanged = delegate { };
-
         public event EventHandler<BaseFigure> FigureCreated;
-
-        public void OnFigureChanged(BaseFigure e)
-        {
-            FigureChanged(this, e);
-        }
 
         private void OnFigureCreated(BaseFigure createdFigure)
         {
@@ -82,16 +61,9 @@ namespace VectorEditor.Presenter
         {
             if (_line != null)
             {
-                Pen pen = new Pen(_line.LineProperties.Color,
-                              _line.LineProperties.Thickness);
-                pen.DashStyle = _line.LineProperties.Style;
-
-                g.DrawLine(pen, _line.Points.GetPoints()[0],
-                                _line.Points.GetPoints()[1]);
+                FigureDrawer.DrawFigure(_line, g);
             }
         }
-
-        // Рисовка в OnPaint текущей фигуры, которая передается через интерфейс
 
         public void MouseDown(object sender, MouseEventArgs e)
         {
@@ -126,13 +98,6 @@ namespace VectorEditor.Presenter
             _line = null;
 
             Canvas.Refresh();
-        }
-
-        public void RemoveHandlers()
-        {
-            Canvas.MouseDown -= MouseDown;
-            Canvas.MouseUp -= MouseUp;
-            Canvas.MouseMove -= MouseMove;
         }
     }
 }

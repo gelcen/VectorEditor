@@ -46,6 +46,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Drawers\BaseDrawer.cs" />
+    <Compile Include="Drawers\FigureDrawer.cs" />
+    <Compile Include="Drawers\LineDrawer.cs" />
+    <Compile Include="Drawers\PolylineDrawer.cs" />
     <Compile Include="Figures\BaseFigure.cs" />
     <Compile Include="Figures\Circle.cs" />
     <Compile Include="Figures\Ellipse.cs" />
@@ -63,6 +67,7 @@
     <Compile Include="PolylineEntity.cs" />
     <Compile Include="Presenter\IBaseHandler.cs" />
     <Compile Include="Presenter\LineHandler.cs" />
+    <Compile Include="Presenter\PolylineHandler.cs" />
     <Compile Include="View\Canvas.cs">
       <SubType>UserControl</SubType>
     </Compile>

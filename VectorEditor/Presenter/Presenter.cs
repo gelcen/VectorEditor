@@ -16,6 +16,8 @@ namespace VectorEditor.Presenter
 
         public Presenter(IView view, IModel model)
         {
+            _currentHandler = null;
+
             _view = view;
             _model = model;
 
@@ -35,16 +37,17 @@ namespace VectorEditor.Presenter
 
         private void _view_ToolPicked(object sender, Item e)
         {
-            if (_currentHandler != null)
-            {
-                _currentHandler.RemoveHandlers();
-            }
             if (e == Item.Line)
             {
                 _currentHandler = new LineHandler(_view.Canvas, _view.FigureParameters);
                 _currentHandler.FigureCreated += _currentHandler_FigureCreated;
                 _view.CurrentHandler = (LineHandler)_currentHandler;
-                _view.CurrentHandler.FigureChanged += delegate { _view.Canvas.Refresh(); };
+            }
+            else if (e == Item.Polyline)
+            {
+                _currentHandler = new PolylineHandler(_view.Canvas, _view.FigureParameters);
+                _currentHandler.FigureCreated += _currentHandler_FigureCreated;
+                _view.CurrentHandler = (PolylineHandler)_currentHandler;
             }
         }
 

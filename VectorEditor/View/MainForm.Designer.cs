@@ -161,6 +161,7 @@
             this.buttonPolyLine.TabIndex = 1;
             this.buttonPolyLine.Text = "Полилиния";
             this.buttonPolyLine.UseVisualStyleBackColor = true;
+            this.buttonPolyLine.Click += new System.EventHandler(this.buttonPolyLine_Click);
             // 
             // buttonCursor
             // 

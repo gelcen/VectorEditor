@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using VectorEditor.Drawers;
 using VectorEditor.Figures;
 using VectorEditor.Model;
 using VectorEditor.Presenter;
@@ -225,6 +226,11 @@ namespace VectorEditor
             OnToolPicked(Item.Line);
         }
 
+        private void buttonPolyLine_Click(object sender, EventArgs e)
+        {
+            OnToolPicked(Item.Polyline);
+        }
+
         #region Изменение параметров фигуры
         private void nudLineThickness_ValueChanged(object sender, EventArgs e)
         {
@@ -309,6 +315,15 @@ namespace VectorEditor
         {
             Graphics g = e.Graphics;
             g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+
+            if (_figures != null)
+            {
+                foreach (BaseFigure figure in _figures)
+                {
+                    FigureDrawer.DrawFigure(figure, g);
+                }
+            }
+
             if (CurrentHandler != null)
             {
                 CurrentHandler.Draw(g);
@@ -317,5 +332,7 @@ namespace VectorEditor
         }
 
         #endregion
+
+        
     }
 }
