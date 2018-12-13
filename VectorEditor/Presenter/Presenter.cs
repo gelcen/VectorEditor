@@ -71,7 +71,8 @@ namespace VectorEditor.Presenter
             }
             else if (e == Item.Cursor)
             {
-
+                _currentHandler = new CursorHandler(_view.Canvas, _view.FigureParameters, this);
+                _view.CurrentHandler = (CursorHandler)_currentHandler;
             }
         }
 
@@ -89,7 +90,7 @@ namespace VectorEditor.Presenter
             _figures = figures;
         }
 
-        private List<BaseFigure> GetFigures()
+        public List<BaseFigure> GetFigures()
         {
             return _figures;
         }

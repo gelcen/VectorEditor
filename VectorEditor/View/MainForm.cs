@@ -295,10 +295,6 @@ namespace VectorEditor
             //Сделать фабрику для рисования разных фигур
         }
 
-
-
-
-
         #endregion
 
         private void buttonCursor_Click(object sender, EventArgs e)
