@@ -32,6 +32,11 @@ namespace VectorEditor.Figures
             _points.RemoveAt(_points.Count - 1);
         }
 
+        public void Replace(int index, PointF point)
+        {
+            _points[index] = point;
+        }
+
         private bool IsInRange()
         {
             if (_count == 0)

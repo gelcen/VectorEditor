@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using VectorEditor.Drawers;
 using VectorEditor.Figures;
 using VectorEditor.View;
 
@@ -63,6 +65,11 @@ namespace VectorEditor.Presenter
             g.DrawRectangle(pen, _selectionRect);
             pen.Dispose();
             brush.Dispose();
+            if (_selectedFigure != null)
+            {
+                FigureDrawer.DrawSelection(_selectedFigure, g);
+            }
+            
         }
 
         /// <summary>
@@ -93,6 +100,12 @@ namespace VectorEditor.Presenter
                 _selectedFigures.Clear();
 
                 _isMouseDown = true;
+                if (IsPointOnFigure(e.Location))
+                {
+                    _isMouseDownOnFigure = true;
+                    _selectedFigure = GetFigurePointOn(e.Location);
+                }
+                
                 _originalMouseDownPoint = e.Location;
             }
         }
@@ -107,17 +120,62 @@ namespace VectorEditor.Presenter
             }
             else if (_isMouseDown)
             {
-                PointF currentMouseDownPoint = e.Location;
-                float deltaX = Math.Abs(
-                               currentMouseDownPoint.X - _originalMouseDownPoint.X);
-                float deltaY = Math.Abs(
-                               currentMouseDownPoint.Y - _originalMouseDownPoint.Y);
-                double distance = Math.Sqrt(Math.Pow(deltaX, 2) + Math.Pow(deltaY, 2));
-                if (distance > _dragTreshold)
+                if (_isMouseDownOnFigure)
                 {
-                    _isDraggingSelectionRect = true;
-                    InitDragSelectionRect(_originalMouseDownPoint, 
-                                          currentMouseDownPoint);
+                    PointF currentMouseDownPoint = e.Location;
+                    float deltaX = currentMouseDownPoint.X - _originalMouseDownPoint.X;
+                    float deltaY = currentMouseDownPoint.Y - _originalMouseDownPoint.Y;
+                    float distance = (float)Math.Sqrt(Math.Pow(deltaX, 2) + Math.Pow(deltaY, 2));
+
+                    if (distance > _dragTreshold)
+                    {
+                        _isDraggingFigure = true;
+                        PointF tempPoint0 = new PointF();
+                        tempPoint0.X = _selectedFigure.Points.GetPoints()[0].X;
+                        tempPoint0.Y = _selectedFigure.Points.GetPoints()[0].Y;
+                        PointF tempPoint1 = new PointF();
+                        tempPoint1.X = _selectedFigure.Points.GetPoints()[1].X;
+                        tempPoint1.Y = _selectedFigure.Points.GetPoints()[1].Y;
+                        tempPoint0.X += deltaX;
+                        tempPoint0.Y += deltaY;
+                        tempPoint1.X += deltaX;
+                        tempPoint1.Y += deltaY;
+                        _selectedFigure.Points.Replace(0, tempPoint0);
+                        _selectedFigure.Points.Replace(1, tempPoint1);
+                    }
+
+                }
+                else
+                {
+                    PointF currentMouseDownPoint = e.Location;
+                    float deltaX = Math.Abs(
+                                   currentMouseDownPoint.X - _originalMouseDownPoint.X);
+                    float deltaY = Math.Abs(
+                                   currentMouseDownPoint.Y - _originalMouseDownPoint.Y);
+                    double distance = Math.Sqrt(Math.Pow(deltaX, 2) + Math.Pow(deltaY, 2));
+                    if (distance > _dragTreshold)
+                    {
+                        _isDraggingSelectionRect = true;
+                        InitDragSelectionRect(_originalMouseDownPoint,
+                                              currentMouseDownPoint);
+                    }
+                }                
+            }
+            else
+            {
+                Cursor newCursor;
+                if (IsPointOnFigure(e.Location))
+                {
+                    newCursor = Cursors.Hand;
+                }
+                else
+                {
+                    newCursor = Cursors.Default;
+                }
+
+                if (Canvas.Cursor != newCursor)
+                {
+                    Canvas.Cursor = newCursor;
                 }
             }
             Canvas.Refresh();
@@ -142,6 +200,10 @@ namespace VectorEditor.Presenter
                 if (_isMouseDown)
                 {
                     _isMouseDown = false;
+                    if (_isDraggingFigure)
+                    {
+                        _isDraggingFigure = false;
+                    }
                 }
 
                 if(!wasDragSelectionApplied)
@@ -191,7 +253,53 @@ namespace VectorEditor.Presenter
 
             _selectionRect = new Rectangle((int)x, (int)y, 
                                            (int)width, (int)height);
+        }
 
+        private bool IsPointOnFigure(PointF point)
+        {
+            bool result = false;
+            foreach (var figure in _presenter.GetFigures())
+            {
+                var points = figure.Points.GetPoints();
+                Pen pickPen = new Pen(Color.Transparent, 3);
+
+                GraphicsPath path = new GraphicsPath();
+
+                //path.AddRectangle(GetRect(points));
+                path.AddLine(points[0], points[1]);
+
+                result = path.IsOutlineVisible(point, pickPen);
+            }
+            return result;
+        }
+
+        private BaseFigure GetFigurePointOn(PointF point)
+        {
+            foreach (var figure in _presenter.GetFigures())
+            {
+                var points = figure.Points.GetPoints();
+                Pen pickPen = new Pen(Color.Transparent, 3);
+
+                GraphicsPath path = new GraphicsPath();
+
+                //path.AddRectangle(GetRect(points));
+                path.AddLine(points[0], points[1]);
+
+                if (path.IsOutlineVisible(point, pickPen))
+                {
+                    return figure;
+                }
+            }
+            return null;
+        }
+
+        private RectangleF GetRect(IReadOnlyCollection<PointF> points)
+        {
+            float minX = points.Min(x => x.X);
+            float minY = points.Min(y => y.Y);
+            float maxX = points.Max(x => x.X);
+            float maxY = points.Max(y => y.Y);
+            return new RectangleF(minX, minY, Math.Abs(maxX - minX), Math.Abs(maxY - minY));
         }
     }
 }
