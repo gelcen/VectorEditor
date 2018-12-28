@@ -65,7 +65,7 @@ namespace VectorEditor.Presenter
             g.DrawRectangle(pen, _selectionRect);
             pen.Dispose();
             brush.Dispose();
-            if (_selectedFigure != null)
+            if (_selectedFigure != null && _isFigurePicked)
             {
                 FigureDrawer.DrawSelection(_selectedFigure, g);
             }
@@ -89,23 +89,32 @@ namespace VectorEditor.Presenter
 
         private bool _isDraggingFigure = false;
 
+        private bool _isFigurePicked = false;
+
         private List<BaseFigure> _selectedFigures;
 
         private Rectangle _selectionRect;
+
+        private float _offsetX;
+        private float _offsetY;
 
         public void MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
             {
-                _selectedFigures.Clear();
-
                 _isMouseDown = true;
                 if (IsPointOnFigure(e.Location))
                 {
                     _isMouseDownOnFigure = true;
+                    _isFigurePicked = true;
                     _selectedFigure = GetFigurePointOn(e.Location);
+                    _offsetX = _selectedFigure.Points.GetPoints()[0].X - e.X;
+                    _offsetY = _selectedFigure.Points.GetPoints()[0].Y - e.Y;
                 }
-                
+                else
+                {
+                    _isFigurePicked = false;
+                }
                 _originalMouseDownPoint = e.Location;
             }
         }
@@ -122,28 +131,21 @@ namespace VectorEditor.Presenter
             {
                 if (_isMouseDownOnFigure)
                 {
-                    PointF currentMouseDownPoint = e.Location;
-                    float deltaX = currentMouseDownPoint.X - _originalMouseDownPoint.X;
-                    float deltaY = currentMouseDownPoint.Y - _originalMouseDownPoint.Y;
-                    float distance = (float)Math.Sqrt(Math.Pow(deltaX, 2) + Math.Pow(deltaY, 2));
+                    float newX1 = e.X + _offsetX;
+                    float newY1 = e.Y + _offsetY;
 
-                    if (distance > _dragTreshold)
-                    {
-                        _isDraggingFigure = true;
-                        PointF tempPoint0 = new PointF();
-                        tempPoint0.X = _selectedFigure.Points.GetPoints()[0].X;
-                        tempPoint0.Y = _selectedFigure.Points.GetPoints()[0].Y;
-                        PointF tempPoint1 = new PointF();
-                        tempPoint1.X = _selectedFigure.Points.GetPoints()[1].X;
-                        tempPoint1.Y = _selectedFigure.Points.GetPoints()[1].Y;
-                        tempPoint0.X += deltaX;
-                        tempPoint0.Y += deltaY;
-                        tempPoint1.X += deltaX;
-                        tempPoint1.Y += deltaY;
-                        _selectedFigure.Points.Replace(0, tempPoint0);
-                        _selectedFigure.Points.Replace(1, tempPoint1);
-                    }
+                    float dx = newX1 - _selectedFigure.Points.GetPoints()[0].X;
+                    float dy = newY1 - _selectedFigure.Points.GetPoints()[0].Y;
 
+                    if (dx == 0 && dy == 0) return;
+
+                    _isDraggingFigure = true;
+                    PointF tmpPt0 = new PointF(newX1, newY1);
+                    _selectedFigure.Points.Replace(0, tmpPt0);
+                    PointF tempPoint1 = new PointF(
+                            _selectedFigure.Points.GetPoints()[1].X + dx,
+                            _selectedFigure.Points.GetPoints()[1].Y + dy);
+                    _selectedFigure.Points.Replace(1, tempPoint1);                       
                 }
                 else
                 {
@@ -185,7 +187,7 @@ namespace VectorEditor.Presenter
         {
             if (e.Button == MouseButtons.Left)
             {
-                //Была создан прямоугольник выборки
+                //Был создан прямоугольник выборки
                 bool wasDragSelectionApplied = false;
 
                 if (_isDraggingSelectionRect)
@@ -204,12 +206,28 @@ namespace VectorEditor.Presenter
                     {
                         _isDraggingFigure = false;
                     }
+                    if (_isMouseDownOnFigure)
+                    {
+                        PointF currentMouseDownPoint = e.Location;
+                        float deltaX = Math.Abs(
+                                       currentMouseDownPoint.X - _originalMouseDownPoint.X);
+                        float deltaY = Math.Abs(
+                                       currentMouseDownPoint.Y - _originalMouseDownPoint.Y);
+                        double distance = Math.Sqrt(Math.Pow(deltaX, 2) + Math.Pow(deltaY, 2));
+                        if (distance < _dragTreshold)
+                        {
+                            _isFigurePicked = true;
+                            _selectedFigure = GetFigurePointOn(_originalMouseDownPoint);
+                        }
+                        _isMouseDownOnFigure = false;
+                    }                    
                 }
 
                 if(!wasDragSelectionApplied)
                 {
                     //Клик по пустому месту
                     _selectedFigures.Clear();
+                    _selectedFigure = null;
                 }
             }
             Canvas.Refresh();
@@ -258,17 +276,20 @@ namespace VectorEditor.Presenter
         private bool IsPointOnFigure(PointF point)
         {
             bool result = false;
-            foreach (var figure in _presenter.GetFigures())
+            if (_presenter.GetFigures() != null)
             {
-                var points = figure.Points.GetPoints();
-                Pen pickPen = new Pen(Color.Transparent, 3);
+                foreach (var figure in _presenter.GetFigures())
+                {
+                    var points = figure.Points.GetPoints();
+                    Pen pickPen = new Pen(Color.Transparent, 3);
 
-                GraphicsPath path = new GraphicsPath();
+                    GraphicsPath path = new GraphicsPath();
 
-                //path.AddRectangle(GetRect(points));
-                path.AddLine(points[0], points[1]);
+                    //path.AddRectangle(GetRect(points));
+                    path.AddLine(points[0], points[1]);
 
-                result = path.IsOutlineVisible(point, pickPen);
+                    result = path.IsOutlineVisible(point, pickPen);
+                }
             }
             return result;
         }

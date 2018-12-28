@@ -27,9 +27,15 @@ namespace VectorEditor.Presenter
 
             _view.ToolPicked += _view_ToolPicked;
             _view.ParametersChanged += _view_ParametersChanged;
-            
+            _view.CanvasCleared += _view_CanvasCleared;
+                            
             _model.RegisterObserver(this);
             _model.RegisterObserver((IObserver)_view);
+        }
+
+        private void _view_CanvasCleared(object sender, System.EventArgs e)
+        {
+            _model.ClearCanvas();
         }
 
         private void _view_ParametersChanged(object sender, View.FigureParameters e)

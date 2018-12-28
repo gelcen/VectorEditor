@@ -33,6 +33,7 @@ namespace VectorEditor.Model
 
         event EventHandler<FigureParameters> ParametersChanged;
 
+        event EventHandler CanvasCleared;
 
         IBaseHandler CurrentHandler
         {

@@ -57,7 +57,19 @@ namespace VectorEditor
 
         public event EventHandler<FigureParameters> ParametersChanged;
 
+        public event EventHandler CanvasCleared;
+
         #endregion
+
+        private void OnCanvasCleared()
+        {
+            EventHandler handler = CanvasCleared;
+
+            if (handler != null)
+            {
+                handler(this, null);
+            }
+        }
 
         private void OnToolPicked(Item pickedItem)
         {
@@ -103,7 +115,8 @@ namespace VectorEditor
         /// <param name="e"></param>
         private void buttonClearCanvas_Click(object sender, EventArgs e)
         {
-            //pbCanvas.Image = null;
+            pbCanvas.Image = null;
+            OnCanvasCleared();
         }
 
         #region Изменение размера канвы
@@ -170,6 +183,11 @@ namespace VectorEditor
             }
         }
         #endregion
+
+        private void buttonCursor_Click(object sender, EventArgs e)
+        {
+            OnToolPicked(Item.Cursor);
+        }
 
         private void buttonLine_Click(object sender, EventArgs e)
         {
@@ -292,15 +310,9 @@ namespace VectorEditor
             {
                 CurrentHandler.Draw(g);
             }
-            //Сделать фабрику для рисования разных фигур
         }
 
-        #endregion
-
-        private void buttonCursor_Click(object sender, EventArgs e)
-        {
-            OnToolPicked(Item.Cursor);
-        }
+        #endregion        
 
         //IObserver
         public void Update(List<BaseFigure> figures)
