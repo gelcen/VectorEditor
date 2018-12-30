@@ -84,7 +84,7 @@ namespace VectorEditor
         private void OnParametersChanged(FigureParameters figureParameters)
         {
             EventHandler<FigureParameters> handler = ParametersChanged;
-            if(handler !=null)
+            if(handler != null)
             {
                 handler(this, figureParameters);
             }

@@ -72,6 +72,7 @@
     <Compile Include="Presenter\CursorHandler.cs" />
     <Compile Include="Presenter\EllipseHandler.cs" />
     <Compile Include="Presenter\IBaseHandler.cs" />
+    <Compile Include="Presenter\IPropertyChanged.cs" />
     <Compile Include="Presenter\LineHandler.cs" />
     <Compile Include="Presenter\PolygonHandler.cs" />
     <Compile Include="Presenter\PolylineHandler.cs" />
