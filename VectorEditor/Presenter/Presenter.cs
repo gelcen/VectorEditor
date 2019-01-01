@@ -41,6 +41,7 @@ namespace VectorEditor.Presenter
         private void _view_ParametersChanged(object sender, View.FigureParameters e)
         {
             _currentHandler.FigureParameters = e;
+            _view.Canvas.Invalidate();
         }
 
         private void _view_ToolPicked(object sender, Item e)
