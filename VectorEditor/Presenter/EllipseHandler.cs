@@ -41,12 +41,34 @@ namespace VectorEditor.Presenter
             }
         }
 
+        public MouseOperation MouseDownDelegate
+        {
+            set;
+            get;
+        }
+
+        public MouseOperation MouseUpDelegate
+        {
+            set;
+            get;
+        }
+
+        public MouseOperation MouseMoveDelegate
+        {
+            set;
+            get;
+        }
+
         public EllipseHandler(PictureBox canvas, FigureParameters figureParameters)
         {
             FigureParameters = figureParameters;
             Canvas = canvas;
 
             _ellipse = null;
+
+            MouseDownDelegate += MouseDown;
+            MouseUpDelegate += MouseUp;
+            MouseMoveDelegate += MouseMove;
         }
 
         public event EventHandler<BaseFigure> FigureCreated;

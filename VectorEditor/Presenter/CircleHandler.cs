@@ -37,12 +37,34 @@ namespace VectorEditor.Presenter
             }
         }
 
+        public MouseOperation MouseDownDelegate
+        {
+            set;
+            get;
+        }
+
+        public MouseOperation MouseUpDelegate
+        {
+            set;
+            get;
+        }
+
+        public MouseOperation MouseMoveDelegate
+        {
+            set;
+            get;
+        }
+
         public CircleHandler(PictureBox canvas, FigureParameters figureParameters)
         {
             FigureParameters = figureParameters;
             Canvas = canvas;
 
             _circle = null;
+
+            MouseDownDelegate += MouseDown;
+            MouseUpDelegate += MouseUp;
+            MouseMoveDelegate += MouseMove;
         }
 
         public event EventHandler<BaseFigure> FigureCreated;

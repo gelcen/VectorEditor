@@ -279,7 +279,7 @@ namespace VectorEditor
             base.OnMouseDown(e);
             if (CurrentHandler != null)
             {
-                CurrentHandler.MouseDown(null, e);
+                CurrentHandler.MouseDownDelegate(sender, e);                
             }
         }
 
@@ -288,7 +288,7 @@ namespace VectorEditor
             base.OnMouseMove(e);
             if (CurrentHandler != null)
             {
-                CurrentHandler.MouseMove(null, e);
+                CurrentHandler.MouseMoveDelegate(sender, e);
             }
         }
 
@@ -297,7 +297,7 @@ namespace VectorEditor
             base.OnMouseUp(e);
             if (CurrentHandler != null)
             {
-                CurrentHandler.MouseUp(null, e);
+                CurrentHandler.MouseUpDelegate(sender, e);
             }
         }
 

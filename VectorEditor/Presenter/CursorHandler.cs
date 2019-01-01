@@ -44,6 +44,24 @@ namespace VectorEditor.Presenter
             }
         }
 
+        public MouseOperation MouseDownDelegate
+        {
+            set;
+            get;
+        }
+
+        public MouseOperation MouseUpDelegate
+        {
+            set;
+            get;
+        }
+
+        public MouseOperation MouseMoveDelegate
+        {
+            set;
+            get;
+        }
+
         public CursorHandler(PictureBox canvas, FigureParameters figureParameters, Presenter presenter)
         {
             FigureParameters = figureParameters;
@@ -52,6 +70,10 @@ namespace VectorEditor.Presenter
             
             _selectedFigure = null;
             _selectedFigures = new List<BaseFigure>();
+
+            MouseDownDelegate += MouseDown;
+            MouseUpDelegate += MouseUp;
+            MouseMoveDelegate += MouseMove;
         }
 
         public event EventHandler<BaseFigure> FigureCreated;
