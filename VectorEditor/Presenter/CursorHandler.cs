@@ -27,15 +27,7 @@ namespace VectorEditor.Presenter
                 _figureParameters = value;
                 if (_selectedFigure != null)
                 {
-                    _selectedFigure.LineProperties.Color = _figureParameters.LineColor;
-                    _selectedFigure.LineProperties.Style = (DashStyle)_figureParameters.LineType;
-                    _selectedFigure.LineProperties.Thickness = _figureParameters.LineThickness;
-                    if (_selectedFigure.GetType() == typeof(FillableFigure))
-                    {
-                        var figure = _selectedFigure as FillableFigure;
-                        if (figure == null) return;
-                        figure.FillProperty.FillColor = _figureParameters.FillColor;
-                    }
+                    SetParameters(_selectedFigure, _figureParameters);
                 }
             }
         }
@@ -66,10 +58,22 @@ namespace VectorEditor.Presenter
 
         public event EventHandler<FigureParameters> ParametersChanged;
 
+        public event EventHandler<FigureParameters> FigureSelected;
+
+        private void OnFigureSelected(FigureParameters figureParams)
+        {
+            EventHandler<FigureParameters> handler = FigureSelected;
+
+            if (handler != null)
+            {
+                handler(this, figureParams);
+            }
+        }
+
         public void Draw(Graphics g)
         {
             Pen pen= new Pen(Color.FromArgb(0, 120, 215), 1);
-            pen.DashStyle = System.Drawing.Drawing2D.DashStyle.Solid;
+            pen.DashStyle = DashStyle.Solid;
 
             Brush brush = new SolidBrush(Color.FromArgb(80, 0, 102, 204));
 
@@ -281,6 +285,11 @@ namespace VectorEditor.Presenter
                             {
                                 _selectedFigure = GetFigurePointOn(e.Location);
                                 _isFigurePicked = true;
+
+                                FigureParameters figureParameters = new FigureParameters();
+                                figureParameters = GetParameters(_selectedFigure,
+                                                    figureParameters);
+                                OnFigureSelected(figureParameters);
                             }
                             else
                             {
@@ -389,6 +398,34 @@ namespace VectorEditor.Presenter
             float maxX = points.Max(x => x.X);
             float maxY = points.Max(y => y.Y);
             return new RectangleF(minX, minY, Math.Abs(maxX - minX), Math.Abs(maxY - minY));
+        }
+
+        private BaseFigure SetParameters(BaseFigure figure, FigureParameters parameters)
+        {
+            figure.LineProperties.Color = parameters.LineColor;
+            figure.LineProperties.Style = (DashStyle)parameters.LineType;
+            figure.LineProperties.Thickness = parameters.LineThickness;
+            if (figure.GetType() == typeof(FillableFigure))
+            {
+                var tempFigure = figure as FillableFigure;
+                if (tempFigure == null) return null;
+                tempFigure.FillProperty.FillColor = parameters.FillColor;
+            }
+            return figure;
+        }
+
+        private FigureParameters GetParameters(BaseFigure figure, FigureParameters parameters)
+        {
+            parameters.LineColor = figure.LineProperties.Color;
+            parameters.LineType = (int)figure.LineProperties.Style;
+            parameters.LineThickness = figure.LineProperties.Thickness;
+            if (figure.GetType() == typeof(FillableFigure))
+            {
+                var tempFigure = figure as FillableFigure;
+                //if (tempFigure == null) return;
+                parameters.FillColor = tempFigure.FillProperty.FillColor ;
+            }
+            return parameters;
         }
     }
 }

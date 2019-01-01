@@ -29,6 +29,7 @@ namespace VectorEditor.Model
         FigureParameters FigureParameters
         {
             get;
+            set;
         }
 
         event EventHandler<FigureParameters> ParametersChanged;

@@ -77,9 +77,16 @@ namespace VectorEditor.Presenter
             }
             else if (e == Item.Cursor)
             {
-                _currentHandler = new CursorHandler(_view.Canvas, _view.FigureParameters, this);
+                CursorHandler cursorHandler = new CursorHandler(_view.Canvas, _view.FigureParameters, this);
+                cursorHandler.FigureSelected += CursorHandler_FigureSelected;
+                _currentHandler = cursorHandler;
                 _view.CurrentHandler = (CursorHandler)_currentHandler;
             }
+        }
+
+        private void CursorHandler_FigureSelected(object sender, View.FigureParameters e)
+        {
+            _view.FigureParameters = e;
         }
 
         private void _currentHandler_FigureCreated(object sender, BaseFigure e)
