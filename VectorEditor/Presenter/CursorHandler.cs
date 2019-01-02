@@ -73,9 +73,10 @@ namespace VectorEditor.Presenter
 
             MouseDownDelegate += MouseDown;
             MouseUpDelegate += MouseUp;
-            MouseMoveDelegate += MouseMove;
+            MouseMoveDelegate += MouseMoveNotDown;
         }
 
+        
         public event EventHandler<BaseFigure> FigureCreated;
 
         public event EventHandler<FigureParameters> ParametersChanged;
@@ -115,6 +116,10 @@ namespace VectorEditor.Presenter
         /// </summary>
         private const int object_radius = 3;
 
+        // We're over an object if the distance squared
+        // between the mouse and the object is less than this.
+        private const int over_dist_squared = object_radius * object_radius;
+
         private bool _isMouseDown = false;
 
         private bool _isDraggingSelectionRect = false;
@@ -137,24 +142,118 @@ namespace VectorEditor.Presenter
 
         private float _offsetY;
 
+        private PointF _pickedPoint;
+
+        private int _pickedPointIndex;
+
         public void MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
             {
                 _isMouseDown = true;
-                if (IsPointOnFigure(e.Location))
+                if (_isFigurePicked != false && 
+                    _selectedFigure != null)
                 {
-                    if ((_selectedFigure != null) &&
-                        _selectedFigure == GetFigurePointOn(e.Location))
+                    if (IsPointOnFigure(e.Location))
                     {
-                        _isMouseDownOnFigure = true;
-                        _offsetX = _selectedFigure.Points.GetPoints()[0].X - e.X;
-                        _offsetY = _selectedFigure.Points.GetPoints()[0].Y - e.Y;
+                        if ((_selectedFigure != null) &&
+                            _selectedFigure == GetFigurePointOn(e.Location))
+                        {
+                            MouseMoveDelegate -= MouseMoveNotDown;
+                            MouseMoveDelegate += MouseMoveFigure;
+                            MouseUpDelegate += MouseUpFigure;
+
+                            _isMouseDownOnFigure = true;
+                            _offsetX = _selectedFigure.Points.GetPoints()[0].X - e.X;
+                            _offsetY = _selectedFigure.Points.GetPoints()[0].Y - e.Y;
+                        }
                     }
-                }
+                    else if (IsPointOnMarker(e.Location, out _pickedPoint))
+                    {
+                        MouseMoveDelegate -= MouseMoveNotDown;
+                        MouseMoveDelegate += MouseMoveMarker;
+                        MouseUpDelegate += MouseUpMarker;
+
+                        _offsetX = _pickedPoint.X - e.X;
+                        _offsetY = _pickedPoint.Y - e.Y;
+                    }
+                }                
                 _originalMouseDownPoint = e.Location;
                 
             }
+        }
+
+        private void MouseUpFigure(object obj, MouseEventArgs e)
+        {
+            MouseMoveDelegate += MouseMoveNotDown;
+            MouseMoveDelegate -= MouseMoveFigure;
+            MouseUpDelegate -= MouseUpFigure;
+
+            Canvas.Refresh();
+        }
+
+        private void MouseMoveFigure(object obj, MouseEventArgs e)
+        {
+            float newX1 = e.X + _offsetX;
+            float newY1 = e.Y + _offsetY;
+
+            float dx = newX1 - _selectedFigure.Points.GetPoints()[0].X;
+            float dy = newY1 - _selectedFigure.Points.GetPoints()[0].Y;
+
+            if (dx == 0 && dy == 0) return;
+
+            _isDraggingFigure = true;
+            PointF tmpPt0 = new PointF(newX1, newY1);
+            _selectedFigure.Points.Replace(0, tmpPt0);
+            PointF tempPoint1 = new PointF(
+                    _selectedFigure.Points.GetPoints()[1].X + dx,
+                    _selectedFigure.Points.GetPoints()[1].Y + dy);
+            _selectedFigure.Points.Replace(1, tempPoint1);
+
+            Canvas.Refresh();
+        }
+
+        private void MouseUpMarker(object obj, MouseEventArgs e)
+        {
+            MouseMoveDelegate += MouseMoveNotDown;
+            MouseMoveDelegate -= MouseMoveMarker;
+            MouseUpDelegate -= MouseUpMarker;
+
+            Canvas.Refresh();
+        }
+
+        private void MouseMoveMarker(object obj, MouseEventArgs e)
+        {
+            int count = _selectedFigure.Points.GetPoints().Count;
+
+            _selectedFigure.Points.Replace(_pickedPointIndex,
+                             new PointF(e.X + _offsetX, e.Y + _offsetY));
+
+            Canvas.Refresh();
+        }
+
+        private void MouseMoveNotDown(object obj, MouseEventArgs e)
+        {
+            Cursor newCursor;
+            if (IsPointOnFigure(e.Location))
+            {
+                newCursor = Cursors.Hand;
+            }
+            else if (IsPointOnMarker(e.Location, out _pickedPoint))
+            {
+                newCursor = Cursors.Cross;
+            }
+            else
+            {
+                newCursor = Cursors.Default;
+            }
+
+            if (Canvas.Cursor != newCursor)
+            {
+                Canvas.Cursor = newCursor;
+            }
+
+            Canvas.Refresh();
         }
 
         public void MouseMove(object sender, MouseEventArgs e)
@@ -403,6 +502,7 @@ namespace VectorEditor.Presenter
 
                     //path.AddRectangle(GetRect(points));
                     path.AddLine(points[0], points[1]);
+                    
 
                     if (path.IsOutlineVisible(point, pickPen))
                     {
@@ -411,6 +511,37 @@ namespace VectorEditor.Presenter
                 }
             }
             return null;
+        }
+
+        //For selected figure
+        private bool IsPointOnMarker(PointF mousePoint, 
+                                     out PointF pickedPoint)
+        {
+            if (_selectedFigure != null)
+            {
+                var points = _selectedFigure.Points.GetPoints();
+                int count = _selectedFigure.Points.GetPoints().Count;
+                for (int i = 0; i < count; i++)
+                {
+                    if (FindDistanceToPointSquared(mousePoint,
+                        _selectedFigure.Points.GetPoints()[i]) < over_dist_squared)
+                    {
+                        pickedPoint = _selectedFigure.Points.GetPoints()[i];
+                        _pickedPointIndex = i;
+
+                        return true;
+                    }
+                }
+            }
+            pickedPoint = new PointF(-1, -1);
+            return false;
+        }
+
+        private float FindDistanceToPointSquared(PointF pt1, PointF pt2)
+        {
+            float dx = pt1.X - pt2.X;
+            float dy = pt1.Y - pt2.Y;
+            return dx * dx + dy * dy;
         }
 
         private RectangleF GetRect(IReadOnlyCollection<PointF> points)
