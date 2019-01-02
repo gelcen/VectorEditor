@@ -111,7 +111,7 @@ namespace VectorEditor
             _figureParameters.LineThickness = 1;
             _figureParameters.LineType = 0;
 
-
+            
             pbCanvas.Parent = this;
 
         }
@@ -326,6 +326,11 @@ namespace VectorEditor
         public void Update(List<BaseFigure> figures)
         {
             _figures = figures;
+        }
+
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+            OnToolPicked(Item.Cursor);
         }
     }
 }

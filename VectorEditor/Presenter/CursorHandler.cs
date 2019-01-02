@@ -73,7 +73,7 @@ namespace VectorEditor.Presenter
 
             MouseDownDelegate += MouseDown;
             MouseUpDelegate += MouseUp;
-            MouseMoveDelegate += MouseMoveNotDown;
+            MouseMoveDelegate += MouseMoveSelecting;
         }
 
         
@@ -154,6 +154,8 @@ namespace VectorEditor.Presenter
 
         private int _pickedPointIndex;
 
+        private bool _isSelectionEmpty=false;
+
         public void MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
@@ -166,7 +168,7 @@ namespace VectorEditor.Presenter
                         if ((_selectedFigure != null) &&
                             _selectedFigure == GetFigurePointOn(e.Location))
                         {
-                            MouseMoveDelegate -= MouseMoveNotDown;
+                            MouseMoveDelegate -= MouseMoveSelecting;
                             MouseMoveDelegate += MouseMoveFigure;
                             MouseUpDelegate += MouseUpFigure;
 
@@ -177,7 +179,7 @@ namespace VectorEditor.Presenter
                     }
                     else if (IsPointOnMarker(e.Location, out _pickedPoint))
                     {
-                        MouseMoveDelegate -= MouseMoveNotDown;
+                        MouseMoveDelegate -= MouseMoveSelecting;
                         MouseMoveDelegate += MouseMoveMarker;
                         MouseUpDelegate += MouseUpMarker;
 
@@ -187,15 +189,11 @@ namespace VectorEditor.Presenter
                     else
                     {
                         _isMouseDown = true;
-                        MouseMoveDelegate -= MouseMoveNotDown;
-                        MouseMoveDelegate += MouseMoveSelection;
                     }
                 } 
                 else
                 {
                     _isMouseDown = true;
-                    MouseMoveDelegate -= MouseMoveNotDown;
-                    MouseMoveDelegate += MouseMoveSelection;
                 }               
                 _originalMouseDownPoint = e.Location;
                 
@@ -204,7 +202,7 @@ namespace VectorEditor.Presenter
 
         private void MouseUpFigure(object obj, MouseEventArgs e)
         {
-            MouseMoveDelegate += MouseMoveNotDown;
+            MouseMoveDelegate += MouseMoveSelecting;
             MouseMoveDelegate -= MouseMoveFigure;
             MouseUpDelegate -= MouseUpFigure;
 
@@ -234,7 +232,7 @@ namespace VectorEditor.Presenter
 
         private void MouseUpMarker(object obj, MouseEventArgs e)
         {
-            MouseMoveDelegate += MouseMoveNotDown;
+            MouseMoveDelegate += MouseMoveSelecting;
             MouseMoveDelegate -= MouseMoveMarker;
             MouseUpDelegate -= MouseUpMarker;
 
@@ -251,36 +249,36 @@ namespace VectorEditor.Presenter
             Canvas.Refresh();
         }
 
-        private void MouseMoveNotDown(object obj, MouseEventArgs e)
-        {
-            Cursor newCursor;
-            if (IsPointOnFigure(e.Location))
-            {
-                newCursor = Cursors.Hand;
-            }
-            else if (IsPointOnMarker(e.Location, out _pickedPoint))
-            {
-                newCursor = Cursors.Cross;
-            }
-            else
-            {
-                newCursor = Cursors.Default;
-            }
+        //private void MouseMoveSelecting(object obj, MouseEventArgs e)
+        //{
+        //    Cursor newCursor;
+        //    if (IsPointOnFigure(e.Location))
+        //    {
+        //        newCursor = Cursors.Hand;
+        //    }
+        //    else if (IsPointOnMarker(e.Location, out _pickedPoint))
+        //    {
+        //        newCursor = Cursors.Cross;
+        //    }
+        //    else
+        //    {
+        //        newCursor = Cursors.Default;
+        //    }
 
-            if (Canvas.Cursor != newCursor)
-            {
-                Canvas.Cursor = newCursor;
-            }
+        //    if (Canvas.Cursor != newCursor)
+        //    {
+        //        Canvas.Cursor = newCursor;
+        //    }
 
-            Canvas.Refresh();
-        }
+        //    Canvas.Refresh();
+        //}
 
         public void MouseMove(object sender, MouseEventArgs e)
         {
 
         }
 
-        public void MouseMoveSelection(object sender, MouseEventArgs e)
+        public void MouseMoveSelecting(object sender, MouseEventArgs e)
         {
             if (_isDraggingSelectionRect)
             {
@@ -303,6 +301,25 @@ namespace VectorEditor.Presenter
                                           currentMouseDownPoint);
                 }
             }
+            Cursor newCursor;
+            if (IsPointOnFigure(e.Location))
+            {
+                newCursor = Cursors.Hand;
+            }
+            else if (IsPointOnMarker(e.Location, out _pickedPoint))
+            {
+                newCursor = Cursors.Cross;
+            }
+            else
+            {
+                newCursor = Cursors.Default;
+            }
+
+            if (Canvas.Cursor != newCursor)
+            {
+                Canvas.Cursor = newCursor;
+            }
+
 
             Canvas.Refresh();
         }
@@ -311,21 +328,19 @@ namespace VectorEditor.Presenter
         {
             if (e.Button == MouseButtons.Left)
             {
-                MouseMoveDelegate += MouseMoveNotDown;
-                MouseMoveDelegate -= MouseMoveSelection;
 
                 if (_isDraggingSelectionRect)
                 {
                     //Выборка закончилась
                     _isDraggingSelectionRect = false;
                     SelectFiguresInRect();
-                    if (_selectedFigures.Count == 0)
+                    if (_isSelectionEmpty)
                     {
                         _isFigurePicked = false;
                         _selectedFigures.Clear();
                         _selectedFigure = null;
+                        _isSelectionEmpty = false;
                     }
-                    Canvas.Refresh();
                 }
 
                 if (_isMouseDown)
@@ -363,15 +378,30 @@ namespace VectorEditor.Presenter
 
         private void SelectFiguresInRect()
         {
+            if (_presenter.GetFigures() == null)
+            {
+                _selectionRect = new Rectangle();
+                return;
+            }
             int count = _presenter.GetFigures().Count;
+            List<BaseFigure> selectedFigures = new List<BaseFigure>();
             for (int i=0; i < count; i++)
             {
                 var points = _presenter.GetFigures()[i].Points.GetPoints();
                 Rectangle figureRect = GetRect(points);
                 if (_selectionRect.IntersectsWith(figureRect))
                 {
-                    _selectedFigures.Add(_presenter.GetFigures()[i]);
+                    selectedFigures.Add(_presenter.GetFigures()[i]);
                 }
+            }
+            if (selectedFigures.Count == 0)
+            {
+                _isSelectionEmpty = true;
+            }
+            else
+            {
+                _selectedFigures.Clear();
+                _selectedFigures = selectedFigures;
             }
             _selectionRect = new Rectangle();
         }
