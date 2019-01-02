@@ -104,9 +104,17 @@ namespace VectorEditor.Presenter
             g.DrawRectangle(pen, _selectionRect);
             pen.Dispose();
             brush.Dispose();
+            if (_selectedFigures.Count != 0)
+            {
+                foreach (var figure in _selectedFigures)
+                {
+                    FigureDrawer.DrawSelection(figure, g);
+                }
+            }
             if (_selectedFigure != null && _isFigurePicked)
             {
                 FigureDrawer.DrawSelection(_selectedFigure, g);
+                
             }
             
         }
@@ -150,7 +158,6 @@ namespace VectorEditor.Presenter
         {
             if (e.Button == MouseButtons.Left)
             {
-                _isMouseDown = true;
                 if (_isFigurePicked != false && 
                     _selectedFigure != null)
                 {
@@ -177,7 +184,19 @@ namespace VectorEditor.Presenter
                         _offsetX = _pickedPoint.X - e.X;
                         _offsetY = _pickedPoint.Y - e.Y;
                     }
-                }                
+                    else
+                    {
+                        _isMouseDown = true;
+                        MouseMoveDelegate -= MouseMoveNotDown;
+                        MouseMoveDelegate += MouseMoveSelection;
+                    }
+                } 
+                else
+                {
+                    _isMouseDown = true;
+                    MouseMoveDelegate -= MouseMoveNotDown;
+                    MouseMoveDelegate += MouseMoveSelection;
+                }               
                 _originalMouseDownPoint = e.Location;
                 
             }
@@ -258,85 +277,33 @@ namespace VectorEditor.Presenter
 
         public void MouseMove(object sender, MouseEventArgs e)
         {
-            //if (_isDraggingSelectionRect)
-            //{
-            //    PointF currentMouseDownPoint = e.Location;
-            //    UpdateDragSelectionRect(_originalMouseDownPoint,
-            //                            currentMouseDownPoint);
-            //}
-            //else if (_isMouseDown)
-            //{
-            //    if (_isMouseDownOnFigure)
-            //    {
-            //        float newX1 = e.X + _offsetX;
-            //        float newY1 = e.Y + _offsetY;
 
-            //        float dx = newX1 - _selectedFigure.Points.GetPoints()[0].X;
-            //        float dy = newY1 - _selectedFigure.Points.GetPoints()[0].Y;
+        }
 
-            //        if (dx == 0 && dy == 0) return;
-
-            //        _isDraggingFigure = true;
-            //        PointF tmpPt0 = new PointF(newX1, newY1);
-            //        _selectedFigure.Points.Replace(0, tmpPt0);
-            //        PointF tempPoint1 = new PointF(
-            //                _selectedFigure.Points.GetPoints()[1].X + dx,
-            //                _selectedFigure.Points.GetPoints()[1].Y + dy);
-            //        _selectedFigure.Points.Replace(1, tempPoint1);                       
-            //    }
-            //    else
-            //    {
-            //        PointF currentMouseDownPoint = e.Location;
-            //        float deltaX = Math.Abs(
-            //                       currentMouseDownPoint.X - _originalMouseDownPoint.X);
-            //        float deltaY = Math.Abs(
-            //                       currentMouseDownPoint.Y - _originalMouseDownPoint.Y);
-            //        double distance = Math.Sqrt(Math.Pow(deltaX, 2) + Math.Pow(deltaY, 2));
-            //        if (distance > _dragTreshold)
-            //        {
-            //            _isDraggingSelectionRect = true;
-            //            InitDragSelectionRect(_originalMouseDownPoint,
-            //                                  currentMouseDownPoint);
-            //        }
-            //    }                
-            //}
-            //else
-            //{
-            if (_isMouseDownOnFigure)
+        public void MouseMoveSelection(object sender, MouseEventArgs e)
+        {
+            if (_isDraggingSelectionRect)
             {
-                float newX1 = e.X + _offsetX;
-                float newY1 = e.Y + _offsetY;
-
-                float dx = newX1 - _selectedFigure.Points.GetPoints()[0].X;
-                float dy = newY1 - _selectedFigure.Points.GetPoints()[0].Y;
-
-                if (dx == 0 && dy == 0) return;
-
-                _isDraggingFigure = true;
-                PointF tmpPt0 = new PointF(newX1, newY1);
-                _selectedFigure.Points.Replace(0, tmpPt0);
-                PointF tempPoint1 = new PointF(
-                        _selectedFigure.Points.GetPoints()[1].X + dx,
-                        _selectedFigure.Points.GetPoints()[1].Y + dy);
-                _selectedFigure.Points.Replace(1, tempPoint1);
+                PointF currentMouseDownPoint = e.Location;
+                UpdateDragSelectionRect(_originalMouseDownPoint,
+                                        currentMouseDownPoint);
             }
+            else if (_isMouseDown)
             {
-                Cursor newCursor;
-                if (IsPointOnFigure(e.Location))
+                PointF currentMouseDownPoint = e.Location;
+                float deltaX = Math.Abs(
+                               currentMouseDownPoint.X - _originalMouseDownPoint.X);
+                float deltaY = Math.Abs(
+                               currentMouseDownPoint.Y - _originalMouseDownPoint.Y);
+                double distance = Math.Sqrt(Math.Pow(deltaX, 2) + Math.Pow(deltaY, 2));
+                if (distance > _dragTreshold)
                 {
-                    newCursor = Cursors.Hand;
-                }
-                else
-                {
-                    newCursor = Cursors.Default;
-                }
-
-                if (Canvas.Cursor != newCursor)
-                {
-                    Canvas.Cursor = newCursor;
+                    _isDraggingSelectionRect = true;
+                    InitDragSelectionRect(_originalMouseDownPoint,
+                                          currentMouseDownPoint);
                 }
             }
-            //}
+
             Canvas.Refresh();
         }
 
@@ -344,56 +311,25 @@ namespace VectorEditor.Presenter
         {
             if (e.Button == MouseButtons.Left)
             {
-                ////Был создан прямоугольник выборки
-                //bool wasDragSelectionApplied = false;
+                MouseMoveDelegate += MouseMoveNotDown;
+                MouseMoveDelegate -= MouseMoveSelection;
 
-                //if (_isDraggingSelectionRect)
-                //{
-                //    //Выборка закончилась
-                //    _isDraggingSelectionRect = false;
-                //    SelectFiguresInRect();
+                if (_isDraggingSelectionRect)
+                {
+                    //Выборка закончилась
+                    _isDraggingSelectionRect = false;
+                    SelectFiguresInRect();
+                    if (_selectedFigures.Count == 0)
+                    {
+                        _isFigurePicked = false;
+                        _selectedFigures.Clear();
+                        _selectedFigure = null;
+                    }
+                    Canvas.Refresh();
+                }
 
-                //    wasDragSelectionApplied = true;
-                //}
-
-                //if (_isMouseDown)
-                //{
-                //    _isMouseDown = false;
-                //    if (_isDraggingFigure)
-                //    {
-                //        _isDraggingFigure = false;
-                //    }
-                //    if (_isMouseDownOnFigure)
-                //    {
-                //        PointF currentMouseDownPoint = e.Location;
-                //        float deltaX = Math.Abs(
-                //                       currentMouseDownPoint.X - _originalMouseDownPoint.X);
-                //        float deltaY = Math.Abs(
-                //                       currentMouseDownPoint.Y - _originalMouseDownPoint.Y);
-                //        double distance = Math.Sqrt(Math.Pow(deltaX, 2) + Math.Pow(deltaY, 2));
-                //        if (distance < _dragTreshold)
-                //        {
-                //            _isFigurePicked = true;
-                //            _selectedFigure = GetFigurePointOn(_originalMouseDownPoint);
-                //        }
-                //        _isMouseDownOnFigure = false;
-                //    }                    
-                //}
-
-                //if(!wasDragSelectionApplied)
-                //{
-                //    //Клик по пустому месту
-                //    _selectedFigures.Clear();
-                //    _selectedFigure = null;
-                //}
                 if (_isMouseDown)
                 {
-                    if (_isMouseDownOnFigure)
-                    {
-                        _isMouseDownOnFigure = false;
-                    }
-                    else
-                    {
                         PointF currentMouseDownPoint = e.Location;
                         float deltaX = Math.Abs(
                                        currentMouseDownPoint.X - _originalMouseDownPoint.X);
@@ -414,19 +350,29 @@ namespace VectorEditor.Presenter
                             }
                             else
                             {
+                                _selectedFigures.Clear();
                                 _selectedFigure = null;
                                 _isFigurePicked = false;
                             }
                         }
                         _isMouseDown = false;
-                    }
-                }
+                    }   
             }
             Canvas.Refresh();
         }
 
         private void SelectFiguresInRect()
         {
+            int count = _presenter.GetFigures().Count;
+            for (int i=0; i < count; i++)
+            {
+                var points = _presenter.GetFigures()[i].Points.GetPoints();
+                Rectangle figureRect = GetRect(points);
+                if (_selectionRect.IntersectsWith(figureRect))
+                {
+                    _selectedFigures.Add(_presenter.GetFigures()[i]);
+                }
+            }
             _selectionRect = new Rectangle();
         }
 
@@ -544,13 +490,13 @@ namespace VectorEditor.Presenter
             return dx * dx + dy * dy;
         }
 
-        private RectangleF GetRect(IReadOnlyCollection<PointF> points)
+        private Rectangle GetRect(IReadOnlyCollection<PointF> points)
         {
-            float minX = points.Min(x => x.X);
-            float minY = points.Min(y => y.Y);
-            float maxX = points.Max(x => x.X);
-            float maxY = points.Max(y => y.Y);
-            return new RectangleF(minX, minY, Math.Abs(maxX - minX), Math.Abs(maxY - minY));
+            int minX = (int)points.Min(x => x.X);
+            int minY = (int)points.Min(y => y.Y);
+            int maxX = (int)points.Max(x => x.X);
+            int maxY = (int)points.Max(y => y.Y);
+            return new Rectangle(minX, minY, Math.Abs(maxX - minX), Math.Abs(maxY - minY));
         }
 
         private BaseFigure SetParameters(BaseFigure figure, FigureParameters parameters)
