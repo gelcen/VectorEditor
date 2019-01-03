@@ -631,6 +631,17 @@ namespace VectorEditor.Presenter
                 Rectangle circleRect = new Rectangle(x, y, radius, radius);
                 path.AddEllipse(circleRect);
             }
+            else if (figure.GetType() == typeof(Ellipse))
+            {
+                int width = (int)Math.Abs(points[0].X - points[1].X);
+                int height = (int)Math.Abs(points[0].Y - points[1].Y);
+
+                int x = (int)Math.Min(points[0].X, points[1].X);
+                int y = (int)Math.Min(points[0].Y, points[1].Y);
+
+                Rectangle ellipseRect = new Rectangle(x, y, width, height);
+                path.AddEllipse(ellipseRect);
+            }
         }
     }
 }
