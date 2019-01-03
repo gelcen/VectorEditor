@@ -5,7 +5,6 @@ namespace VectorEditor.Drawers
 {
     public class LineDrawer : BaseDrawer
     {
-        private const int object_radius = 3;
 
         public override void DrawFigure(BaseFigure figure, Graphics canvas)
         {

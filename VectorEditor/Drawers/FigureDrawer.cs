@@ -44,22 +44,22 @@ namespace VectorEditor.Drawers
             else if (figure.GetType() == typeof(Polyline))
             {
                 PolylineDrawer drawer = new PolylineDrawer();
-                drawer.DrawFigure(figure, canvas);
+                drawer.DrawSelection(figure, canvas);
             }
             else if (figure.GetType() == typeof(Circle))
             {
                 CircleDrawer circleDrawer = new CircleDrawer();
-                circleDrawer.DrawFigure(figure, canvas);
+                circleDrawer.DrawSelection(figure, canvas);
             }
             else if (figure.GetType() == typeof(Ellipse))
             {
                 EllipseDrawer ellipseDrawer = new EllipseDrawer();
-                ellipseDrawer.DrawFigure(figure, canvas);
+                ellipseDrawer.DrawSelection(figure, canvas);
             }
             else if (figure.GetType() == typeof(Polygon))
             {
                 PolygonDrawer polygonDrawer = new PolygonDrawer();
-                polygonDrawer.DrawFigure(figure, canvas);
+                polygonDrawer.DrawSelection(figure, canvas);
             }
         }
     }

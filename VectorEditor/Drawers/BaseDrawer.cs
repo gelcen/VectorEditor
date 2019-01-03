@@ -5,6 +5,8 @@ namespace VectorEditor.Drawers
 {
     public abstract class BaseDrawer
     {
+        protected const int object_radius = 3;
+
         public abstract void DrawFigure(BaseFigure figure, Graphics canvas);
 
         /// <summary>
