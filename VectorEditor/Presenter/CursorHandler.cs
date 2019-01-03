@@ -66,14 +66,14 @@ namespace VectorEditor.Presenter
             get;
         }
 
-        public CursorHandler(PictureBox canvas, 
-            FigureParameters figureParameters, 
+        public CursorHandler(PictureBox canvas,
+            FigureParameters figureParameters,
             Presenter presenter)
         {
             FigureParameters = figureParameters;
             Canvas = canvas;
             _presenter = presenter;
-            
+
             _selectedFigure = null;
             _selectedFigures = new List<BaseFigure>();
 
@@ -82,7 +82,7 @@ namespace VectorEditor.Presenter
             MouseMoveDelegate += MouseMoveSelecting;
         }
 
-        
+
         public event EventHandler<BaseFigure> FigureCreated;
 
         public event EventHandler<FigureParameters> ParametersChanged;
@@ -101,7 +101,7 @@ namespace VectorEditor.Presenter
 
         public void Draw(Graphics g)
         {
-            Pen pen= new Pen(Color.FromArgb(0, 120, 215), 1);
+            Pen pen = new Pen(Color.FromArgb(0, 120, 215), 1);
             pen.DashStyle = DashStyle.Solid;
 
             Brush brush = new SolidBrush(Color.FromArgb(80, 0, 102, 204));
@@ -121,9 +121,9 @@ namespace VectorEditor.Presenter
             if (_selectedFigure != null && _isFigurePicked)
             {
                 FigureDrawer.DrawSelection(_selectedFigure, g);
-                
+
             }
-            
+
         }
 
         public void ClearSelectedFigures()
@@ -167,13 +167,13 @@ namespace VectorEditor.Presenter
 
         private int _pickedPointIndex;
 
-        private bool _isSelectionEmpty=false;
+        private bool _isSelectionEmpty = false;
 
         public void MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
             {
-                if (_isFigurePicked != false && 
+                if (_isFigurePicked != false &&
                     _selectedFigures != null)
                 {
                     if (IsPointOnFigure(e.Location))
@@ -204,13 +204,13 @@ namespace VectorEditor.Presenter
                     {
                         _isMouseDown = true;
                     }
-                } 
+                }
                 else
                 {
                     _isMouseDown = true;
-                }               
+                }
                 _originalMouseDownPoint = e.Location;
-                
+
             }
         }
 
@@ -371,33 +371,35 @@ namespace VectorEditor.Presenter
 
                 if (_isMouseDown)
                 {
-                        PointF currentMouseDownPoint = e.Location;
-                        float deltaX = Math.Abs(
-                                       currentMouseDownPoint.X - _originalMouseDownPoint.X);
-                        float deltaY = Math.Abs(
-                                       currentMouseDownPoint.Y - _originalMouseDownPoint.Y);
-                        double distance = Math.Sqrt(Math.Pow(deltaX, 2) + Math.Pow(deltaY, 2));
-                        if (distance < _dragTreshold)
+                    PointF currentMouseDownPoint = e.Location;
+                    float deltaX = Math.Abs(
+                                   currentMouseDownPoint.X - _originalMouseDownPoint.X);
+                    float deltaY = Math.Abs(
+                                   currentMouseDownPoint.Y - _originalMouseDownPoint.Y);
+                    double distance = Math.Sqrt(Math.Pow(deltaX, 2) + Math.Pow(deltaY, 2));
+                    if (distance < _dragTreshold)
+                    {
+                        if (IsPointOnFigure(e.Location))
                         {
-                            if (IsPointOnFigure(e.Location))
-                            {
-                                _selectedFigure = GetFigurePointOn(e.Location);
-                                _isFigurePicked = true;
+                            _selectedFigures.Clear();
+                            _selectedFigure = GetFigurePointOn(e.Location);
+                            _selectedFigures.Add(_selectedFigure);           
+                            _isFigurePicked = true;
 
-                                FigureParameters figureParameters = new FigureParameters();
-                                figureParameters = GetParameters(_selectedFigure,
-                                                    figureParameters);
-                                OnFigureSelected(figureParameters);
-                            }
-                            else
-                            {
-                                _selectedFigures.Clear();
-                                _selectedFigure = null;
-                                _isFigurePicked = false;
-                            }
+                            FigureParameters figureParameters = new FigureParameters();
+                            figureParameters = GetParameters(_selectedFigure,
+                                                figureParameters);
+                            OnFigureSelected(figureParameters);
                         }
-                        _isMouseDown = false;
-                    }   
+                        else
+                        {
+                            _selectedFigures.Clear();
+                            _selectedFigure = null;
+                            _isFigurePicked = false;
+                        }
+                    }
+                    _isMouseDown = false;
+                }
             }
             Canvas.Refresh();
         }
@@ -411,7 +413,7 @@ namespace VectorEditor.Presenter
             }
             int count = _presenter.GetFigures().Count;
             List<BaseFigure> selectedFigures = new List<BaseFigure>();
-            for (int i=0; i < count; i++)
+            for (int i = 0; i < count; i++)
             {
                 var points = _presenter.GetFigures()[i].Points.GetPoints();
                 Rectangle figureRect = GetRect(points);
@@ -463,7 +465,7 @@ namespace VectorEditor.Presenter
                 height = pt2.Y - pt1.Y;
             }
 
-            _selectionRect = new Rectangle((int)x, (int)y, 
+            _selectionRect = new Rectangle((int)x, (int)y,
                                            (int)width, (int)height);
         }
 
@@ -481,10 +483,10 @@ namespace VectorEditor.Presenter
 
                     //path.AddRectangle(GetRect(points));
                     path.AddLine(points[0], points[1]);
-                    
-                    result = path.IsOutlineVisible(point, pickPen);                    
+
+                    result = path.IsOutlineVisible(point, pickPen);
                     path.Reset();
-                    if (result) break;                    
+                    if (result) break;
                 }
             }
             return result;
@@ -504,7 +506,7 @@ namespace VectorEditor.Presenter
 
                     //path.AddRectangle(GetRect(points));
                     path.AddLine(points[0], points[1]);
-                    
+
 
                     if (path.IsOutlineVisible(point, pickPen))
                     {
@@ -516,7 +518,7 @@ namespace VectorEditor.Presenter
         }
 
         //For selected figure
-        private bool IsPointOnMarker(PointF mousePoint, 
+        private bool IsPointOnMarker(PointF mousePoint,
                                      out PointF pickedPoint)
         {
             if (_selectedFigure != null)
@@ -569,7 +571,7 @@ namespace VectorEditor.Presenter
             return figure;
         }
 
-        private List<BaseFigure> SetParameters(List<BaseFigure> figures, 
+        private List<BaseFigure> SetParameters(List<BaseFigure> figures,
                                                FigureParameters parameters)
         {
             foreach (var figure in figures)
@@ -596,7 +598,7 @@ namespace VectorEditor.Presenter
             {
                 var tempFigure = figure as FillableFigure;
                 //if (tempFigure == null) return;
-                parameters.FillColor = tempFigure.FillProperty.FillColor ;
+                parameters.FillColor = tempFigure.FillProperty.FillColor;
             }
             return parameters;
         }
