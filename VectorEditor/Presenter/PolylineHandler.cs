@@ -131,6 +131,7 @@ namespace VectorEditor.Presenter
 
         public void MouseUp(object sender, MouseEventArgs e)
         {
+
             if (_polyline == null) return;
             PointF temp = new PointF(e.Location.X, e.Location.Y);
             _polyline.Points.RemoveLast();

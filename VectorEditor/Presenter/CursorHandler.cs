@@ -239,10 +239,14 @@ namespace VectorEditor.Presenter
                 _isDraggingFigure = true;
                 PointF tmpPt0 = new PointF(newX1, newY1);
                 _selectedFigure.Points.Replace(0, tmpPt0);
-                PointF tempPoint1 = new PointF(
-                        _selectedFigure.Points.GetPoints()[1].X + dx,
-                        _selectedFigure.Points.GetPoints()[1].Y + dy);
-                _selectedFigure.Points.Replace(1, tempPoint1);
+                int count = _selectedFigure.Points.GetPoints().Count;
+                for (int i = 1; i < count; i++)
+                {
+                    PointF tempPoint1 = new PointF(
+                        _selectedFigure.Points.GetPoints()[i].X + dx,
+                        _selectedFigure.Points.GetPoints()[i].Y + dy);
+                    _selectedFigure.Points.Replace(i, tempPoint1);
+                }
             }
             else
             {
@@ -256,11 +260,15 @@ namespace VectorEditor.Presenter
 
                 PointF tmpPt0 = new PointF(newX1, newY1);
                 _selectedFigure.Points.Replace(0, tmpPt0);
-                PointF tempPoint1 = new PointF(
-                        _selectedFigure.Points.GetPoints()[1].X + dx,
-                        _selectedFigure.Points.GetPoints()[1].Y + dy);
-                _selectedFigure.Points.Replace(1, tempPoint1);
-
+                int count = _selectedFigure.Points.GetPoints().Count;
+                for (int i = 1; i < count; i++)
+                {
+                    PointF tempPoint1 = new PointF(
+                        _selectedFigure.Points.GetPoints()[i].X + dx,
+                        _selectedFigure.Points.GetPoints()[i].Y + dy);
+                    _selectedFigure.Points.Replace(i, tempPoint1);
+                }
+                
                 foreach (var figure in _selectedFigures)
                 {
                     if (figure != _selectedFigure)
@@ -641,6 +649,10 @@ namespace VectorEditor.Presenter
 
                 Rectangle ellipseRect = new Rectangle(x, y, width, height);
                 path.AddEllipse(ellipseRect);
+            }
+            else if (figure.GetType() == typeof(Polyline))
+            {
+                path.AddLines(points.ToArray());
             }
         }
     }
