@@ -654,6 +654,10 @@ namespace VectorEditor.Presenter
             {
                 path.AddLines(points.ToArray());
             }
+            else if (figure.GetType() == typeof(Polygon))
+            {
+                path.AddPolygon(points.ToArray());
+            }
         }
     }
 }
