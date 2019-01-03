@@ -481,8 +481,8 @@ namespace VectorEditor.Presenter
                     var points = figure.Points.GetPoints();
                     Pen pickPen = new Pen(Color.Transparent, 3);
 
-                    //path.AddRectangle(GetRect(points));
-                    path.AddLine(points[0], points[1]);
+                    //path.AddLine(points[0], points[1]);
+                    AddFigureToGraphicsPath(path, figure);
 
                     result = path.IsOutlineVisible(point, pickPen);
                     path.Reset();
@@ -504,8 +504,7 @@ namespace VectorEditor.Presenter
 
                     GraphicsPath path = new GraphicsPath();
 
-                    //path.AddRectangle(GetRect(points));
-                    path.AddLine(points[0], points[1]);
+                    AddFigureToGraphicsPath(path, figure);
 
 
                     if (path.IsOutlineVisible(point, pickPen))
@@ -562,11 +561,14 @@ namespace VectorEditor.Presenter
             figure.LineProperties.Color = parameters.LineColor;
             figure.LineProperties.Style = (DashStyle)parameters.LineType;
             figure.LineProperties.Thickness = parameters.LineThickness;
-            if (figure.GetType() == typeof(FillableFigure))
+            if (figure.GetType() == typeof(Circle) ||
+                figure.GetType() == typeof(Ellipse) ||
+                figure.GetType() == typeof(Polygon))
             {
                 var tempFigure = figure as FillableFigure;
                 if (tempFigure == null) return null;
                 tempFigure.FillProperty.FillColor = parameters.FillColor;
+                figure = tempFigure;
             }
             return figure;
         }
@@ -579,8 +581,11 @@ namespace VectorEditor.Presenter
                 figure.LineProperties.Color = parameters.LineColor;
                 figure.LineProperties.Style = (DashStyle)parameters.LineType;
                 figure.LineProperties.Thickness = parameters.LineThickness;
-                if (figure.GetType() == typeof(FillableFigure))
+                if (figure.GetType() == typeof(Circle) ||
+                    figure.GetType() == typeof(Ellipse) ||
+                    figure.GetType() == typeof(Polygon))
                 {
+                    //FIX: сделать темп фигуру до проверки с as и проверить на null
                     var tempFigure = figure as FillableFigure;
                     if (tempFigure == null) return null;
                     tempFigure.FillProperty.FillColor = parameters.FillColor;
@@ -594,13 +599,38 @@ namespace VectorEditor.Presenter
             parameters.LineColor = figure.LineProperties.Color;
             parameters.LineType = (int)figure.LineProperties.Style;
             parameters.LineThickness = figure.LineProperties.Thickness;
-            if (figure.GetType() == typeof(FillableFigure))
+            if (figure.GetType() == typeof(Circle) ||
+                figure.GetType() == typeof(Ellipse) ||
+                figure.GetType() == typeof(Polygon))
             {
                 var tempFigure = figure as FillableFigure;
                 //if (tempFigure == null) return;
                 parameters.FillColor = tempFigure.FillProperty.FillColor;
             }
             return parameters;
+        }
+
+        private void AddFigureToGraphicsPath(GraphicsPath path, BaseFigure figure)
+        {
+            var points = figure.Points.GetPoints();
+
+            if (figure.GetType() == typeof(Line))
+            {
+                path.AddLine(points[0], points[1]);
+            }
+            else if (figure.GetType() == typeof(Circle))
+            {
+                int width = (int)Math.Abs(points[0].X - points[1].X);
+                int height = (int)Math.Abs(points[0].Y - points[1].Y);
+
+                int radius = Math.Max(width, height);
+
+                int x = (int)Math.Min(points[0].X, points[1].X);
+                int y = (int)Math.Min(points[0].Y, points[1].Y);
+
+                Rectangle circleRect = new Rectangle(x, y, radius, radius);
+                path.AddEllipse(circleRect);
+            }
         }
     }
 }
