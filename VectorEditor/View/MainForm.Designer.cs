@@ -58,7 +58,7 @@
             // 
             // gpFigures
             // 
-            this.gpFigures.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.gpFigures.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.gpFigures.Controls.Add(this.buttonClearCanvas);
             this.gpFigures.Controls.Add(this.buttonEllipse);
             this.gpFigures.Controls.Add(this.buttonCircle);
@@ -66,7 +66,7 @@
             this.gpFigures.Controls.Add(this.buttonLine);
             this.gpFigures.Controls.Add(this.buttonPolyLine);
             this.gpFigures.Controls.Add(this.buttonCursor);
-            this.gpFigures.Location = new System.Drawing.Point(988, 17);
+            this.gpFigures.Location = new System.Drawing.Point(680, 20);
             this.gpFigures.Name = "gpFigures";
             this.gpFigures.Size = new System.Drawing.Size(340, 277);
             this.gpFigures.TabIndex = 1;
@@ -146,7 +146,7 @@
             // 
             // gpProps
             // 
-            this.gpProps.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.gpProps.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.gpProps.Controls.Add(this.cbLineType);
             this.gpProps.Controls.Add(this.buttonFillColor);
             this.gpProps.Controls.Add(this.buttonLineColor);
@@ -155,7 +155,7 @@
             this.gpProps.Controls.Add(this.label3);
             this.gpProps.Controls.Add(this.label2);
             this.gpProps.Controls.Add(this.label1);
-            this.gpProps.Location = new System.Drawing.Point(988, 300);
+            this.gpProps.Location = new System.Drawing.Point(686, 303);
             this.gpProps.Name = "gpProps";
             this.gpProps.Size = new System.Drawing.Size(340, 238);
             this.gpProps.TabIndex = 2;
@@ -258,7 +258,7 @@
             // 
             // btnHeightResize
             // 
-            this.btnHeightResize.Location = new System.Drawing.Point(465, 757);
+            this.btnHeightResize.Location = new System.Drawing.Point(257, 497);
             this.btnHeightResize.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnHeightResize.Name = "btnHeightResize";
             this.btnHeightResize.Size = new System.Drawing.Size(18, 18);
@@ -268,7 +268,7 @@
             // 
             // btnDiagonalResize
             // 
-            this.btnDiagonalResize.Location = new System.Drawing.Point(970, 752);
+            this.btnDiagonalResize.Location = new System.Drawing.Point(655, 497);
             this.btnDiagonalResize.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnDiagonalResize.Name = "btnDiagonalResize";
             this.btnDiagonalResize.Size = new System.Drawing.Size(18, 18);
@@ -278,7 +278,7 @@
             // 
             // btnWidthResize
             // 
-            this.btnWidthResize.Location = new System.Drawing.Point(970, 371);
+            this.btnWidthResize.Location = new System.Drawing.Point(655, 235);
             this.btnWidthResize.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnWidthResize.Name = "btnWidthResize";
             this.btnWidthResize.Size = new System.Drawing.Size(18, 18);
@@ -293,7 +293,7 @@
             this.pbCanvas.Location = new System.Drawing.Point(16, 20);
             this.pbCanvas.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.pbCanvas.Name = "pbCanvas";
-            this.pbCanvas.Size = new System.Drawing.Size(958, 737);
+            this.pbCanvas.Size = new System.Drawing.Size(640, 480);
             this.pbCanvas.TabIndex = 6;
             this.pbCanvas.TabStop = false;
             this.pbCanvas.Paint += new System.Windows.Forms.PaintEventHandler(this.pbCanvas_Paint);
@@ -305,7 +305,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1345, 784);
+            this.ClientSize = new System.Drawing.Size(1284, 944);
             this.Controls.Add(this.pbCanvas);
             this.Controls.Add(this.btnWidthResize);
             this.Controls.Add(this.btnDiagonalResize);
@@ -315,6 +315,7 @@
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "VectorEditor";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.gpFigures.ResumeLayout(false);
             this.gpProps.ResumeLayout(false);

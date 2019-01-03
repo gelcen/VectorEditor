@@ -29,6 +29,10 @@ namespace VectorEditor.Presenter
                 {
                     SetParameters(_selectedFigure, _figureParameters);
                 }
+                if (_selectedFigures != null)
+                {
+                    SetParameters(_selectedFigures, _figureParameters);
+                }
             }
         }
 
@@ -62,7 +66,9 @@ namespace VectorEditor.Presenter
             get;
         }
 
-        public CursorHandler(PictureBox canvas, FigureParameters figureParameters, Presenter presenter)
+        public CursorHandler(PictureBox canvas, 
+            FigureParameters figureParameters, 
+            Presenter presenter)
         {
             FigureParameters = figureParameters;
             Canvas = canvas;
@@ -541,6 +547,24 @@ namespace VectorEditor.Presenter
                 tempFigure.FillProperty.FillColor = parameters.FillColor;
             }
             return figure;
+        }
+
+        private List<BaseFigure> SetParameters(List<BaseFigure> figures, 
+                                               FigureParameters parameters)
+        {
+            foreach (var figure in figures)
+            {
+                figure.LineProperties.Color = parameters.LineColor;
+                figure.LineProperties.Style = (DashStyle)parameters.LineType;
+                figure.LineProperties.Thickness = parameters.LineThickness;
+                if (figure.GetType() == typeof(FillableFigure))
+                {
+                    var tempFigure = figure as FillableFigure;
+                    if (tempFigure == null) return null;
+                    tempFigure.FillProperty.FillColor = parameters.FillColor;
+                }
+            }
+            return figures;
         }
 
         private FigureParameters GetParameters(BaseFigure figure, FigureParameters parameters)
