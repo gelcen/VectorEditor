@@ -167,18 +167,19 @@ namespace VectorEditor.Presenter
             if (e.Button == MouseButtons.Left)
             {
                 if (_isFigurePicked != false && 
-                    _selectedFigure != null)
+                    _selectedFigures != null)
                 {
                     if (IsPointOnFigure(e.Location))
                     {
-                        if ((_selectedFigure != null) &&
-                            _selectedFigure == GetFigurePointOn(e.Location))
+                        if ((_selectedFigures != null) &&
+                            _selectedFigures.Contains(GetFigurePointOn(e.Location)))
                         {
                             MouseMoveDelegate -= MouseMoveSelecting;
                             MouseMoveDelegate += MouseMoveFigure;
                             MouseUpDelegate += MouseUpFigure;
 
-                            _isMouseDownOnFigure = true;
+                            _selectedFigure = GetFigurePointOn(e.Location);
+
                             _offsetX = _selectedFigure.Points.GetPoints()[0].X - e.X;
                             _offsetY = _selectedFigure.Points.GetPoints()[0].Y - e.Y;
                         }
@@ -217,21 +218,56 @@ namespace VectorEditor.Presenter
 
         private void MouseMoveFigure(object obj, MouseEventArgs e)
         {
-            float newX1 = e.X + _offsetX;
-            float newY1 = e.Y + _offsetY;
+            if (_selectedFigures == null) return;
+            if (_selectedFigures.Count == 1)
+            {
+                float newX1 = e.X + _offsetX;
+                float newY1 = e.Y + _offsetY;
 
-            float dx = newX1 - _selectedFigure.Points.GetPoints()[0].X;
-            float dy = newY1 - _selectedFigure.Points.GetPoints()[0].Y;
+                float dx = newX1 - _selectedFigure.Points.GetPoints()[0].X;
+                float dy = newY1 - _selectedFigure.Points.GetPoints()[0].Y;
 
-            if (dx == 0 && dy == 0) return;
+                if (dx == 0 && dy == 0) return;
 
-            _isDraggingFigure = true;
-            PointF tmpPt0 = new PointF(newX1, newY1);
-            _selectedFigure.Points.Replace(0, tmpPt0);
-            PointF tempPoint1 = new PointF(
-                    _selectedFigure.Points.GetPoints()[1].X + dx,
-                    _selectedFigure.Points.GetPoints()[1].Y + dy);
-            _selectedFigure.Points.Replace(1, tempPoint1);
+                _isDraggingFigure = true;
+                PointF tmpPt0 = new PointF(newX1, newY1);
+                _selectedFigure.Points.Replace(0, tmpPt0);
+                PointF tempPoint1 = new PointF(
+                        _selectedFigure.Points.GetPoints()[1].X + dx,
+                        _selectedFigure.Points.GetPoints()[1].Y + dy);
+                _selectedFigure.Points.Replace(1, tempPoint1);
+            }
+            else
+            {
+                float newX1 = e.X + _offsetX;
+                float newY1 = e.Y + _offsetY;
+
+                float dx = newX1 - _selectedFigure.Points.GetPoints()[0].X;
+                float dy = newY1 - _selectedFigure.Points.GetPoints()[0].Y;
+
+                if (dx == 0 && dy == 0) return;
+
+                PointF tmpPt0 = new PointF(newX1, newY1);
+                _selectedFigure.Points.Replace(0, tmpPt0);
+                PointF tempPoint1 = new PointF(
+                        _selectedFigure.Points.GetPoints()[1].X + dx,
+                        _selectedFigure.Points.GetPoints()[1].Y + dy);
+                _selectedFigure.Points.Replace(1, tempPoint1);
+
+                foreach (var figure in _selectedFigures)
+                {
+                    if (figure != _selectedFigure)
+                    {
+                        for (int i = 0; i < figure.Points.GetPoints().Count; i++)
+                        {
+                            figure.Points.Replace(i,
+                                new PointF(
+                                    figure.Points.GetPoints()[i].X + dx,
+                                    figure.Points.GetPoints()[i].Y + dy));
+                        }
+                    }
+                }
+            }
 
             Canvas.Refresh();
         }
@@ -254,30 +290,6 @@ namespace VectorEditor.Presenter
 
             Canvas.Refresh();
         }
-
-        //private void MouseMoveSelecting(object obj, MouseEventArgs e)
-        //{
-        //    Cursor newCursor;
-        //    if (IsPointOnFigure(e.Location))
-        //    {
-        //        newCursor = Cursors.Hand;
-        //    }
-        //    else if (IsPointOnMarker(e.Location, out _pickedPoint))
-        //    {
-        //        newCursor = Cursors.Cross;
-        //    }
-        //    else
-        //    {
-        //        newCursor = Cursors.Default;
-        //    }
-
-        //    if (Canvas.Cursor != newCursor)
-        //    {
-        //        Canvas.Cursor = newCursor;
-        //    }
-
-        //    Canvas.Refresh();
-        //}
 
         public void MouseMove(object sender, MouseEventArgs e)
         {
@@ -340,6 +352,7 @@ namespace VectorEditor.Presenter
                     //Выборка закончилась
                     _isDraggingSelectionRect = false;
                     SelectFiguresInRect();
+                    _isFigurePicked = true;
                     if (_isSelectionEmpty)
                     {
                         _isFigurePicked = false;
