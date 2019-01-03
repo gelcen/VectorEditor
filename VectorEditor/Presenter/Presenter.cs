@@ -36,6 +36,11 @@ namespace VectorEditor.Presenter
         private void _view_CanvasCleared(object sender, System.EventArgs e)
         {
             _model.ClearCanvas();
+            if (_currentHandler.GetType() == typeof(CursorHandler))
+            {
+                CursorHandler handler = _currentHandler as CursorHandler;
+                handler.ClearSelectedFigures();
+            }
         }
 
         private void _view_ParametersChanged(object sender, View.FigureParameters e)

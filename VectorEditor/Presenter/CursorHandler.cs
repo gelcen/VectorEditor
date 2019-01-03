@@ -110,6 +110,7 @@ namespace VectorEditor.Presenter
             g.DrawRectangle(pen, _selectionRect);
             pen.Dispose();
             brush.Dispose();
+
             if (_selectedFigures.Count != 0)
             {
                 foreach (var figure in _selectedFigures)
@@ -123,6 +124,12 @@ namespace VectorEditor.Presenter
                 
             }
             
+        }
+
+        public void ClearSelectedFigures()
+        {
+            _selectedFigures.Clear();
+            _selectedFigure = null;
         }
 
         /// <summary>
