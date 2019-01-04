@@ -167,6 +167,8 @@ namespace VectorEditor.Presenter
 
         private int _pickedPointIndex;
 
+        private int _pickedFigureIndex;
+
         private bool _isSelectionEmpty = false;
 
         public void MouseDown(object sender, MouseEventArgs e)
@@ -297,10 +299,9 @@ namespace VectorEditor.Presenter
         }
 
         private void MouseMoveMarker(object obj, MouseEventArgs e)
-        {
-            int count = _selectedFigure.Points.GetPoints().Count;
-
-            _selectedFigure.Points.Replace(_pickedPointIndex,
+        {                    
+            _selectedFigures[_pickedFigureIndex].Points.Replace(
+                             _pickedPointIndex,
                              new PointF(e.X + _offsetX, e.Y + _offsetY));
 
             Canvas.Refresh();
@@ -528,22 +529,46 @@ namespace VectorEditor.Presenter
         private bool IsPointOnMarker(PointF mousePoint,
                                      out PointF pickedPoint)
         {
-            if (_selectedFigure != null)
+            if (_selectedFigures != null)
             {
-                var points = _selectedFigure.Points.GetPoints();
-                int count = _selectedFigure.Points.GetPoints().Count;
-                for (int i = 0; i < count; i++)
+                if (_selectedFigures.Count == 1)
                 {
-                    if (FindDistanceToPointSquared(mousePoint,
-                        _selectedFigure.Points.GetPoints()[i]) < over_dist_squared)
+                    var points = _selectedFigures[0].Points.GetPoints();
+                    int count = _selectedFigures[0].Points.GetPoints().Count;
+                    for (int i = 0; i < count; i++)
                     {
-                        pickedPoint = _selectedFigure.Points.GetPoints()[i];
-                        _pickedPointIndex = i;
-
-                        return true;
+                        if (FindDistanceToPointSquared(mousePoint,
+                            _selectedFigures[0].Points.GetPoints()[i]) < over_dist_squared)
+                        {
+                            pickedPoint = _selectedFigures[0].Points.GetPoints()[i];
+                            _pickedPointIndex = i;
+                            _pickedFigureIndex = 0;
+                            return true;
+                        }
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < _selectedFigures.Count; i++)
+                    {
+                        var points = _selectedFigures[i].Points.GetPoints();
+                        int count = _selectedFigures[i].Points.GetPoints().Count;
+                        for (int j = 0; j < count; j++)
+                        {
+                            if (FindDistanceToPointSquared(mousePoint,
+                                _selectedFigures[i].Points.GetPoints()[j]) < over_dist_squared)
+                            {
+                                pickedPoint = _selectedFigures[i].Points.GetPoints()[j];
+                                _pickedPointIndex = j;
+                                _pickedFigureIndex = i;
+                                return true;
+                            }
+                        }
                     }
                 }
             }
+            _pickedPointIndex = -1;
+            _pickedFigureIndex = -1;
             pickedPoint = new PointF(-1, -1);
             return false;
         }
