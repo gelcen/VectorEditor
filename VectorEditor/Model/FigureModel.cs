@@ -75,7 +75,7 @@ namespace VectorEditor.Model
         /// <param name="figure"></param>
         public void DeleteFigure(BaseFigure figure)
         {
-
+            _figures.Remove(figure);
         }
 
         /// <summary>

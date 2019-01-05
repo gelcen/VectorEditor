@@ -263,7 +263,7 @@ namespace VectorEditor.Presenter
                 PointF tmpPt0 = new PointF(newX1, newY1);
                 _selectedFigure.Points.Replace(0, tmpPt0);
                 int count = _selectedFigure.Points.GetPoints().Count;
-                for (int i = 1; i < count; i++)
+                for (int i = 1; i < count; i++)    
                 {
                     PointF tempPoint1 = new PointF(
                         _selectedFigure.Points.GetPoints()[i].X + dx,
@@ -641,6 +641,14 @@ namespace VectorEditor.Presenter
                 parameters.FillColor = tempFigure.FillProperty.FillColor;
             }
             return parameters;
+        }
+
+        public List<BaseFigure> SelectedFigures
+        {
+            get
+            {
+                return _selectedFigures;
+            }
         }
 
         private void AddFigureToGraphicsPath(GraphicsPath path, BaseFigure figure)

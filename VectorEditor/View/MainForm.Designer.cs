@@ -50,10 +50,22 @@
             this.btnDiagonalResize = new System.Windows.Forms.Button();
             this.btnWidthResize = new System.Windows.Forms.Button();
             this.pbCanvas = new System.Windows.Forms.PictureBox();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.файлToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.соToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.сохранитьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.сохранитьToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.сохранитьКакToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.правкаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.DeleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.копироватьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.отменитьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.вернутьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gpFigures.SuspendLayout();
             this.gpProps.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudLineThickness)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbCanvas)).BeginInit();
+            this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // gpFigures
@@ -258,7 +270,7 @@
             // 
             // btnHeightResize
             // 
-            this.btnHeightResize.Location = new System.Drawing.Point(257, 497);
+            this.btnHeightResize.Location = new System.Drawing.Point(315, 537);
             this.btnHeightResize.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnHeightResize.Name = "btnHeightResize";
             this.btnHeightResize.Size = new System.Drawing.Size(18, 18);
@@ -268,7 +280,7 @@
             // 
             // btnDiagonalResize
             // 
-            this.btnDiagonalResize.Location = new System.Drawing.Point(655, 497);
+            this.btnDiagonalResize.Location = new System.Drawing.Point(655, 537);
             this.btnDiagonalResize.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnDiagonalResize.Name = "btnDiagonalResize";
             this.btnDiagonalResize.Size = new System.Drawing.Size(18, 18);
@@ -278,7 +290,7 @@
             // 
             // btnWidthResize
             // 
-            this.btnWidthResize.Location = new System.Drawing.Point(655, 235);
+            this.btnWidthResize.Location = new System.Drawing.Point(655, 263);
             this.btnWidthResize.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnWidthResize.Name = "btnWidthResize";
             this.btnWidthResize.Size = new System.Drawing.Size(18, 18);
@@ -290,16 +302,99 @@
             // 
             this.pbCanvas.BackColor = System.Drawing.SystemColors.HighlightText;
             this.pbCanvas.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pbCanvas.Location = new System.Drawing.Point(16, 20);
+            this.pbCanvas.Location = new System.Drawing.Point(13, 45);
             this.pbCanvas.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.pbCanvas.Name = "pbCanvas";
-            this.pbCanvas.Size = new System.Drawing.Size(640, 480);
+            this.pbCanvas.Size = new System.Drawing.Size(643, 496);
             this.pbCanvas.TabIndex = 6;
             this.pbCanvas.TabStop = false;
             this.pbCanvas.Paint += new System.Windows.Forms.PaintEventHandler(this.pbCanvas_Paint);
             this.pbCanvas.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pbCanvas_MouseDown);
             this.pbCanvas.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pbCanvas_MouseMove);
             this.pbCanvas.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pbCanvas_MouseUp);
+            // 
+            // menuStrip1
+            // 
+            this.menuStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.файлToolStripMenuItem,
+            this.правкаToolStripMenuItem});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(1284, 33);
+            this.menuStrip1.TabIndex = 7;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // файлToolStripMenuItem
+            // 
+            this.файлToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.соToolStripMenuItem,
+            this.сохранитьToolStripMenuItem,
+            this.сохранитьToolStripMenuItem1,
+            this.сохранитьКакToolStripMenuItem});
+            this.файлToolStripMenuItem.Name = "файлToolStripMenuItem";
+            this.файлToolStripMenuItem.Size = new System.Drawing.Size(65, 29);
+            this.файлToolStripMenuItem.Text = "Файл";
+            // 
+            // соToolStripMenuItem
+            // 
+            this.соToolStripMenuItem.Name = "соToolStripMenuItem";
+            this.соToolStripMenuItem.Size = new System.Drawing.Size(214, 30);
+            this.соToolStripMenuItem.Text = "Создать";
+            // 
+            // сохранитьToolStripMenuItem
+            // 
+            this.сохранитьToolStripMenuItem.Name = "сохранитьToolStripMenuItem";
+            this.сохранитьToolStripMenuItem.Size = new System.Drawing.Size(214, 30);
+            this.сохранитьToolStripMenuItem.Text = "Открыть";
+            // 
+            // сохранитьToolStripMenuItem1
+            // 
+            this.сохранитьToolStripMenuItem1.Name = "сохранитьToolStripMenuItem1";
+            this.сохранитьToolStripMenuItem1.Size = new System.Drawing.Size(214, 30);
+            this.сохранитьToolStripMenuItem1.Text = "Сохранить";
+            // 
+            // сохранитьКакToolStripMenuItem
+            // 
+            this.сохранитьКакToolStripMenuItem.Name = "сохранитьКакToolStripMenuItem";
+            this.сохранитьКакToolStripMenuItem.Size = new System.Drawing.Size(214, 30);
+            this.сохранитьКакToolStripMenuItem.Text = "Сохранить как";
+            // 
+            // правкаToolStripMenuItem
+            // 
+            this.правкаToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.DeleteToolStripMenuItem,
+            this.копироватьToolStripMenuItem,
+            this.отменитьToolStripMenuItem,
+            this.вернутьToolStripMenuItem});
+            this.правкаToolStripMenuItem.Name = "правкаToolStripMenuItem";
+            this.правкаToolStripMenuItem.Size = new System.Drawing.Size(85, 29);
+            this.правкаToolStripMenuItem.Text = "Правка";
+            // 
+            // DeleteToolStripMenuItem
+            // 
+            this.DeleteToolStripMenuItem.Name = "DeleteToolStripMenuItem";
+            this.DeleteToolStripMenuItem.Size = new System.Drawing.Size(210, 30);
+            this.DeleteToolStripMenuItem.Text = "Удалить";
+            this.DeleteToolStripMenuItem.Click += new System.EventHandler(this.DeleteToolStripMenuItem_Click);
+            // 
+            // копироватьToolStripMenuItem
+            // 
+            this.копироватьToolStripMenuItem.Name = "копироватьToolStripMenuItem";
+            this.копироватьToolStripMenuItem.Size = new System.Drawing.Size(210, 30);
+            this.копироватьToolStripMenuItem.Text = "Копировать";
+            // 
+            // отменитьToolStripMenuItem
+            // 
+            this.отменитьToolStripMenuItem.Name = "отменитьToolStripMenuItem";
+            this.отменитьToolStripMenuItem.Size = new System.Drawing.Size(210, 30);
+            this.отменитьToolStripMenuItem.Text = "Отменить";
+            // 
+            // вернутьToolStripMenuItem
+            // 
+            this.вернутьToolStripMenuItem.Name = "вернутьToolStripMenuItem";
+            this.вернутьToolStripMenuItem.Size = new System.Drawing.Size(210, 30);
+            this.вернутьToolStripMenuItem.Text = "Вернуть";
             // 
             // MainForm
             // 
@@ -312,6 +407,8 @@
             this.Controls.Add(this.btnHeightResize);
             this.Controls.Add(this.gpProps);
             this.Controls.Add(this.gpFigures);
+            this.Controls.Add(this.menuStrip1);
+            this.MainMenuStrip = this.menuStrip1;
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "VectorEditor";
@@ -322,7 +419,10 @@
             this.gpProps.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudLineThickness)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbCanvas)).EndInit();
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -349,6 +449,17 @@
         private System.Windows.Forms.Button btnDiagonalResize;
         private System.Windows.Forms.Button btnWidthResize;
         private System.Windows.Forms.PictureBox pbCanvas;
+        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem файлToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem соToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem сохранитьToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem сохранитьToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem сохранитьКакToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem правкаToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem DeleteToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem копироватьToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem отменитьToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem вернутьToolStripMenuItem;
     }
 }
 

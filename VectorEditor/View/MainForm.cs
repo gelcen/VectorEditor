@@ -67,7 +67,19 @@ namespace VectorEditor
 
         public event EventHandler CanvasCleared;
 
+        public event EventHandler FiguresDeleted;
+
         #endregion
+
+        private void OnFiguresDeleted()
+        {
+            EventHandler handler = FiguresDeleted;
+
+            if (handler != null)
+            {
+                handler(this, null);
+            }
+        }
 
         private void OnCanvasCleared()
         {
@@ -331,6 +343,11 @@ namespace VectorEditor
         private void MainForm_Load(object sender, EventArgs e)
         {
             OnToolPicked(Item.Cursor);
+        }
+
+        private void DeleteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OnFiguresDeleted();
         }
     }
 }

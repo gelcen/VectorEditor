@@ -36,12 +36,14 @@ namespace VectorEditor.Model
 
         event EventHandler CanvasCleared;
 
+        event EventHandler FiguresDeleted;
+
+        event EventHandler<Item> ToolPicked;
+
         IBaseHandler CurrentHandler
         {
             get;
             set;
-        }
-       
-        event EventHandler<Item> ToolPicked;
+        }              
     }
 }
