@@ -144,15 +144,5 @@ namespace VectorEditor.Figures
             }
             return resultFigure;
         }
-
-        private static void OffsetPoints(BaseFigure figure)
-        {
-            for (int i = 0; i < figure.Points.GetPoints().Count; i++)
-            {
-                PointF temp = new PointF(figure.Points.GetPoints()[i].X + 5,
-                                        figure.Points.GetPoints()[i].Y + 5);
-                figure.Points.Replace(i, temp);
-            }
-        }
     }
 }
