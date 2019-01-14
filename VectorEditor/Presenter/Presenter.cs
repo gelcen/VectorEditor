@@ -2,6 +2,7 @@
 using VectorEditor.Figures;
 using VectorEditor.Model;
 using VectorEditor.Presenter;
+using VectorEditor.UndoRedo;
 
 namespace VectorEditor.Presenter
 {
@@ -15,9 +16,12 @@ namespace VectorEditor.Presenter
         private IBaseHandler _currentHandler;
         private List<BaseFigure> _figures;
 
+        private UndoRedoStack _undoRedoStack;
+
         public Presenter(IView view, IModel model)
         {
             _currentHandler = null;
+            _undoRedoStack = new UndoRedoStack();
 
             _view = view;
             _model = model;
@@ -30,9 +34,23 @@ namespace VectorEditor.Presenter
             _view.CanvasCleared += _view_CanvasCleared;
             _view.FiguresDeleted += _view_FiguresDeleted;
             _view.FigureCopied += _view_FigureCopied;
+            _view.UndoPressed += _view_UndoPressed;
+            _view.RedoPressed += _view_RedoPressed;
                             
             _model.RegisterObserver(this);
             _model.RegisterObserver((IObserver)_view);
+        }
+
+        private void _view_RedoPressed(object sender, System.EventArgs e)
+        {
+            _undoRedoStack.Redo();
+            _view.Canvas.Refresh();
+        }
+
+        private void _view_UndoPressed(object sender, System.EventArgs e)
+        {
+            _undoRedoStack.Undo();
+            _view.Canvas.Refresh();
         }
 
         private void _view_FigureCopied(object sender, System.EventArgs e)
@@ -131,7 +149,9 @@ namespace VectorEditor.Presenter
 
         private void _currentHandler_FigureCreated(object sender, BaseFigure e)
         {
-            _model.AddFigure(e);
+            AddFigureCommand cmd = new AddFigureCommand(_model, e);
+            _undoRedoStack.Do(cmd);
+            //_model.AddFigure(e);
         }
 
         /// <summary>

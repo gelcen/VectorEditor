@@ -40,6 +40,10 @@ namespace VectorEditor.Model
 
         event EventHandler FigureCopied;
 
+        event EventHandler UndoPressed;
+
+        event EventHandler RedoPressed;
+
         event EventHandler<Item> ToolPicked;
 
         IBaseHandler CurrentHandler

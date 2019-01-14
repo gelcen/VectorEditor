@@ -71,7 +71,31 @@ namespace VectorEditor
 
         public event EventHandler FigureCopied;
 
+        public event EventHandler UndoPressed;
+
+        public event EventHandler RedoPressed;
+
         #endregion
+
+        private void OnRedoPressed()
+        {
+            EventHandler handler = RedoPressed;
+
+            if (handler != null)
+            {
+                handler(this, null);
+            }
+        }
+
+        private void OnUndoPressed()
+        {
+            EventHandler handler = UndoPressed;
+
+            if (handler != null)
+            {
+                handler(this, null);
+            }
+        }
 
         private void OnFigureCopied()
         {
@@ -370,8 +394,16 @@ namespace VectorEditor
             Console.WriteLine("Figures count " + _figures.Count);
         }
 
-        #endregion
+        private void UndoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OnUndoPressed();
+        }
 
-        
+        private void RedoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OnRedoPressed();
+        }
+
+        #endregion
     }
 }

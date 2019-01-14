@@ -7,7 +7,7 @@ namespace VectorEditor.Model
     /// <summary>
     /// Класс для модели
     /// </summary>
-    class FigureModel:IModel, ISubject
+    public class FigureModel:IModel, ISubject
     {
         /// <summary>
         /// Список подписчиков
@@ -78,6 +78,7 @@ namespace VectorEditor.Model
         public void DeleteFigure(BaseFigure figure)
         {
             _figures.Remove(figure);
+            NotifyObservers();
         }
 
         /// <summary>
