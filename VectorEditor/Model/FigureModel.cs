@@ -57,7 +57,9 @@ namespace VectorEditor.Model
         /// <param name="figure"></param>
         public void CopyFigure(BaseFigure figure)
         {
-
+            var addingFigure = FigureFactory.CreateCopy(figure);
+            _figures.Add(addingFigure);
+            NotifyObservers();      
         }
 
         /// <summary>

@@ -38,6 +38,8 @@ namespace VectorEditor.Model
 
         event EventHandler FiguresDeleted;
 
+        event EventHandler FigureCopied;
+
         event EventHandler<Item> ToolPicked;
 
         IBaseHandler CurrentHandler

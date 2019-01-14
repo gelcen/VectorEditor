@@ -29,9 +29,25 @@ namespace VectorEditor.Presenter
             _view.ParametersChanged += _view_ParametersChanged;
             _view.CanvasCleared += _view_CanvasCleared;
             _view.FiguresDeleted += _view_FiguresDeleted;
+            _view.FigureCopied += _view_FigureCopied;
                             
             _model.RegisterObserver(this);
             _model.RegisterObserver((IObserver)_view);
+        }
+
+        private void _view_FigureCopied(object sender, System.EventArgs e)
+        {
+            if (_currentHandler.GetType() == typeof(CursorHandler))
+            {
+                CursorHandler handler = _currentHandler as CursorHandler;
+                foreach (var figure in handler.SelectedFigures)
+                {
+                    if (_model.getFigureList().Contains(figure))
+                    {
+                        _model.CopyFigure(figure);
+                    }
+                }
+            }
         }
 
         private void _view_FiguresDeleted(object sender, System.EventArgs e)
@@ -58,6 +74,7 @@ namespace VectorEditor.Presenter
                 CursorHandler handler = _currentHandler as CursorHandler;
                 handler.ClearSelectedFigures();
             }
+            _view.Canvas.Refresh();
         }
 
         private void _view_ParametersChanged(object sender, View.FigureParameters e)

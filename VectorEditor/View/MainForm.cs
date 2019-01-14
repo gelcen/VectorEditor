@@ -69,7 +69,19 @@ namespace VectorEditor
 
         public event EventHandler FiguresDeleted;
 
+        public event EventHandler FigureCopied;
+
         #endregion
+
+        private void OnFigureCopied()
+        {
+            EventHandler handler = FigureCopied;
+
+            if (handler != null)
+            {
+                handler(this, null);
+            }
+        }
 
         private void OnFiguresDeleted()
         {
@@ -135,7 +147,7 @@ namespace VectorEditor
         /// <param name="e"></param>
         private void buttonClearCanvas_Click(object sender, EventArgs e)
         {
-            pbCanvas.Image = null;
+            //pbCanvas.Image = null;
             OnCanvasCleared();
         }
 
@@ -345,9 +357,21 @@ namespace VectorEditor
             OnToolPicked(Item.Cursor);
         }
 
+        #region Обработчики нажатий по пунктам меню
+
         private void DeleteToolStripMenuItem_Click(object sender, EventArgs e)
         {
             OnFiguresDeleted();
         }
+
+        private void CopyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OnFigureCopied();
+            Console.WriteLine("Figures count " + _figures.Count);
+        }
+
+        #endregion
+
+        
     }
 }
