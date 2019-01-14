@@ -1,41 +1,65 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using System.Drawing;
 using VectorEditor.Figures;
+
 
 namespace VectorEditor.Drawers
 {
     public static class FigureDrawer
     {
-        public static void DrawFigure(Figure figure, PictureBox canvas)
+        public static void DrawFigure(BaseFigure figure, Graphics canvas)
         {
             if (figure.GetType() == typeof(Line))
             {
-                LineDrawer lineDrawer = new LineDrawer((Line)figure, canvas);
-                lineDrawer.Draw();
+                LineDrawer lineDrawer = new LineDrawer();
+                lineDrawer.DrawFigure(figure, canvas);
             }
-            else if (figure.GetType() == typeof(PolyLine))
+            else if (figure.GetType() == typeof(Polyline))
             {
-                PolyLineDrawer drawer = new PolyLineDrawer((PolyLine)figure, canvas);
-                drawer.Draw();
+                PolylineDrawer drawer = new PolylineDrawer();
+                drawer.DrawFigure(figure, canvas);
             }
             else if (figure.GetType() == typeof(Circle))
             {
-                CircleDrawer circleDrawer = new CircleDrawer((Circle)figure, canvas);
-                circleDrawer.Draw();
+                CircleDrawer circleDrawer = new CircleDrawer();
+                circleDrawer.DrawFigure(figure, canvas);
             }
             else if (figure.GetType() == typeof(Ellipse))
             {
-                EllipseDrawer ellipseDrawer = new EllipseDrawer((Ellipse)figure, canvas);
-                ellipseDrawer.Draw();
+                EllipseDrawer ellipseDrawer = new EllipseDrawer();
+                ellipseDrawer.DrawFigure(figure, canvas);
             }
-            else if (figure.GetType() == typeof(Polygone))
+            else if (figure.GetType() == typeof(Polygon))
             {
-                PolygoneDrawer polygoneDrawer = new PolygoneDrawer((Polygone)figure, canvas);
-                polygoneDrawer.Draw();
+                PolygonDrawer polygonDrawer = new PolygonDrawer();
+                polygonDrawer.DrawFigure(figure, canvas);
+            }
+        }
+        public static void DrawSelection(BaseFigure figure, Graphics canvas)
+        {
+            if (figure.GetType() == typeof(Line))
+            {
+                LineDrawer lineDrawer = new LineDrawer();
+                lineDrawer.DrawSelection(figure, canvas);
+            }
+            else if (figure.GetType() == typeof(Polyline))
+            {
+                PolylineDrawer drawer = new PolylineDrawer();
+                drawer.DrawSelection(figure, canvas);
+            }
+            else if (figure.GetType() == typeof(Circle))
+            {
+                CircleDrawer circleDrawer = new CircleDrawer();
+                circleDrawer.DrawSelection(figure, canvas);
+            }
+            else if (figure.GetType() == typeof(Ellipse))
+            {
+                EllipseDrawer ellipseDrawer = new EllipseDrawer();
+                ellipseDrawer.DrawSelection(figure, canvas);
+            }
+            else if (figure.GetType() == typeof(Polygon))
+            {
+                PolygonDrawer polygonDrawer = new PolygonDrawer();
+                polygonDrawer.DrawSelection(figure, canvas);
             }
         }
     }

@@ -5,7 +5,7 @@ namespace VectorEditor.Model
 {
     public class ModelChangedEventArgs
     {
-        public List<Figure> Figures
+        public List<BaseFigure> Figures
         {
             get;
             set;

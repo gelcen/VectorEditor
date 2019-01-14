@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using VectorEditor.Figures;
-using VectorEditor.Observer;
 
 namespace VectorEditor.Model
 {
@@ -16,22 +11,22 @@ namespace VectorEditor.Model
         /// <summary>
         /// Добавление фигуры
         /// </summary>
-        void AddFigure(Figure figure);
+        void AddFigure(BaseFigure figure);
 
         /// <summary>
         /// Изменение флага IsChanged
         /// </summary>
         void HasChanged();
 
-        void CopyFigure(Figure figure);
+        void CopyFigure(BaseFigure figure);
 
-        void CutFigure(Figure figure);
+        void CutFigure(BaseFigure figure);
 
-        void DeleteFigure(Figure figure);
+        void DeleteFigure(BaseFigure figure);
 
-        void ChangeFigureSize(Figure figure);
+        void ChangeFigureSize(BaseFigure figure);
 
-        void MoveFigure(Figure figure);
+        void MoveFigure(BaseFigure figure);
 
         void Save(string filename);
 
@@ -45,7 +40,7 @@ namespace VectorEditor.Model
         /// Получение списка фигур
         /// </summary>
         /// <returns></returns>
-        List<Figure> getFigureList();
+        List<BaseFigure> getFigureList();
 
         //void registerObserver(Observer observer);
 

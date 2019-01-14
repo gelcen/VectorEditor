@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using VectorEditor.Figures;
+using VectorEditor.Presenter;
+using VectorEditor.View;
 
 namespace VectorEditor.Model
 {
@@ -13,14 +16,36 @@ namespace VectorEditor.Model
     public interface IView
     {
         /// <summary>
-        /// Событие - Фигура создана в представлении
+        /// Канва
         /// </summary>
-        event EventHandler<FigureCreatedEventArgs> FigureCreated;
-
+        PictureBox Canvas
+        {
+            get;
+        }
 
         /// <summary>
-        /// Событие изменения модели
+        /// Параметры
         /// </summary>
-        void DrawModel(List<Figure> figures);
+        FigureParameters FigureParameters
+        {
+            get;
+            set;
+        }
+
+        event EventHandler<FigureParameters> ParametersChanged;
+
+        event EventHandler CanvasCleared;
+
+        event EventHandler FiguresDeleted;
+
+        event EventHandler FigureCopied;
+
+        event EventHandler<Item> ToolPicked;
+
+        IBaseHandler CurrentHandler
+        {
+            get;
+            set;
+        }              
     }
 }

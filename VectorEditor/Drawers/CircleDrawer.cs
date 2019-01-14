@@ -4,38 +4,75 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 using VectorEditor.Figures;
 
 namespace VectorEditor.Drawers
 {
-    class CircleDrawer:Drawer
+    public class CircleDrawer : BaseDrawer
     {
-        Circle circle;
-
-        public CircleDrawer(Circle circle, PictureBox canvas)
+        public override void DrawFigure(BaseFigure figure, Graphics canvas)
         {
-            SetCanvas(canvas);
-            this.circle = circle;
+            var circle = figure as FillableFigure;
+            if (circle == null) return;
+
+            var points = circle.Points.GetPoints();
+            if (points.Count != 2) return;
+
+            int width = (int)Math.Abs(points[0].X - points[1].X);
+            int height = (int)Math.Abs(points[0].Y - points[1].Y);
+
+            int radius = Math.Max(width, height);
+
+            int x = (int)Math.Min(points[0].X, points[1].X);
+            int y = (int)Math.Min(points[0].Y, points[1].Y);
+
+            Rectangle circleRect = new Rectangle(x, y, radius, radius);
+
+            Brush brush = new SolidBrush(circle.FillProperty.FillColor);
+            canvas.FillEllipse(brush, circleRect);
+            brush.Dispose();
+
+            Pen pen = new Pen(circle.LineProperties.Color,
+                              circle.LineProperties.Thickness);
+            pen.DashStyle = circle.LineProperties.Style;
+
+            canvas.DrawEllipse(pen, circleRect);
+            pen.Dispose();
         }
 
-        public override void Draw()
+        public override void DrawSelection(BaseFigure figure, Graphics canvas)
         {
-            float x = circle.CenterPoint.X;
-            float y = circle.CenterPoint.Y;
-            float rad = circle.Radius;
-            
-            Graphics g = Canvas.CreateGraphics();
-            Pen pen = new Pen(circle.LineColor, circle.LineThickness);
-            PickLineType(circle.LineType, pen);
-            g.DrawEllipse(pen, x - rad, y - rad, rad + rad, rad + rad);
-            if (circle.FillColor != Color.White)
-                {
-                    SolidBrush brush = new SolidBrush(circle.FillColor);
-                    g.FillEllipse(brush, x - rad, y - rad, rad + rad, rad + rad);
-                }
-            g.Dispose();
-        }
+            var circle = figure as FillableFigure;
+            if (circle == null) return;
 
+            var points = circle.Points.GetPoints();
+            if (points.Count != 2) return;
+
+            foreach (var pt in points)
+            {
+                Rectangle rect = new Rectangle(
+                    (int)pt.X - object_radius, (int)pt.Y - object_radius,
+                    2 * object_radius + 1, 2 * object_radius + 1);
+                canvas.FillEllipse(Brushes.White, rect);
+                canvas.DrawEllipse(Pens.Black, rect);
+            }
+
+            int width = (int)Math.Abs(points[0].X - points[1].X);
+            int height = (int)Math.Abs(points[0].Y - points[1].Y);
+
+            int radius = Math.Max(width, height);
+
+            int x = (int)Math.Min(points[0].X, points[1].X);
+            int y = (int)Math.Min(points[0].Y, points[1].Y);
+
+            Rectangle circleRect = new Rectangle(x, y, radius, radius);
+
+            Pen pen = new Pen(Color.Black, 1);
+            pen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dash;
+
+            canvas.DrawRectangle(pen, circleRect);
+
+            pen.Dispose();
+        }
     }
 }
