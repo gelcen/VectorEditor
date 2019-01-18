@@ -93,10 +93,13 @@ namespace VectorEditor.Model
             figure.LineProperties.Color = parameters.LineColor;
             figure.LineProperties.Style = (DashStyle)parameters.LineType;
             figure.LineProperties.Thickness = parameters.LineThickness;
-            if (figure.GetType() == typeof(FillableFigure))
+            if (figure.GetType() == typeof(Circle) ||
+                figure.GetType() == typeof(Ellipse) ||
+                figure.GetType() == typeof(Polygon))
             {
-                var fillableFigure = figure as FillableFigure;
-                fillableFigure.FillProperty.FillColor = parameters.FillColor;
+                //FIX: сделать темп фигуру до проверки с as и проверить на null
+                var tempFigure = figure as FillableFigure;
+                tempFigure.FillProperty.FillColor = parameters.FillColor;
             }
             NotifyObservers();
         }
