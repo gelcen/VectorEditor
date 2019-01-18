@@ -78,6 +78,8 @@
     <Compile Include="Presenter\PolylineHandler.cs" />
     <Compile Include="UndoRedo\AddFigureCommand.cs" />
     <Compile Include="UndoRedo\ICommand.cs" />
+    <Compile Include="UndoRedo\MoveFigureCommand.cs" />
+    <Compile Include="UndoRedo\ChangeParametersCommand.cs" />
     <Compile Include="UndoRedo\UndoRedoStack.cs" />
     <Compile Include="View\Canvas.cs">
       <SubType>UserControl</SubType>

@@ -24,15 +24,15 @@ namespace VectorEditor.Presenter
         {
             set
             {
-                _figureParameters = value;
-                if (_selectedFigure != null)
-                {
-                    SetParameters(_selectedFigure, _figureParameters);
-                }
-                if (_selectedFigures != null)
-                {
-                    SetParameters(_selectedFigures, _figureParameters);
-                }
+                //_figureParameters = value;
+                //if (_selectedFigure != null)
+                //{
+                //    SetParameters(_selectedFigure, _figureParameters);
+                //}
+                //if (_selectedFigures != null)
+                //{
+                //    SetParameters(_selectedFigures, _figureParameters);
+                //}
             }
         }
 
@@ -76,6 +76,7 @@ namespace VectorEditor.Presenter
 
             _selectedFigure = null;
             _selectedFigures = new List<BaseFigure>();
+            _originalFigures = new List<BaseFigure>();
 
             MouseDownDelegate += MouseDown;
             MouseUpDelegate += MouseUp;
@@ -128,6 +129,7 @@ namespace VectorEditor.Presenter
 
         public void ClearSelectedFigures()
         {
+            _originalFigures.Clear();
             _selectedFigures.Clear();
             _selectedFigure = null;
         }
@@ -156,6 +158,8 @@ namespace VectorEditor.Presenter
         private bool _isFigurePicked = false;
 
         private List<BaseFigure> _selectedFigures;
+
+        private List<BaseFigure> _originalFigures;
 
         private Rectangle _selectionRect;
 
@@ -216,11 +220,25 @@ namespace VectorEditor.Presenter
             }
         }
 
+        public event EventHandler FiguresMoved;
+
+        private void OnFiguresMoved()
+        {
+            EventHandler handler = FiguresMoved;
+
+            if (handler != null)
+            {
+                handler(this, null);
+            }
+        }
+
         private void MouseUpFigure(object obj, MouseEventArgs e)
         {
             MouseMoveDelegate += MouseMoveSelecting;
             MouseMoveDelegate -= MouseMoveFigure;
             MouseUpDelegate -= MouseUpFigure;
+
+            OnFiguresMoved();
 
             Canvas.Refresh();
         }
@@ -371,6 +389,7 @@ namespace VectorEditor.Presenter
                     _isFigurePicked = true;
                     if (_isSelectionEmpty)
                     {
+                        _originalFigures.Clear();
                         _isFigurePicked = false;
                         _selectedFigures.Clear();
                         _selectedFigure = null;
@@ -392,7 +411,8 @@ namespace VectorEditor.Presenter
                         {
                             _selectedFigures.Clear();
                             _selectedFigure = GetFigurePointOn(e.Location);
-                            _selectedFigures.Add(_selectedFigure);           
+                            _selectedFigures.Add(_selectedFigure);
+                            _originalFigures.Add(FigureFactory.CreateCopyWithOffset(_selectedFigure));           
                             _isFigurePicked = true;
 
                             FigureParameters figureParameters = new FigureParameters();
@@ -402,6 +422,7 @@ namespace VectorEditor.Presenter
                         }
                         else
                         {
+                            _originalFigures.Clear();
                             _selectedFigures.Clear();
                             _selectedFigure = null;
                             _isFigurePicked = false;
@@ -437,8 +458,13 @@ namespace VectorEditor.Presenter
             }
             else
             {
+                _originalFigures.Clear();
                 _selectedFigures.Clear();
                 _selectedFigures = selectedFigures;
+                foreach (var figure in selectedFigures)
+                {
+                    _originalFigures.Add(FigureFactory.CreateCopyWithOffset(figure));
+                }
             }
             _selectionRect = new Rectangle();
         }
@@ -648,6 +674,14 @@ namespace VectorEditor.Presenter
             get
             {
                 return _selectedFigures;
+            }
+        }
+
+        public List<BaseFigure> OriginalFigures
+        {
+            get
+            {
+                return _originalFigures;
             }
         }
 

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing.Drawing2D;
 using VectorEditor.Figures;
+using VectorEditor.View;
 
 namespace VectorEditor.Model
 {
@@ -57,7 +59,7 @@ namespace VectorEditor.Model
         /// <param name="figure"></param>
         public void CopyFigure(BaseFigure figure)
         {
-            var addingFigure = FigureFactory.CreateCopy(figure);
+            var addingFigure = FigureFactory.CreateCopyWithOffset(figure);
             _figures.Add(addingFigure);
             NotifyObservers();      
         }
@@ -85,9 +87,18 @@ namespace VectorEditor.Model
         /// Изменение размеров фигуры
         /// </summary>
         /// <param name="figure"></param>
-        public void ChangeFigureSize(BaseFigure figure)
+        public void ChangeFigureParameters(int index, FigureParameters parameters)
         {
-
+            var figure = _figures[index];
+            figure.LineProperties.Color = parameters.LineColor;
+            figure.LineProperties.Style = (DashStyle)parameters.LineType;
+            figure.LineProperties.Thickness = parameters.LineThickness;
+            if (figure.GetType() == typeof(FillableFigure))
+            {
+                var fillableFigure = figure as FillableFigure;
+                fillableFigure.FillProperty.FillColor = parameters.FillColor;
+            }
+            NotifyObservers();
         }
 
         /// <summary>

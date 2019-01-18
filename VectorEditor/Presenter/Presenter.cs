@@ -97,7 +97,26 @@ namespace VectorEditor.Presenter
 
         private void _view_ParametersChanged(object sender, View.FigureParameters e)
         {
-            _currentHandler.FigureParameters = e;
+            //Словарь для хранения состояния до
+            Dictionary<int, BaseFigure> beforeState = new Dictionary<int, BaseFigure>();
+            if (_currentHandler.GetType() == typeof(CursorHandler))
+            {
+                CursorHandler handler = _currentHandler as CursorHandler;                
+                foreach (var figure in handler.SelectedFigures)
+                {
+                    if (_model.getFigureList().Contains(figure))
+                    {
+                        int index =_model.getFigureList().IndexOf(figure);
+                        beforeState.Add(index, FigureFactory.CreateCopy(figure));
+                    }
+                }
+            }
+            if (beforeState != null)
+            {
+                ChangeParametersCommand cmd = new ChangeParametersCommand(_model, beforeState, e);
+                _undoRedoStack.Do(cmd);
+            }            
+            
             _view.Canvas.Invalidate();
         }
 
@@ -137,9 +156,15 @@ namespace VectorEditor.Presenter
             {
                 CursorHandler cursorHandler = new CursorHandler(_view.Canvas, _view.FigureParameters, this);
                 cursorHandler.FigureSelected += CursorHandler_FigureSelected;
+                cursorHandler.FiguresMoved += CursorHandler_FiguresMoved;
                 _currentHandler = cursorHandler;
                 _view.CurrentHandler = (CursorHandler)_currentHandler;
             }
+        }
+
+        private void CursorHandler_FiguresMoved(object sender, System.EventArgs e)
+        {
+            
         }
 
         private void CursorHandler_FigureSelected(object sender, View.FigureParameters e)

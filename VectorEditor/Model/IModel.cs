@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using VectorEditor.Figures;
+using VectorEditor.View;
 
 namespace VectorEditor.Model
 {
@@ -24,7 +25,7 @@ namespace VectorEditor.Model
 
         void DeleteFigure(BaseFigure figure);
 
-        void ChangeFigureSize(BaseFigure figure);
+        void ChangeFigureParameters(int index, FigureParameters parameters);
 
         void MoveFigure(BaseFigure figure);
 
