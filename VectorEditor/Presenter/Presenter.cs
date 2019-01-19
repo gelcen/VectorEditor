@@ -82,13 +82,17 @@ namespace VectorEditor.Presenter
             if (_currentHandler.GetType() == typeof(CursorHandler))
             {
                 CursorHandler handler = _currentHandler as CursorHandler;
+                Dictionary<int, BaseFigure> beforeState = new Dictionary<int, BaseFigure>();
                 foreach (var figure in handler.SelectedFigures)
                 {
                     if (_model.getFigureList().Contains(figure))
                     {
-                        _model.DeleteFigure(figure);
+                        int index = _model.getFigureList().IndexOf(figure);
+                        beforeState.Add(index, figure);                                                
                     }
                 }
+                DeleteFigureCommand cmd = new DeleteFigureCommand(_model, beforeState);
+                _undoRedoStack.Do(cmd);
                 handler.ClearSelectedFigures();
             }
         }

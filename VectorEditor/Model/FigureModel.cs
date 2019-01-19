@@ -78,9 +78,21 @@ namespace VectorEditor.Model
         /// Удаление объекта
         /// </summary>
         /// <param name="figure"></param>
+        public void DeleteFigureAt(int index, BaseFigure figure)
+        {
+            _figures.RemoveAt(index);
+            NotifyObservers();
+        }
+
         public void DeleteFigure(BaseFigure figure)
         {
             _figures.Remove(figure);
+            NotifyObservers();
+        }
+
+        public void InsertAt(int index, BaseFigure figure)
+        {
+            _figures.Insert(index, figure);
             NotifyObservers();
         }
 

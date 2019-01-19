@@ -23,7 +23,11 @@ namespace VectorEditor.Model
 
         void CutFigure(BaseFigure figure);
 
+        void DeleteFigureAt(int index, BaseFigure figure);
+
         void DeleteFigure(BaseFigure figure);
+
+        void InsertAt(int index, BaseFigure figure);
 
         void ChangeFigureParameters(int index, FigureParameters parameters);
 

@@ -77,6 +77,7 @@
     <Compile Include="Presenter\PolygonHandler.cs" />
     <Compile Include="Presenter\PolylineHandler.cs" />
     <Compile Include="UndoRedo\AddFigureCommand.cs" />
+    <Compile Include="UndoRedo\DeleteFigureCommand.cs" />
     <Compile Include="UndoRedo\ICommand.cs" />
     <Compile Include="UndoRedo\MoveFigureCommand.cs" />
     <Compile Include="UndoRedo\ChangeParametersCommand.cs" />
