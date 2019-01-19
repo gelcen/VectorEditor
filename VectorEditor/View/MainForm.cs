@@ -6,6 +6,7 @@ using VectorEditor.Drawers;
 using VectorEditor.Figures;
 using VectorEditor.Model;
 using VectorEditor.Presenter;
+using VectorEditor.UndoRedo;
 using VectorEditor.View;
 
 namespace VectorEditor
@@ -55,6 +56,16 @@ namespace VectorEditor
             set
             {
                 _currentHandler = value;
+            }
+        }
+
+        private UndoRedoStack _undoRedoStack;
+
+        public UndoRedoStack CommandStack
+        {
+            set
+            {
+                _undoRedoStack = value;
             }
         }
 
@@ -366,6 +377,9 @@ namespace VectorEditor
             {
                 CurrentHandler.Draw(g);
             }
+
+            tbCommandsStack.Text = "Count of Undo: " + _undoRedoStack.UndoCount;
+            tbCommandsStack.Text += "Count of Redo: " + _undoRedoStack.RedoCount;
         }
 
         #endregion        

@@ -77,6 +77,7 @@ namespace VectorEditor.Presenter
             _selectedFigure = null;
             _selectedFigures = new List<BaseFigure>();
             _originalFigures = new List<BaseFigure>();
+            _beforeState = new Dictionary<int, BaseFigure>();
 
             MouseDownDelegate += MouseDown;
             MouseUpDelegate += MouseUp;
@@ -175,6 +176,17 @@ namespace VectorEditor.Presenter
 
         private bool _isSelectionEmpty = false;
 
+        private Dictionary<int, BaseFigure> _beforeState;
+
+        public Dictionary<int, BaseFigure> BeforeState
+        {
+            get
+            {
+                return _beforeState;
+            }
+        }
+
+        //Мышка нажата
         public void MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
@@ -192,6 +204,18 @@ namespace VectorEditor.Presenter
                             MouseUpDelegate += MouseUpFigure;
 
                             _selectedFigure = GetFigurePointOn(e.Location);
+
+                            //Сохраняем предыдущее состояние
+                            if (_beforeState != null) _beforeState.Clear();
+
+                            foreach (var figure in _selectedFigures)
+                            {                                
+                                if (_presenter.GetFigures().Contains(figure))
+                                {
+                                    int index = _presenter.GetFigures().IndexOf(figure);
+                                    _beforeState.Add(index, FigureFactory.CreateCopy(figure));
+                                }
+                            }
 
                             _offsetX = _selectedFigure.Points.GetPoints()[0].X - e.X;
                             _offsetY = _selectedFigure.Points.GetPoints()[0].Y - e.Y;
@@ -220,31 +244,60 @@ namespace VectorEditor.Presenter
             }
         }
 
-        public event EventHandler FiguresMoved;
+        public event EventHandler<Dictionary<int, BaseFigure>> FiguresMoved;
 
-        private void OnFiguresMoved()
+        private void OnFiguresMoved(Dictionary<int, BaseFigure> newState)
         {
-            EventHandler handler = FiguresMoved;
+            EventHandler< Dictionary < int, BaseFigure >> handler = FiguresMoved;
 
             if (handler != null)
             {
-                handler(this, null);
+                handler(this, newState);
             }
         }
 
+        //Отпускание фигуры
         private void MouseUpFigure(object obj, MouseEventArgs e)
         {
             MouseMoveDelegate += MouseMoveSelecting;
             MouseMoveDelegate -= MouseMoveFigure;
             MouseUpDelegate -= MouseUpFigure;
 
-            OnFiguresMoved();
+            if (_reallyMoved)
+            {
+                Dictionary<int, BaseFigure> newState = new Dictionary<int, BaseFigure>();
+                foreach (var figure in _selectedFigures)
+                {
+                    if (_presenter.GetFigures().Contains(figure))
+                    {
+                        int index = _presenter.GetFigures().IndexOf(figure);
+                        newState.Add(index, FigureFactory.CreateCopy(figure));
+                    }
+                }
+
+                OnFiguresMoved(newState);
+                _reallyMoved = false;
+            }
 
             Canvas.Refresh();
         }
 
+        private bool _reallyMoved = false;
+
+        //Двигание фигурой
         private void MouseMoveFigure(object obj, MouseEventArgs e)
         {
+            PointF currentMouseDownPoint = e.Location;
+            float deltaX = Math.Abs(
+                           currentMouseDownPoint.X - _originalMouseDownPoint.X);
+            float deltaY = Math.Abs(
+                           currentMouseDownPoint.Y - _originalMouseDownPoint.Y);
+            double distance = Math.Sqrt(Math.Pow(deltaX, 2) + Math.Pow(deltaY, 2));
+            if (distance >= _dragTreshold)
+            {
+                _reallyMoved = true;
+            }
+
             if (_selectedFigures == null) return;
             if (_selectedFigures.Count == 1)
             {
@@ -307,6 +360,7 @@ namespace VectorEditor.Presenter
             Canvas.Refresh();
         }
 
+        //Отпускание точки-маркера
         private void MouseUpMarker(object obj, MouseEventArgs e)
         {
             MouseMoveDelegate += MouseMoveSelecting;
@@ -316,6 +370,7 @@ namespace VectorEditor.Presenter
             Canvas.Refresh();
         }
 
+        //Двигание точки - маркера
         private void MouseMoveMarker(object obj, MouseEventArgs e)
         {                    
             _selectedFigures[_pickedFigureIndex].Points.Replace(
@@ -330,6 +385,7 @@ namespace VectorEditor.Presenter
 
         }
 
+        //Выборка или просто движение
         public void MouseMoveSelecting(object sender, MouseEventArgs e)
         {
             if (_isDraggingSelectionRect)
@@ -376,6 +432,7 @@ namespace VectorEditor.Presenter
             Canvas.Refresh();
         }
 
+        //Отпускание мыши после выборки или выбор одной фигуры
         public void MouseUp(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)

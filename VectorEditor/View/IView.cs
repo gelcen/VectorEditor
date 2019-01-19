@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using VectorEditor.Figures;
 using VectorEditor.Presenter;
+using VectorEditor.UndoRedo;
 using VectorEditor.View;
 
 namespace VectorEditor.Model
@@ -21,6 +22,11 @@ namespace VectorEditor.Model
         PictureBox Canvas
         {
             get;
+        }
+
+        UndoRedoStack CommandStack
+        {
+            set;
         }
 
         /// <summary>

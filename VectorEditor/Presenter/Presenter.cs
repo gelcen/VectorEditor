@@ -36,6 +36,7 @@ namespace VectorEditor.Presenter
             _view.FigureCopied += _view_FigureCopied;
             _view.UndoPressed += _view_UndoPressed;
             _view.RedoPressed += _view_RedoPressed;
+            _view.CommandStack = _undoRedoStack;
                             
             _model.RegisterObserver(this);
             _model.RegisterObserver((IObserver)_view);
@@ -162,9 +163,15 @@ namespace VectorEditor.Presenter
             }
         }
 
-        private void CursorHandler_FiguresMoved(object sender, System.EventArgs e)
+        private void CursorHandler_FiguresMoved(object sender, Dictionary<int, BaseFigure> e)
         {
-            
+            if (_currentHandler.GetType() == typeof(CursorHandler))
+            {
+                CursorHandler handler = _currentHandler as CursorHandler;
+                MoveFigureCommand cmd = new MoveFigureCommand(_model, handler.BeforeState, e, _view);
+                _undoRedoStack.Do(cmd);
+                //_view.Canvas.Refresh();
+            }
         }
 
         private void CursorHandler_FigureSelected(object sender, View.FigureParameters e)

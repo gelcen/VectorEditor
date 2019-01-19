@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Drawing.Drawing2D;
 using VectorEditor.Figures;
 using VectorEditor.View;
@@ -108,9 +109,15 @@ namespace VectorEditor.Model
         /// Перемещение объекта
         /// </summary>
         /// <param name="figure"></param>
-        public void MoveFigure(BaseFigure figure)
-        {
-
+        public void MoveFigure(int index, BaseFigure figure)
+        {            
+            int count = _figures[index].Points.GetPoints().Count;
+            for (int i = 0; i < count; i++)
+            {
+                _figures[index].Points.Replace(i, new PointF(figure.Points.GetPoints()[i].X,
+                                                             figure.Points.GetPoints()[i].Y));
+            }
+            NotifyObservers();
         }
 
         /// <summary>
