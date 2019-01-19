@@ -105,12 +105,37 @@ namespace VectorEditor.Model
             NotifyObservers();
         }
 
+
+        public void ChangeFigure(int index, BaseFigure newFigure)
+        {
+            var figure = _figures[index];
+            figure.LineProperties.Color = newFigure.LineProperties.Color;
+            figure.LineProperties.Style = newFigure.LineProperties.Style;
+            figure.LineProperties.Thickness = newFigure.LineProperties.Thickness;
+            if (newFigure.GetType() == typeof(Circle) ||
+                newFigure.GetType() == typeof(Ellipse) ||
+                newFigure.GetType() == typeof(Polygon))
+            {
+                var tempFigure = newFigure as FillableFigure;
+                var changedFigure = figure as FillableFigure;
+                changedFigure.FillProperty.FillColor = tempFigure.FillProperty.FillColor;
+                figure = changedFigure;
+            }
+            int count = figure.Points.GetPoints().Count;
+            for (int i = 0; i < count; i++)
+            {
+                figure.Points.Replace(i, new PointF(newFigure.Points.GetPoints()[i].X,
+                                                    newFigure.Points.GetPoints()[i].Y));
+            }
+            NotifyObservers();
+        }
+
         /// <summary>
         /// Перемещение объекта
         /// </summary>
         /// <param name="figure"></param>
         public void MoveFigure(int index, BaseFigure figure)
-        {            
+        {
             int count = _figures[index].Points.GetPoints().Count;
             for (int i = 0; i < count; i++)
             {

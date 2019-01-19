@@ -29,6 +29,8 @@ namespace VectorEditor.Model
 
         void MoveFigure(int index, BaseFigure figure);
 
+        void ChangeFigure(int index, BaseFigure figure);
+
         void Save(string filename);
 
         void Load();

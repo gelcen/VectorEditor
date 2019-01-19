@@ -416,9 +416,10 @@
             // 
             // tbCommandsStack
             // 
-            this.tbCommandsStack.Location = new System.Drawing.Point(617, 388);
+            this.tbCommandsStack.Location = new System.Drawing.Point(552, 357);
+            this.tbCommandsStack.Multiline = true;
             this.tbCommandsStack.Name = "tbCommandsStack";
-            this.tbCommandsStack.Size = new System.Drawing.Size(227, 20);
+            this.tbCommandsStack.Size = new System.Drawing.Size(304, 200);
             this.tbCommandsStack.TabIndex = 8;
             // 
             // MainForm

@@ -32,6 +32,32 @@ namespace VectorEditor.UndoRedo
             }
         }
 
+        public Stack<ICommand> UndoStack
+        {
+            get
+            {
+                return _undo;
+            }
+
+            set
+            {
+                _undo = value;
+            }
+        }
+
+        public Stack<ICommand> RedoStack
+        {
+            get
+            {
+                return _redo;
+            }
+
+            set
+            {
+                _redo = value;
+            }
+        }
+
         public void Reset()
         {
             _undo = new Stack<ICommand>();

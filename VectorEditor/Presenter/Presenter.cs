@@ -51,6 +51,14 @@ namespace VectorEditor.Presenter
         private void _view_UndoPressed(object sender, System.EventArgs e)
         {
             _undoRedoStack.Undo();
+            if (_model.getFigureList().Count == 0)
+            {
+                if (_currentHandler.GetType() == typeof(CursorHandler))
+                {
+                    CursorHandler handler = _currentHandler as CursorHandler;
+                    handler.ClearSelectedFigures();
+                }
+            }
             _view.Canvas.Refresh();
         }
 
@@ -156,10 +164,21 @@ namespace VectorEditor.Presenter
             else if (e == Item.Cursor)
             {
                 CursorHandler cursorHandler = new CursorHandler(_view.Canvas, _view.FigureParameters, this);
-                cursorHandler.FigureSelected += CursorHandler_FigureSelected;
                 cursorHandler.FiguresMoved += CursorHandler_FiguresMoved;
+                cursorHandler.PointMoved += CursorHandler_PointMoved;
                 _currentHandler = cursorHandler;
                 _view.CurrentHandler = (CursorHandler)_currentHandler;
+            }
+        }
+
+        private void CursorHandler_PointMoved(object sender, Dictionary<int, BaseFigure> e)
+        {
+            if (_currentHandler.GetType() == typeof(CursorHandler))
+            {
+                CursorHandler handler = _currentHandler as CursorHandler;
+                MovePointCommand cmd = new MovePointCommand(_model, handler.BeforePointState, e, _view);
+                _undoRedoStack.Do(cmd);
+                //_view.Canvas.Refresh();
             }
         }
 

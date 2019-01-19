@@ -80,6 +80,7 @@
     <Compile Include="UndoRedo\ICommand.cs" />
     <Compile Include="UndoRedo\MoveFigureCommand.cs" />
     <Compile Include="UndoRedo\ChangeParametersCommand.cs" />
+    <Compile Include="UndoRedo\MovePointCommand.cs" />
     <Compile Include="UndoRedo\UndoRedoStack.cs" />
     <Compile Include="View\Canvas.cs">
       <SubType>UserControl</SubType>
