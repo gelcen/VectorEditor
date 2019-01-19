@@ -142,10 +142,6 @@ namespace VectorEditor.Presenter
 
         private static readonly double _dragTreshold = 5;
 
-        private bool _isMouseDownOnFigure = false;
-
-        private bool _isDraggingFigure = false;
-
         private bool _isFigurePicked = false;
 
         private List<BaseFigure> _selectedFigures;
@@ -206,10 +202,6 @@ namespace VectorEditor.Presenter
                         if ((_selectedFigures != null) &&
                             _selectedFigures.Contains(GetFigurePointOn(e.Location)))
                         {
-                            MouseMoveDelegate -= MouseMoveSelecting;
-                            MouseMoveDelegate += MouseMoveFigure;
-                            MouseUpDelegate += MouseUpFigure;
-
                             _selectedFigure = GetFigurePointOn(e.Location);
 
                             //Сохраняем предыдущее состояние
@@ -223,6 +215,10 @@ namespace VectorEditor.Presenter
                                     _beforeState.Add(index, FigureFactory.CreateCopy(figure));
                                 }
                             }
+
+                            MouseMoveDelegate -= MouseMoveSelecting;
+                            MouseMoveDelegate += MouseMoveFigure;
+                            MouseUpDelegate += MouseUpFigure;
 
                             _offsetX = _selectedFigure.Points.GetPoints()[0].X - e.X;
                             _offsetY = _selectedFigure.Points.GetPoints()[0].Y - e.Y;
@@ -330,7 +326,6 @@ namespace VectorEditor.Presenter
 
                 if (dx == 0 && dy == 0) return;
 
-                _isDraggingFigure = true;
                 PointF tmpPt0 = new PointF(newX1, newY1);
                 _selectedFigure.Points.Replace(0, tmpPt0);
                 int count = _selectedFigure.Points.GetPoints().Count;

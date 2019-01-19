@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using VectorEditor.Figures;
 using VectorEditor.Model;
-using VectorEditor.Presenter;
 using VectorEditor.UndoRedo;
 
 namespace VectorEditor.Presenter
@@ -99,7 +98,8 @@ namespace VectorEditor.Presenter
 
         private void _view_CanvasCleared(object sender, System.EventArgs e)
         {
-            _model.ClearCanvas();
+            ClearCanvasCommand cmd = new ClearCanvasCommand(_model);
+            _undoRedoStack.Do(cmd);
             if (_currentHandler.GetType() == typeof(CursorHandler))
             {
                 CursorHandler handler = _currentHandler as CursorHandler;

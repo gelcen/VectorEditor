@@ -18,8 +18,19 @@ namespace VectorEditor.UndoRedo
         {
             _model = model;
             _view = view;
-            _beforeState = beforeState;
-            _newState = newState;
+            _beforeState = new Dictionary<int, BaseFigure>();
+            _newState = new Dictionary<int, BaseFigure>();
+
+            foreach (KeyValuePair<int, BaseFigure> entry in beforeState)
+            {
+                int index = entry.Key;
+                _beforeState.Add(index, FigureFactory.CreateCopy(entry.Value));
+            }
+            foreach(KeyValuePair < int, BaseFigure > entry in newState)
+            {
+                int index = entry.Key;
+                _newState.Add(index, FigureFactory.CreateCopy(entry.Value));
+            }
         }
 
         public void Do()

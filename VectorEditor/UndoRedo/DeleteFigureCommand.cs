@@ -16,7 +16,7 @@ namespace VectorEditor.UndoRedo
         public DeleteFigureCommand(IModel model, Dictionary<int, BaseFigure> deletedFigures)
         {
             _model = model;
-            _deletedFigures = deletedFigures;
+            _deletedFigures = deletedFigures;            
         }
 
         public override string ToString()

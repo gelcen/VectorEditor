@@ -189,6 +189,7 @@ namespace VectorEditor.Model
         public void ClearCanvas()
         {
             _figures.Clear();
+            NotifyObservers();
         }
 
         public List<BaseFigure> getFigureList()

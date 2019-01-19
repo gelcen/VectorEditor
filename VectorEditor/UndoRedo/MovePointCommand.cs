@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using VectorEditor.Figures;
 using VectorEditor.Model;
 
@@ -22,8 +18,18 @@ namespace VectorEditor.UndoRedo
         {
             _model = model;
             _view = view;
-            _beforePointState = beforePointState;
-            _newPointState = newPointState;
+            _beforePointState = new Dictionary<int, BaseFigure>();
+            _newPointState = new Dictionary<int, BaseFigure>();
+            foreach (KeyValuePair<int, BaseFigure> entry in beforePointState)
+            {
+                int index = entry.Key;
+                _beforePointState.Add(index, FigureFactory.CreateCopy(entry.Value));
+            }
+            foreach (KeyValuePair<int, BaseFigure> entry in newPointState)
+            {
+                int index = entry.Key;
+                _newPointState.Add(index, FigureFactory.CreateCopy(entry.Value));
+            }
         }
 
         public void Do()
