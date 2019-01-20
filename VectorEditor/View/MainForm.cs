@@ -377,17 +377,6 @@ namespace VectorEditor
             {
                 CurrentHandler.Draw(g);
             }
-
-            tbCommandsStack.Text = String.Format("Count of Undo: {0} \n", _undoRedoStack.UndoCount);
-            foreach (var command in _undoRedoStack.UndoStack)
-            {
-                tbCommandsStack.Text += String.Format("{0} \n", command.ToString());
-            }
-            //tbCommandsStack.Text += "Count of Redo: " + _undoRedoStack.RedoCount;
-            //foreach (var command in _undoRedoStack.RedoStack)
-            //{
-            //    tbCommandsStack.Text += "\n" + command.ToString();
-            //}
         }
 
         #endregion        

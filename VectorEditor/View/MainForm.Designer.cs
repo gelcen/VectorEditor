@@ -61,7 +61,6 @@
             this.CopyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.UndoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.RedoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.tbCommandsStack = new System.Windows.Forms.TextBox();
             this._saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.gpFigures.SuspendLayout();
             this.gpProps.SuspendLayout();
@@ -80,11 +79,11 @@
             this.gpFigures.Controls.Add(this.buttonLine);
             this.gpFigures.Controls.Add(this.buttonPolyLine);
             this.gpFigures.Controls.Add(this.buttonCursor);
-            this.gpFigures.Location = new System.Drawing.Point(453, 13);
+            this.gpFigures.Location = new System.Drawing.Point(619, 29);
             this.gpFigures.Margin = new System.Windows.Forms.Padding(2);
             this.gpFigures.Name = "gpFigures";
             this.gpFigures.Padding = new System.Windows.Forms.Padding(2);
-            this.gpFigures.Size = new System.Drawing.Size(227, 180);
+            this.gpFigures.Size = new System.Drawing.Size(227, 154);
             this.gpFigures.TabIndex = 1;
             this.gpFigures.TabStop = false;
             this.gpFigures.Text = "Инструменты";
@@ -176,7 +175,7 @@
             this.gpProps.Controls.Add(this.label3);
             this.gpProps.Controls.Add(this.label2);
             this.gpProps.Controls.Add(this.label1);
-            this.gpProps.Location = new System.Drawing.Point(457, 197);
+            this.gpProps.Location = new System.Drawing.Point(619, 187);
             this.gpProps.Margin = new System.Windows.Forms.Padding(2);
             this.gpProps.Name = "gpProps";
             this.gpProps.Padding = new System.Windows.Forms.Padding(2);
@@ -289,7 +288,7 @@
             // 
             // btnHeightResize
             // 
-            this.btnHeightResize.Location = new System.Drawing.Point(210, 349);
+            this.btnHeightResize.Location = new System.Drawing.Point(290, 540);
             this.btnHeightResize.Name = "btnHeightResize";
             this.btnHeightResize.Size = new System.Drawing.Size(12, 12);
             this.btnHeightResize.TabIndex = 3;
@@ -298,7 +297,7 @@
             // 
             // btnDiagonalResize
             // 
-            this.btnDiagonalResize.Location = new System.Drawing.Point(437, 349);
+            this.btnDiagonalResize.Location = new System.Drawing.Point(584, 540);
             this.btnDiagonalResize.Name = "btnDiagonalResize";
             this.btnDiagonalResize.Size = new System.Drawing.Size(12, 12);
             this.btnDiagonalResize.TabIndex = 4;
@@ -307,7 +306,7 @@
             // 
             // btnWidthResize
             // 
-            this.btnWidthResize.Location = new System.Drawing.Point(437, 171);
+            this.btnWidthResize.Location = new System.Drawing.Point(593, 266);
             this.btnWidthResize.Name = "btnWidthResize";
             this.btnWidthResize.Size = new System.Drawing.Size(12, 12);
             this.btnWidthResize.TabIndex = 5;
@@ -320,7 +319,7 @@
             this.pbCanvas.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pbCanvas.Location = new System.Drawing.Point(9, 29);
             this.pbCanvas.Name = "pbCanvas";
-            this.pbCanvas.Size = new System.Drawing.Size(429, 323);
+            this.pbCanvas.Size = new System.Drawing.Size(587, 514);
             this.pbCanvas.TabIndex = 6;
             this.pbCanvas.TabStop = false;
             this.pbCanvas.Paint += new System.Windows.Forms.PaintEventHandler(this.pbCanvas_Paint);
@@ -337,7 +336,7 @@
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Padding = new System.Windows.Forms.Padding(4, 1, 0, 1);
-            this.menuStrip1.Size = new System.Drawing.Size(856, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(857, 24);
             this.menuStrip1.TabIndex = 7;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -416,20 +415,11 @@
             this.RedoToolStripMenuItem.Text = "Вернуть";
             this.RedoToolStripMenuItem.Click += new System.EventHandler(this.RedoToolStripMenuItem_Click);
             // 
-            // tbCommandsStack
-            // 
-            this.tbCommandsStack.Location = new System.Drawing.Point(552, 357);
-            this.tbCommandsStack.Multiline = true;
-            this.tbCommandsStack.Name = "tbCommandsStack";
-            this.tbCommandsStack.Size = new System.Drawing.Size(254, 200);
-            this.tbCommandsStack.TabIndex = 8;
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(856, 573);
-            this.Controls.Add(this.tbCommandsStack);
+            this.ClientSize = new System.Drawing.Size(857, 573);
             this.Controls.Add(this.pbCanvas);
             this.Controls.Add(this.btnWidthResize);
             this.Controls.Add(this.btnDiagonalResize);
@@ -442,7 +432,6 @@
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "VectorEditor";
-            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.gpFigures.ResumeLayout(false);
             this.gpProps.ResumeLayout(false);
@@ -490,7 +479,6 @@
         private System.Windows.Forms.ToolStripMenuItem CopyToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem UndoToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem RedoToolStripMenuItem;
-        private System.Windows.Forms.TextBox tbCommandsStack;
         private System.Windows.Forms.SaveFileDialog _saveFileDialog;
     }
 }

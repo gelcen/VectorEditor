@@ -27,9 +27,7 @@ namespace VectorEditor.UndoRedo
 
         public void Do()
         {
-
             _model.ClearCanvas();
-
         }
 
         public void Undo()
