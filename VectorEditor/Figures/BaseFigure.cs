@@ -1,14 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Newtonsoft.Json;
 
 namespace VectorEditor.Figures
 {
+    /// <summary>
+    /// Базовая сущность для фигуры
+    /// </summary>
+    [JsonObject(MemberSerialization.Fields)]
     public abstract class BaseFigure
     {
+        /// <summary>
+        /// Параметры линии
+        /// </summary>
         protected LineProperties _lineProperties;
+
+        /// <summary>
+        /// Точки, по которым строится фигура
+        /// </summary>
         protected Points _points;
 
         public LineProperties LineProperties

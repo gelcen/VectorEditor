@@ -518,7 +518,7 @@ namespace VectorEditor.Presenter
                             _selectedFigures.Clear();
                             _selectedFigure = GetFigurePointOn(e.Location);
                             _selectedFigures.Add(_selectedFigure);
-                            _originalFigures.Add(FigureFactory.CreateCopyWithOffset(_selectedFigure));           
+                            _originalFigures.Add(FigureFactory.CreateCopy(_selectedFigure));           
                             _isFigurePicked = true;
 
                         }
@@ -565,7 +565,7 @@ namespace VectorEditor.Presenter
                 _selectedFigures = selectedFigures;
                 foreach (var figure in selectedFigures)
                 {
-                    _originalFigures.Add(FigureFactory.CreateCopyWithOffset(figure));
+                    _originalFigures.Add(FigureFactory.CreateCopy(figure));
                 }
             }
             _selectionRect = new Rectangle();

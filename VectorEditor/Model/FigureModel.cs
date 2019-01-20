@@ -60,7 +60,7 @@ namespace VectorEditor.Model
         /// <param name="figure"></param>
         public void CopyFigure(BaseFigure figure)
         {
-            var addingFigure = FigureFactory.CreateCopyWithOffset(figure);
+            var addingFigure = FigureFactory.CreateCopy(figure, FigureFactory.CopyType.CopyWithOffset);
             _figures.Add(addingFigure);
             NotifyObservers();      
         }
