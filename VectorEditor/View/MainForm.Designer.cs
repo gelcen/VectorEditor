@@ -55,13 +55,14 @@
             this.соToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.сохранитьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.сохранитьToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.сохранитьКакToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportToPngToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.правкаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.DeleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.CopyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.UndoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.RedoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tbCommandsStack = new System.Windows.Forms.TextBox();
+            this._saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.gpFigures.SuspendLayout();
             this.gpProps.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudLineThickness)).BeginInit();
@@ -346,7 +347,7 @@
             this.соToolStripMenuItem,
             this.сохранитьToolStripMenuItem,
             this.сохранитьToolStripMenuItem1,
-            this.сохранитьКакToolStripMenuItem});
+            this.exportToPngToolStripMenuItem});
             this.файлToolStripMenuItem.Name = "файлToolStripMenuItem";
             this.файлToolStripMenuItem.Size = new System.Drawing.Size(48, 22);
             this.файлToolStripMenuItem.Text = "Файл";
@@ -354,26 +355,27 @@
             // соToolStripMenuItem
             // 
             this.соToolStripMenuItem.Name = "соToolStripMenuItem";
-            this.соToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
+            this.соToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.соToolStripMenuItem.Text = "Создать";
             // 
             // сохранитьToolStripMenuItem
             // 
             this.сохранитьToolStripMenuItem.Name = "сохранитьToolStripMenuItem";
-            this.сохранитьToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
+            this.сохранитьToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.сохранитьToolStripMenuItem.Text = "Открыть";
             // 
             // сохранитьToolStripMenuItem1
             // 
             this.сохранитьToolStripMenuItem1.Name = "сохранитьToolStripMenuItem1";
-            this.сохранитьToolStripMenuItem1.Size = new System.Drawing.Size(153, 22);
+            this.сохранитьToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
             this.сохранитьToolStripMenuItem1.Text = "Сохранить";
             // 
-            // сохранитьКакToolStripMenuItem
+            // exportToPngToolStripMenuItem
             // 
-            this.сохранитьКакToolStripMenuItem.Name = "сохранитьКакToolStripMenuItem";
-            this.сохранитьКакToolStripMenuItem.Size = new System.Drawing.Size(153, 22);
-            this.сохранитьКакToolStripMenuItem.Text = "Сохранить как";
+            this.exportToPngToolStripMenuItem.Name = "exportToPngToolStripMenuItem";
+            this.exportToPngToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.exportToPngToolStripMenuItem.Text = "Сохранить как PNG";
+            this.exportToPngToolStripMenuItem.Click += new System.EventHandler(this.exportToPngToolStripMenuItem_Click);
             // 
             // правкаToolStripMenuItem
             // 
@@ -482,13 +484,14 @@
         private System.Windows.Forms.ToolStripMenuItem соToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem сохранитьToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem сохранитьToolStripMenuItem1;
-        private System.Windows.Forms.ToolStripMenuItem сохранитьКакToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem exportToPngToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem правкаToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem DeleteToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem CopyToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem UndoToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem RedoToolStripMenuItem;
         private System.Windows.Forms.TextBox tbCommandsStack;
+        private System.Windows.Forms.SaveFileDialog _saveFileDialog;
     }
 }
 

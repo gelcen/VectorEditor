@@ -427,5 +427,38 @@ namespace VectorEditor
         }
 
         #endregion
+
+        private void exportToPngToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _saveFileDialog = new SaveFileDialog();
+            _saveFileDialog.Title = "Сохранить в PNG";
+            _saveFileDialog.OverwritePrompt = true;
+            _saveFileDialog.CheckPathExists = true;
+            _saveFileDialog.Filter = "Image Files(*.PNG)|*.PNG";
+            _saveFileDialog.ShowHelp = true;
+
+            PictureBox pictureBox = new PictureBox();
+            pictureBox.Size = pbCanvas.Size;
+            Bitmap bitmap = new Bitmap(pictureBox.Width, pictureBox.Height);
+            Graphics bitmapGraphics = Graphics.FromImage(bitmap);
+
+            foreach (var figure in _figures)
+            {
+                FigureDrawer.DrawFigure(figure, bitmapGraphics);
+            }
+
+            pictureBox.Image = bitmap;
+            if (_saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    pictureBox.Image.Save(_saveFileDialog.FileName);
+                }
+                catch (Exception)
+                {
+                    throw new Exception();
+                }
+            }
+        }
     }
 }

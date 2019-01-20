@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using VectorEditor.Figures;
 using VectorEditor.Presenter;
 using VectorEditor.UndoRedo;
 using VectorEditor.View;
