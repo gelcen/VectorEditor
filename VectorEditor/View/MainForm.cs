@@ -428,6 +428,11 @@ namespace VectorEditor
 
         #endregion
 
+        /// <summary>
+        /// Обработчик события нажатия на пункт меню "Сохранить в PNG"
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void exportToPngToolStripMenuItem_Click(object sender, EventArgs e)
         {
             _saveFileDialog = new SaveFileDialog();

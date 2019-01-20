@@ -180,7 +180,7 @@ namespace VectorEditor.Presenter
             if (_currentHandler.GetType() == typeof(CursorHandler))
             {
                 CursorHandler handler = _currentHandler as CursorHandler;
-                MovePointCommand cmd = new MovePointCommand(_model, handler.BeforePointState, e, _view);
+                MovePointCommand cmd = new MovePointCommand(_model, handler.BeforePointState, e);
                 _undoRedoStack.Do(cmd);
                 //_view.Canvas.Refresh();
             }
@@ -191,9 +191,8 @@ namespace VectorEditor.Presenter
             if (_currentHandler.GetType() == typeof(CursorHandler))
             {
                 CursorHandler handler = _currentHandler as CursorHandler;
-                MoveFigureCommand cmd = new MoveFigureCommand(_model, handler.BeforeState, e, _view);
+                MoveFigureCommand cmd = new MoveFigureCommand(_model, handler.BeforeState, e);
                 _undoRedoStack.Do(cmd);
-                //_view.Canvas.Refresh();
             }
         }
 
@@ -206,7 +205,6 @@ namespace VectorEditor.Presenter
         {
             AddFigureCommand cmd = new AddFigureCommand(_model, e);
             _undoRedoStack.Do(cmd);
-            //_model.AddFigure(e);
         }
 
         /// <summary>

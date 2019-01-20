@@ -7,17 +7,14 @@ namespace VectorEditor.UndoRedo
     public class MovePointCommand:ICommand
     {
         IModel _model;
-        IView _view;
         Dictionary<int, BaseFigure> _beforePointState;
         Dictionary<int, BaseFigure> _newPointState;
 
         public MovePointCommand(IModel model,
                                  Dictionary<int, BaseFigure> beforePointState,
-                                 Dictionary<int, BaseFigure> newPointState,
-                                 IView view)
+                                 Dictionary<int, BaseFigure> newPointState)
         {
             _model = model;
-            _view = view;
             _beforePointState = new Dictionary<int, BaseFigure>();
             _newPointState = new Dictionary<int, BaseFigure>();
             foreach (KeyValuePair<int, BaseFigure> entry in beforePointState)
@@ -38,7 +35,6 @@ namespace VectorEditor.UndoRedo
             {
                 _model.MoveFigure(figure.Key, figure.Value);
             }
-            _view.Canvas.Refresh();
         }
 
         public void Undo()
@@ -47,7 +43,6 @@ namespace VectorEditor.UndoRedo
             {
                 _model.MoveFigure(figure.Key, figure.Value);
             }
-            _view.Canvas.Refresh();
         }
 
         public override string ToString()

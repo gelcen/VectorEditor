@@ -12,7 +12,7 @@ namespace VectorEditor.UndoRedo
         public ClearCanvasCommand(IModel model)
         {
             _model = model;
-            _figures = new List<BaseFigure>(); 
+            _figures = new List<BaseFigure>();
             foreach (var figure in model.getFigureList())
             {
                 _figures.Add(FigureFactory.CreateCopy(figure));
@@ -27,13 +27,9 @@ namespace VectorEditor.UndoRedo
 
         public void Do()
         {
-            foreach (var figure in _figures)
-            {
-                if (_model.getFigureList().Contains(figure))
-                {
-                    _model.DeleteFigure(figure);
-                }              
-            }
+
+            _model.ClearCanvas();
+
         }
 
         public void Undo()
