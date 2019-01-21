@@ -2,6 +2,7 @@
 using VectorEditor.Figures;
 using VectorEditor.Model;
 using VectorEditor.UndoRedo;
+using VectorEditor.View;
 
 namespace VectorEditor.Presenter
 {
@@ -36,9 +37,31 @@ namespace VectorEditor.Presenter
             _view.UndoPressed += _view_UndoPressed;
             _view.RedoPressed += _view_RedoPressed;
             _view.CommandStack = _undoRedoStack;
+            _view.FileLoaded += _view_FileLoaded;
                             
             _model.RegisterObserver(this);
             _model.RegisterObserver((IObserver)_view);
+        }
+
+        private void _view_FileLoaded(object sender, FileLoadedEventArgs e)
+        {
+            _model.ClearCanvas();
+            foreach (var figure in e.Figures)
+            {
+                _model.AddFigure(FigureFactory.CreateCopy(figure));
+            }
+            foreach (var command in e.UndoStack)
+            {
+                CommandFactory.RestorePointersToModel(command, _model);
+            }
+            foreach (var command in e.RedoStack)
+            {
+                CommandFactory.RestorePointersToModel(command, _model);
+            }
+            _undoRedoStack.Reset();
+            _undoRedoStack.UndoStack = e.UndoStack;
+            _undoRedoStack.RedoStack = e.RedoStack;
+            _view.Canvas.Refresh();
         }
 
         private void _view_RedoPressed(object sender, System.EventArgs e)
@@ -110,8 +133,10 @@ namespace VectorEditor.Presenter
 
         private void _view_ParametersChanged(object sender, View.FigureParameters e)
         {
-            //Словарь для хранения состояния до
+            _currentHandler.FigureParameters = e;
+
             Dictionary<int, BaseFigure> beforeState = new Dictionary<int, BaseFigure>();
+
             if (_currentHandler.GetType() == typeof(CursorHandler))
             {
                 CursorHandler handler = _currentHandler as CursorHandler;                
@@ -123,13 +148,12 @@ namespace VectorEditor.Presenter
                         beforeState.Add(index, FigureFactory.CreateCopy(figure));
                     }
                 }
-            }
+            }            
             if (beforeState != null)
             {
                 ChangeParametersCommand cmd = new ChangeParametersCommand(_model, beforeState, e);
                 _undoRedoStack.Do(cmd);
             }            
-            
             _view.Canvas.Invalidate();
         }
 

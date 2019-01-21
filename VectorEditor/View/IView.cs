@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
+using VectorEditor.Figures;
 using VectorEditor.Presenter;
 using VectorEditor.UndoRedo;
 using VectorEditor.View;
@@ -32,6 +34,8 @@ namespace VectorEditor.Model
             get;
             set;
         }
+
+        event EventHandler<FileLoadedEventArgs> FileLoaded;
 
         event EventHandler<FigureParameters> ParametersChanged;
 

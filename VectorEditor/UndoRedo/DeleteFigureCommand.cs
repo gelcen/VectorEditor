@@ -1,8 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using VectorEditor.Figures;
 using VectorEditor.Model;
 
@@ -11,12 +8,26 @@ namespace VectorEditor.UndoRedo
     /// <summary>
     /// Команда удаления фигуры
     /// </summary>
+    [JsonObject(MemberSerialization.Fields)]
     public class DeleteFigureCommand : ICommand
     {
         /// <summary>
         /// Ссылка на модель
         /// </summary>
         private IModel _model;
+
+        public IModel Model
+        {
+            get
+            {
+                return _model;
+            }
+
+            set
+            {
+                _model = value;
+            }
+        }
 
         /// <summary>
         /// Словарь для хранения удалённых фигур
@@ -50,7 +61,7 @@ namespace VectorEditor.UndoRedo
         }
 
         /// <summary>
-        /// Undo команды
+        /// Отмена команды
         /// </summary>
         public void Undo()
         {

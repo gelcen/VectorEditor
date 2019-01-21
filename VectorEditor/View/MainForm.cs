@@ -86,7 +86,19 @@ namespace VectorEditor
 
         public event EventHandler RedoPressed;
 
+        public event EventHandler<FileLoadedEventArgs> FileLoaded;
+
         #endregion
+
+        private void OnFileLoaded(FileLoadedEventArgs e)
+        {
+            EventHandler<FileLoadedEventArgs> handler = FileLoaded;
+
+            if (handler != null)
+            {
+                handler(this, e);
+            }
+        }
 
         private void OnRedoPressed()
         {
@@ -311,7 +323,7 @@ namespace VectorEditor
             {
                 buttonLineColor.BackColor = colorDialogLineColor.Color;
                 _figureParameters.LineColor = colorDialogLineColor.Color;
-                OnParametersChanged(_figureParameters);
+                OnParametersChanged(_figureParameters);                
             }
         }
 
@@ -402,7 +414,6 @@ namespace VectorEditor
         private void CopyToolStripMenuItem_Click(object sender, EventArgs e)
         {
             OnFigureCopied();
-            Console.WriteLine("Figures count " + _figures.Count);
         }
 
         private void UndoToolStripMenuItem_Click(object sender, EventArgs e)
@@ -424,12 +435,12 @@ namespace VectorEditor
         /// <param name="e"></param>
         private void exportToPngToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _saveFileDialog = new SaveFileDialog();
-            _saveFileDialog.Title = "Сохранить в PNG";
-            _saveFileDialog.OverwritePrompt = true;
-            _saveFileDialog.CheckPathExists = true;
-            _saveFileDialog.Filter = "Image Files(*.PNG)|*.PNG";
-            _saveFileDialog.ShowHelp = true;
+            _saveToPNGDialog = new SaveFileDialog();
+            _saveToPNGDialog.Title = "Сохранить в PNG";
+            _saveToPNGDialog.OverwritePrompt = true;
+            _saveToPNGDialog.CheckPathExists = true;
+            _saveToPNGDialog.Filter = "Image Files(*.PNG)|*.PNG";
+            _saveToPNGDialog.ShowHelp = true;
 
             PictureBox pictureBox = new PictureBox();
             pictureBox.Size = pbCanvas.Size;
@@ -442,15 +453,57 @@ namespace VectorEditor
             }
 
             pictureBox.Image = bitmap;
-            if (_saveFileDialog.ShowDialog() == DialogResult.OK)
+            if (_saveToPNGDialog.ShowDialog() == DialogResult.OK)
             {
                 try
                 {
-                    pictureBox.Image.Save(_saveFileDialog.FileName);
+                    pictureBox.Image.Save(_saveToPNGDialog.FileName);
                 }
                 catch (Exception)
                 {
                     throw new Exception();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Обработчик события нажатия на пункт меню "Сохранить"
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void saveToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            Saver saver = new Saver();
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    saver.SaveToFile(_figures, 
+                                     _undoRedoStack.UndoStack,
+                                     _undoRedoStack.RedoStack,
+                                     saveFileDialog.FileName);
+                }
+                catch (Exception)
+                {
+                    throw new Exception();
+                }
+            }
+        }
+
+        private void openFileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Saver saver = new Saver();
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    FileLoadedEventArgs fileLoadedEventArgs = new FileLoadedEventArgs();
+                    fileLoadedEventArgs = saver.OpenFromFile(openFileDialog.FileName);
+                    OnFileLoaded(fileLoadedEventArgs);
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception(ex.Message);
                 }
             }
         }

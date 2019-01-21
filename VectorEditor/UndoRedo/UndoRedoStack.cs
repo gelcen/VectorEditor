@@ -6,16 +6,25 @@ using System.Threading.Tasks;
 
 namespace VectorEditor.UndoRedo
 {
+    /// <summary>
+    /// Класс для стека команд
+    /// </summary>
     public class UndoRedoStack
     {
         private Stack<ICommand> _undo;
         private Stack<ICommand> _redo;
 
+        /// <summary>
+        /// Конструктор класса стека команд
+        /// </summary>
         public UndoRedoStack()
         {
             Reset();
         }
 
+        /// <summary>
+        /// Свойство: Количество команд в Undo
+        /// </summary>
         public int UndoCount
         {
             get
@@ -24,6 +33,9 @@ namespace VectorEditor.UndoRedo
             }
         }
 
+        /// <summary>
+        /// Свойство: Количество команд в Redo
+        /// </summary>
         public int RedoCount
         {
             get
@@ -32,6 +44,9 @@ namespace VectorEditor.UndoRedo
             }
         }
 
+        /// <summary>
+        /// Свойство: Стек команд Undo
+        /// </summary>
         public Stack<ICommand> UndoStack
         {
             get
@@ -45,6 +60,9 @@ namespace VectorEditor.UndoRedo
             }
         }
 
+        /// <summary>
+        /// Свойство: Стек команд Redo
+        /// </summary>
         public Stack<ICommand> RedoStack
         {
             get
@@ -58,12 +76,19 @@ namespace VectorEditor.UndoRedo
             }
         }
 
+        /// <summary>
+        /// Очистить стеки и создать заново
+        /// </summary>
         public void Reset()
         {
             _undo = new Stack<ICommand>();
             _redo = new Stack<ICommand>();
         }
 
+        /// <summary>
+        /// Выполнить команду
+        /// </summary>
+        /// <param name="cmd">Команда на выполнение</param>
         public void Do(ICommand cmd)
         {
             cmd.Do();
@@ -73,6 +98,9 @@ namespace VectorEditor.UndoRedo
             _redo.Clear();
         }
 
+        /// <summary>
+        /// Отменить
+        /// </summary>
         public void Undo()
         {
             if (_undo.Count > 0)
@@ -85,6 +113,9 @@ namespace VectorEditor.UndoRedo
             }
         }
 
+        /// <summary>
+        /// Выполнить заново
+        /// </summary>
         public void Redo()
         {
             if (_redo.Count > 0)

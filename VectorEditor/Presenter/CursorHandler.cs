@@ -10,16 +10,29 @@ using VectorEditor.View;
 
 namespace VectorEditor.Presenter
 {
+    /// <summary>
+    /// Класс для инструмента "Указатель"
+    /// </summary>
     public class CursorHandler : IBaseHandler, IPropertyChanged
     {
-        private FigureParameters _figureParameters;
-
+        /// <summary>
+        /// Ссылка на канву
+        /// </summary>
         private PictureBox _canvas;
 
+        /// <summary>
+        /// Выбранная фигура
+        /// </summary>
         private BaseFigure _selectedFigure;
 
+        /// <summary>
+        /// Ссылка на презентер
+        /// </summary>
         private Presenter _presenter;
 
+        /// <summary>
+        /// Параметры фигуры
+        /// </summary>
         public FigureParameters FigureParameters
         {
             set
@@ -36,6 +49,9 @@ namespace VectorEditor.Presenter
             }
         }
 
+        /// <summary>
+        /// Свойство для канвы
+        /// </summary>
         public PictureBox Canvas
         {
             get
@@ -48,24 +64,39 @@ namespace VectorEditor.Presenter
             }
         }
 
+        /// <summary>
+        /// Свойство для делегата нажатия мышки
+        /// </summary>
         public MouseOperation MouseDownDelegate
         {
             set;
             get;
         }
 
+        /// <summary>
+        /// Свойство для делегата отпускания мышки
+        /// </summary>
         public MouseOperation MouseUpDelegate
         {
             set;
             get;
         }
 
+        /// <summary>
+        /// Свойство для делегата двигания мышкой
+        /// </summary>
         public MouseOperation MouseMoveDelegate
         {
             set;
             get;
         }
 
+        /// <summary>
+        /// Конструктор класса инструмента "Указатель"
+        /// </summary>
+        /// <param name="canvas">Канва</param>
+        /// <param name="figureParameters">Параметры фигуры</param>
+        /// <param name="presenter">Презентер</param>
         public CursorHandler(PictureBox canvas,
             FigureParameters figureParameters,
             Presenter presenter)
@@ -76,7 +107,6 @@ namespace VectorEditor.Presenter
 
             _selectedFigure = null;
             _selectedFigures = new List<BaseFigure>();
-            _originalFigures = new List<BaseFigure>();
             _beforeState = new Dictionary<int, BaseFigure>();
             _beforePointState = new Dictionary<int, BaseFigure>();
 
@@ -85,12 +115,20 @@ namespace VectorEditor.Presenter
             MouseMoveDelegate += MouseMoveSelecting;
         }
 
-
+        /// <summary>
+        /// События создания фигуры
+        /// </summary>
         public event EventHandler<BaseFigure> FigureCreated;
 
+        /// <summary>
+        /// Событие изменения параметров фигуры
+        /// </summary>
         public event EventHandler<FigureParameters> ParametersChanged;
         
-
+        /// <summary>
+        /// Рисование выбранных фигур
+        /// </summary>
+        /// <param name="g"></param>
         public void Draw(Graphics g)
         {
             Pen pen = new Pen(Color.FromArgb(0, 120, 215), 1);
@@ -118,9 +156,11 @@ namespace VectorEditor.Presenter
 
         }
 
+        /// <summary>
+        /// Очистить выборку фигур
+        /// </summary>
         public void ClearSelectedFigures()
         {
-            _originalFigures.Clear();
             _selectedFigures.Clear();
             _selectedFigure = null;
         }
@@ -130,40 +170,89 @@ namespace VectorEditor.Presenter
         /// </summary>
         private const int object_radius = 3;
 
-        // We're over an object if the distance squared
-        // between the mouse and the object is less than this.
+        /// <summary>
+        /// Мышка над фигурой или маркером, 
+        /// если расстояние между мышкой и объектом меньше этой.
+        /// </summary>
         private const int over_dist_squared = object_radius * object_radius;
 
+        /// <summary>
+        /// Флаг. Нажата ли мышка
+        /// </summary>
         private bool _isMouseDown = false;
 
+        /// <summary>
+        /// Флаг. Появился ли прямоугольник выборки.
+        /// </summary>
         private bool _isDraggingSelectionRect = false;
 
+        /// <summary>
+        /// Первоначальная точка нажатия
+        /// </summary>
         private PointF _originalMouseDownPoint;
 
+        /// <summary>
+        /// Количество пикселей. 
+        /// Операция считается за движение - если двинули на большее
+        /// расстояние, чем это. 
+        /// </summary>
         private static readonly double _dragTreshold = 5;
 
+        /// <summary>
+        /// Флаг для выбора фигур
+        /// </summary>
         private bool _isFigurePicked = false;
 
+        /// <summary>
+        /// Список выбранных фигур
+        /// </summary>
         private List<BaseFigure> _selectedFigures;
 
-        private List<BaseFigure> _originalFigures;
-
+        /// <summary>
+        /// Прямоугольник выборки
+        /// </summary>
         private Rectangle _selectionRect;
 
+        /// <summary>
+        /// Отступ по X
+        /// </summary>
         private float _offsetX;
 
+        /// <summary>
+        /// Отступ по Y
+        /// </summary>
         private float _offsetY;
 
+        /// <summary>
+        /// Выбранный маркер
+        /// </summary>
         private PointF _pickedPoint;
 
+        /// <summary>
+        /// Индекс выбранного маркера
+        /// </summary>
         private int _pickedPointIndex;
 
+        /// <summary>
+        /// Индекс выбранной фигуры
+        /// </summary>
         private int _pickedFigureIndex;
 
+        /// <summary>
+        /// Если выборка пуста. 
+        /// Прямоугольник пуст или тыкнули в пустую точку
+        /// </summary>
         private bool _isSelectionEmpty = false;
 
+        /// <summary>
+        /// Поле-словарь для состояния до передвигания фигур.
+        /// Хранит индексы в главном списке и фигуры.
+        /// </summary>
         private Dictionary<int, BaseFigure> _beforeState;
 
+        /// <summary>
+        /// Свойство для состояния до передвигания фигур
+        /// </summary>
         public Dictionary<int, BaseFigure> BeforeState
         {
             get
@@ -172,8 +261,15 @@ namespace VectorEditor.Presenter
             }
         }
 
+        /// <summary>
+        /// Поле-словарь для состояния до передвигания маркера.
+        /// Хранит индексы в главном списке и фигуры.
+        /// </summary>
         private Dictionary<int, BaseFigure> _beforePointState;
 
+        /// <summary>
+        /// Свойство для состояния до передвигания маркера 
+        /// </summary>
         public Dictionary<int, BaseFigure> BeforePointState
         {
             get
@@ -187,9 +283,17 @@ namespace VectorEditor.Presenter
             }
         }
 
+        /// <summary>
+        /// Индекс фигуры, у которой двигают маркером
+        /// </summary>
         private int _oldFigureIndex;
 
         //Мышка нажата
+        /// <summary>
+        /// Обработчик события нажатия мышки
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
@@ -260,8 +364,15 @@ namespace VectorEditor.Presenter
             }
         }
 
+        /// <summary>
+        /// События передвигания фигур
+        /// </summary>
         public event EventHandler<Dictionary<int, BaseFigure>> FiguresMoved;
 
+        /// <summary>
+        /// Вызов обработчика события движения фигур
+        /// </summary>
+        /// <param name="newState"></param>
         private void OnFiguresMoved(Dictionary<int, BaseFigure> newState)
         {
             EventHandler< Dictionary < int, BaseFigure >> handler = FiguresMoved;
@@ -273,6 +384,11 @@ namespace VectorEditor.Presenter
         }
 
         //Отпускание фигуры
+        /// <summary>
+        /// Обработчик отпускания фигур
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="e"></param>
         private void MouseUpFigure(object obj, MouseEventArgs e)
         {
             MouseMoveDelegate += MouseMoveSelecting;
@@ -298,10 +414,24 @@ namespace VectorEditor.Presenter
             Canvas.Refresh();
         }
 
+        /// <summary>
+        /// Флаг для движения фигур. Становится true,
+        /// если двинули фигурой(ами) на 5 пикселей и больше.
+        /// </summary>
         private bool _reallyMoved = false;
+
+        /// <summary>
+        /// Флаг для движения маркером. Становится true,
+        /// если двинули маркером на 5 пикселей и больше.
+        /// </summary>
         private bool _isPointMoved = false;
 
         //Двигание фигурой
+        /// <summary>
+        /// Обработчик движения фигур
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="e"></param>
         private void MouseMoveFigure(object obj, MouseEventArgs e)
         {
             PointF currentMouseDownPoint = e.Location;
@@ -376,8 +506,15 @@ namespace VectorEditor.Presenter
             Canvas.Refresh();
         }
 
+        /// <summary>
+        /// Событие движения маркером
+        /// </summary>
         public event EventHandler<Dictionary<int, BaseFigure>> PointMoved;
 
+        /// <summary>
+        /// Вызов обработчика события движения маркера
+        /// </summary>
+        /// <param name="newPointState"></param>
         private void OnPointMoved(Dictionary<int, BaseFigure> newPointState)
         {
             EventHandler<Dictionary<int, BaseFigure>> handler = PointMoved;
@@ -388,7 +525,11 @@ namespace VectorEditor.Presenter
             }
         }
 
-        //Отпускание точки-маркера
+        /// <summary>
+        /// Обработчик отпускания маркера
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="e"></param>
         private void MouseUpMarker(object obj, MouseEventArgs e)
         {
             MouseMoveDelegate += MouseMoveSelecting;
@@ -409,7 +550,11 @@ namespace VectorEditor.Presenter
             Canvas.Refresh();
         }
 
-        //Двигание точки - маркера
+        /// <summary>
+        /// Обработчик движения маркера
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="e"></param>
         private void MouseMoveMarker(object obj, MouseEventArgs e)
         {
             PointF currentMouseDownPoint = e.Location;
@@ -429,12 +574,11 @@ namespace VectorEditor.Presenter
             Canvas.Refresh();
         }
 
-        public void MouseMove(object sender, MouseEventArgs e)
-        {
-
-        }
-
-        //Выборка или просто движение
+        /// <summary>
+        /// Обработчик движения мышки
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void MouseMoveSelecting(object sender, MouseEventArgs e)
         {
             if (_isDraggingSelectionRect)
@@ -481,7 +625,11 @@ namespace VectorEditor.Presenter
             Canvas.Refresh();
         }
 
-        //Отпускание мыши после выборки или выбор одной фигуры
+        /// <summary>
+        /// Обработки отпускания мышки
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void MouseUp(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
@@ -495,7 +643,6 @@ namespace VectorEditor.Presenter
                     _isFigurePicked = true;
                     if (_isSelectionEmpty)
                     {
-                        _originalFigures.Clear();
                         _isFigurePicked = false;
                         _selectedFigures.Clear();
                         _selectedFigure = null;
@@ -517,14 +664,12 @@ namespace VectorEditor.Presenter
                         {
                             _selectedFigures.Clear();
                             _selectedFigure = GetFigurePointOn(e.Location);
-                            _selectedFigures.Add(_selectedFigure);
-                            _originalFigures.Add(FigureFactory.CreateCopy(_selectedFigure));           
+                            _selectedFigures.Add(_selectedFigure);       
                             _isFigurePicked = true;
 
                         }
                         else
                         {
-                            _originalFigures.Clear();
                             _selectedFigures.Clear();
                             _selectedFigure = null;
                             _isFigurePicked = false;
@@ -536,6 +681,9 @@ namespace VectorEditor.Presenter
             Canvas.Refresh();
         }
 
+        /// <summary>
+        /// Выбрать фигуры, находящиеся в прямоугольнике выборки 
+        /// </summary>
         private void SelectFiguresInRect()
         {
             if (_presenter.GetFigures() == null)
@@ -560,22 +708,27 @@ namespace VectorEditor.Presenter
             }
             else
             {
-                _originalFigures.Clear();
                 _selectedFigures.Clear();
                 _selectedFigures = selectedFigures;
-                foreach (var figure in selectedFigures)
-                {
-                    _originalFigures.Add(FigureFactory.CreateCopy(figure));
-                }
             }
             _selectionRect = new Rectangle();
         }
 
+        /// <summary>
+        /// Инициализировать прямоугольник выборки
+        /// </summary>
+        /// <param name="pt1">Верхняя левая точка</param>
+        /// <param name="pt2">Правая нижняя точка</param>
         private void InitDragSelectionRect(PointF pt1, PointF pt2)
         {
             UpdateDragSelectionRect(pt1, pt2);
         }
 
+        /// <summary>
+        /// Обновить прямоугольник выборки
+        /// </summary>
+        /// <param name="pt1">Верхняя левая точка</param>
+        /// <param name="pt2">Правая нижняя точка</param>
         private void UpdateDragSelectionRect(PointF pt1, PointF pt2)
         {
             double x, y, width, height;
@@ -606,6 +759,11 @@ namespace VectorEditor.Presenter
                                            (int)width, (int)height);
         }
 
+        /// <summary>
+        /// Определят:находится ли мышка над фигурой
+        /// </summary>
+        /// <param name="point">Точка мышки</param>
+        /// <returns></returns>
         private bool IsPointOnFigure(PointF point)
         {
             bool result = false;
@@ -629,6 +787,11 @@ namespace VectorEditor.Presenter
             return result;
         }
 
+        /// <summary>
+        /// Получить фигуру, на которую указывает мышка
+        /// </summary>
+        /// <param name="point">Точка мышки</param>
+        /// <returns>Фигура</returns>
         private BaseFigure GetFigurePointOn(PointF point)
         {
             if (_presenter.GetFigures() != null)
@@ -654,6 +817,12 @@ namespace VectorEditor.Presenter
         }
 
         //For selected figure
+        /// <summary>
+        /// Определяет находится ли точка на маркере
+        /// </summary>
+        /// <param name="mousePoint">Точка</param>
+        /// <param name="pickedPoint">Маркер, на котором точка</param>
+        /// <returns></returns>
         private bool IsPointOnMarker(PointF mousePoint,
                                      out PointF pickedPoint)
         {
@@ -701,6 +870,12 @@ namespace VectorEditor.Presenter
             return false;
         }
 
+        /// <summary>
+        /// Найти расстояние от точки до точки
+        /// </summary>
+        /// <param name="pt1"></param>
+        /// <param name="pt2"></param>
+        /// <returns></returns>
         private float FindDistanceToPointSquared(PointF pt1, PointF pt2)
         {
             float dx = pt1.X - pt2.X;
@@ -708,6 +883,11 @@ namespace VectorEditor.Presenter
             return dx * dx + dy * dy;
         }
 
+        /// <summary>
+        /// Получить прямоугольник вокруг фигуры
+        /// </summary>
+        /// <param name="points">Точки фигуры</param>
+        /// <returns>Прямоугольник</returns>
         private Rectangle GetRect(IReadOnlyCollection<PointF> points)
         {
             int minX = (int)points.Min(x => x.X);
@@ -717,60 +897,9 @@ namespace VectorEditor.Presenter
             return new Rectangle(minX, minY, Math.Abs(maxX - minX), Math.Abs(maxY - minY));
         }
 
-        private BaseFigure SetParameters(BaseFigure figure, FigureParameters parameters)
-        {
-            figure.LineProperties.Color = parameters.LineColor;
-            figure.LineProperties.Style = (DashStyle)parameters.LineType;
-            figure.LineProperties.Thickness = parameters.LineThickness;
-            if (figure.GetType() == typeof(Circle) ||
-                figure.GetType() == typeof(Ellipse) ||
-                figure.GetType() == typeof(Polygon))
-            {
-                var tempFigure = figure as FillableFigure;
-                if (tempFigure == null) return null;
-                tempFigure.FillProperty.FillColor = parameters.FillColor;
-                figure = tempFigure;
-            }
-            return figure;
-        }
-
-        private List<BaseFigure> SetParameters(List<BaseFigure> figures,
-                                               FigureParameters parameters)
-        {
-            foreach (var figure in figures)
-            {
-                figure.LineProperties.Color = parameters.LineColor;
-                figure.LineProperties.Style = (DashStyle)parameters.LineType;
-                figure.LineProperties.Thickness = parameters.LineThickness;
-                if (figure.GetType() == typeof(Circle) ||
-                    figure.GetType() == typeof(Ellipse) ||
-                    figure.GetType() == typeof(Polygon))
-                {
-                    //FIX: сделать темп фигуру до проверки с as и проверить на null
-                    var tempFigure = figure as FillableFigure;
-                    if (tempFigure == null) return null;
-                    tempFigure.FillProperty.FillColor = parameters.FillColor;
-                }
-            }
-            return figures;
-        }
-
-        private FigureParameters GetParameters(BaseFigure figure, FigureParameters parameters)
-        {
-            parameters.LineColor = figure.LineProperties.Color;
-            parameters.LineType = (int)figure.LineProperties.Style;
-            parameters.LineThickness = figure.LineProperties.Thickness;
-            if (figure.GetType() == typeof(Circle) ||
-                figure.GetType() == typeof(Ellipse) ||
-                figure.GetType() == typeof(Polygon))
-            {
-                var tempFigure = figure as FillableFigure;
-                //if (tempFigure == null) return;
-                parameters.FillColor = tempFigure.FillProperty.FillColor;
-            }
-            return parameters;
-        }
-
+        /// <summary>
+        /// Свойство для получения выбранных фигур
+        /// </summary>
         public List<BaseFigure> SelectedFigures
         {
             get
@@ -778,16 +907,12 @@ namespace VectorEditor.Presenter
                 return _selectedFigures;
             }
         }
-
-        public List<BaseFigure> OriginalFigures
-        {
-            get
-            {
-                return _originalFigures;
-            }
-        }
        
-
+        /// <summary>
+        /// Добавить фигуру в GraphicsPath
+        /// </summary>
+        /// <param name="path">GraphicsPath</param>
+        /// <param name="figure">Добавляемая фигура</param>
         private void AddFigureToGraphicsPath(GraphicsPath path, BaseFigure figure)
         {
             var points = figure.Points.GetPoints();
