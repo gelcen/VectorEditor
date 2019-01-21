@@ -401,6 +401,7 @@ namespace VectorEditor
 
         private void MainForm_Load(object sender, EventArgs e)
         {
+            this.KeyPreview = true;
             OnToolPicked(Item.Cursor);
         }
 
@@ -506,6 +507,27 @@ namespace VectorEditor
                     throw new Exception(ex.Message);
                 }
             }
+        }
+
+        private void MainForm_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Control == true && e.KeyCode == Keys.Z)
+            {
+                OnUndoPressed();
+            }
+            if (e.Control == true && e.KeyCode == Keys.Y)
+            {
+                OnRedoPressed();
+            }
+            if (e.Control == true && e.KeyCode == Keys.C)
+            {
+                OnFigureCopied();
+            }
+            if (e.KeyCode == Keys.Delete)
+            {
+                OnFiguresDeleted();
+            }
+
         }
     }
 }

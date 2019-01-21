@@ -448,6 +448,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "VectorEditor";
             this.Load += new System.EventHandler(this.MainForm_Load);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainForm_KeyDown);
             this.gpFigures.ResumeLayout(false);
             this.gpProps.ResumeLayout(false);
             this.gpProps.PerformLayout();
