@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using VectorEditor.Figures;
 
@@ -24,7 +25,7 @@ namespace VectorEditor.Drawers
             var points = circle.Points.GetPoints();
             if (points.Count != 2) return;
 
-            var circleRect = MakeRectangle(points[0], points[1]);
+            var circleRect = MakeRectangle(points[0], points[1], RoundShapeType.Circle);
 
             Brush brush = new SolidBrush(circle.FillProperty.FillColor);
             canvas.FillEllipse(brush, circleRect);
@@ -43,8 +44,9 @@ namespace VectorEditor.Drawers
         /// </summary>
         /// <param name="pointA">Левая верхняя точка</param>
         /// <param name="pointB">Нижнаяя правая точка</param>
+        /// <param name="shapeType">Тип фигуры</param>
         /// <returns></returns>
-        public static Rectangle MakeRectangle(PointF pointA, PointF pointB)
+        public static Rectangle MakeRectangle(PointF pointA, PointF pointB, RoundShapeType shapeType)
         {
             var width = (int) Math.Abs(pointA.X - pointB.X);
             var height = (int) Math.Abs(pointA.Y - pointB.Y);
@@ -54,7 +56,26 @@ namespace VectorEditor.Drawers
             var x = (int)Math.Min(pointA.X, pointB.X);
             var y = (int)Math.Min(pointA.Y, pointB.Y);
 
-            return  new Rectangle(x, y, radius, radius);
+            return shapeType == RoundShapeType.Circle ? new Rectangle(x, y, radius, radius) : 
+                                                        new Rectangle(x, y, width, height);
+        }
+
+        /// <summary>
+        /// Рисовка маркеров и границ у округлых фигур
+        /// </summary>
+        /// <param name="points">Точки</param>
+        /// <param name="canvas">Канва</param>
+        public static void DrawSelectionRoundShapes(IReadOnlyCollection<PointF> points, 
+                                                    Graphics canvas)
+        {
+            foreach (var pt in points)
+            {
+                var rect = new Rectangle(
+                    (int)pt.X - ObjectRadius, (int)pt.Y - ObjectRadius,
+                    2 * ObjectRadius + 1, 2 * ObjectRadius + 1);
+                canvas.FillEllipse(Brushes.White, rect);
+                canvas.DrawEllipse(Pens.Black, rect);
+            }
         }
 
         /// <inheritdoc />
@@ -71,16 +92,9 @@ namespace VectorEditor.Drawers
             var points = circle.Points.GetPoints();
             if (points.Count != 2) return;
 
-            foreach (var pt in points)
-            {
-                var rect = new Rectangle(
-                    (int)pt.X - ObjectRadius, (int)pt.Y - ObjectRadius,
-                    2 * ObjectRadius + 1, 2 * ObjectRadius + 1);
-                canvas.FillEllipse(Brushes.White, rect);
-                canvas.DrawEllipse(Pens.Black, rect);
-            }
+            DrawSelectionRoundShapes(points, canvas);
 
-            var circleRect = MakeRectangle(points[0], points[1]);
+            var circleRect = MakeRectangle(points[0], points[1], RoundShapeType.Circle);
 
             var pen = new Pen(Color.Black, 1)
                           { DashStyle = System.Drawing.Drawing2D.DashStyle.Dash};

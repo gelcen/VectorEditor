@@ -174,7 +174,7 @@ namespace VectorEditor.Presenter
         /// Операция считается за движение - если двинули на большее
         /// расстояние, чем это. 
         /// </summary>
-        private static readonly double DragTreshold = 5;
+        private const double DragTreshold = 5;
 
         /// <summary>
         /// Флаг для выбора фигур
@@ -360,6 +360,22 @@ namespace VectorEditor.Presenter
         /// </summary>
         private bool _isPointMoved;
 
+        /// <summary>
+        /// Считает, прошла ли мышка расстояние больше порога движения DragTreshold.
+        /// </summary>
+        /// <param name="originalPoint">Точка нажатия</param>
+        /// <param name="currentPoint">Текущая точка</param>
+        /// <returns></returns>
+        private static bool IsItMoving(PointF originalPoint, PointF currentPoint)
+        {
+            var deltaX = Math.Abs(
+                currentPoint.X - originalPoint.X);
+            var deltaY = Math.Abs(
+                currentPoint.Y - originalPoint.Y);
+            var distance = Math.Sqrt(Math.Pow(deltaX, 2) + Math.Pow(deltaY, 2));
+            return distance >= DragTreshold;
+        }
+
         //Двигание фигурой
         /// <summary>
         /// Обработчик движения фигур
@@ -368,13 +384,7 @@ namespace VectorEditor.Presenter
         /// <param name="e"></param>
         private void MouseMoveFigure(object obj, MouseEventArgs e)
         {
-            PointF currentMouseDownPoint = e.Location;
-            var deltaX = Math.Abs(
-                           currentMouseDownPoint.X - _originalMouseDownPoint.X);
-            var deltaY = Math.Abs(
-                           currentMouseDownPoint.Y - _originalMouseDownPoint.Y);
-            var distance = Math.Sqrt(Math.Pow(deltaX, 2) + Math.Pow(deltaY, 2));
-            if (distance >= DragTreshold)
+            if (IsItMoving(_originalMouseDownPoint, e.Location))
             {
                 _reallyMoved = true;
             }
@@ -513,13 +523,7 @@ namespace VectorEditor.Presenter
         /// <param name="e"></param>
         private void MouseMoveMarker(object obj, MouseEventArgs e)
         {
-            PointF currentMouseDownPoint = e.Location;
-            var deltaX = Math.Abs(
-                           currentMouseDownPoint.X - _originalMouseDownPoint.X);
-            var deltaY = Math.Abs(
-                           currentMouseDownPoint.Y - _originalMouseDownPoint.Y);
-            var distance = Math.Sqrt(Math.Pow(deltaX, 2) + Math.Pow(deltaY, 2));
-            if (distance >= DragTreshold)
+            if (IsItMoving(_originalMouseDownPoint, e.Location))
             {
                 _isPointMoved = true;
             }
@@ -546,12 +550,7 @@ namespace VectorEditor.Presenter
             else if (_isMouseDown)
             {
                 PointF currentMouseDownPoint = e.Location;
-                var deltaX = Math.Abs(
-                               currentMouseDownPoint.X - _originalMouseDownPoint.X);
-                var deltaY = Math.Abs(
-                               currentMouseDownPoint.Y - _originalMouseDownPoint.Y);
-                var distance = Math.Sqrt(Math.Pow(deltaX, 2) + Math.Pow(deltaY, 2));
-                if (distance > DragTreshold)
+                if (IsItMoving(_originalMouseDownPoint, currentMouseDownPoint))
                 {
                     _isDraggingSelectionRect = true;
                     InitDragSelectionRect(_originalMouseDownPoint,
@@ -605,16 +604,9 @@ namespace VectorEditor.Presenter
                         _isSelectionEmpty = false;
                     }
                 }
-
                 if (_isMouseDown)
                 {
-                    PointF currentMouseDownPoint = e.Location;
-                    var deltaX = Math.Abs(
-                                   currentMouseDownPoint.X - _originalMouseDownPoint.X);
-                    var deltaY = Math.Abs(
-                                   currentMouseDownPoint.Y - _originalMouseDownPoint.Y);
-                    var distance = Math.Sqrt(Math.Pow(deltaX, 2) + Math.Pow(deltaY, 2));
-                    if (distance < DragTreshold)
+                    if (!IsItMoving(_originalMouseDownPoint, e.Location))
                     {
                         if (IsPointOnFigure(e.Location))
                         {
@@ -862,12 +854,12 @@ namespace VectorEditor.Presenter
             }
             else if (figure.GetType() == typeof(Circle))
             {
-                var circleRect = CircleDrawer.MakeRectangle(points[0], points[1]);
+                var circleRect = CircleDrawer.MakeRectangle(points[0], points[1], RoundShapeType.Circle);
                 path.AddEllipse(circleRect);
             }
             else if (figure.GetType() == typeof(Ellipse))
             {
-                var ellipseRect = EllipseDrawer.RectangleForEllipse(points[0], points[1]);
+                var ellipseRect = CircleDrawer.MakeRectangle(points[0], points[1], RoundShapeType.Ellipse);
                 path.AddEllipse(ellipseRect);
             }
             else if (figure.GetType() == typeof(Polyline))

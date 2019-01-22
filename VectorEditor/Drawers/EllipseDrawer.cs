@@ -24,7 +24,7 @@ namespace VectorEditor.Drawers
             var points = circle.Points.GetPoints();
             if (points.Count != 2) return;
 
-            var ellipseRectangle= RectangleForEllipse(points[0], points[1]);
+            var ellipseRectangle= CircleDrawer.MakeRectangle(points[0], points[1], RoundShapeType.Ellipse);
 
             Brush brush = new SolidBrush(circle.FillProperty.FillColor);
 
@@ -41,23 +41,6 @@ namespace VectorEditor.Drawers
             pen.Dispose();
         }
 
-        /// <summary>
-        /// Создание прямоугольника
-        /// </summary>
-        /// <param name="pointA">Левая верхняя точка</param>
-        /// <param name="pointB">Нижнаяя правая точка</param>
-        /// <returns></returns>
-        public static Rectangle RectangleForEllipse(PointF pointA, PointF pointB)
-        {
-            var width = (int)Math.Abs(pointA.X - pointB.X);
-            var height = (int)Math.Abs(pointA.Y - pointB.Y);
-
-            var x = (int)Math.Min(pointA.X, pointB.X);
-            var y = (int)Math.Min(pointA.Y, pointB.Y);
-
-            return new Rectangle(x, y, width, height);
-        }
-
         /// <inheritdoc />
         /// <summary>
         /// Нарисовать маркеры
@@ -72,16 +55,9 @@ namespace VectorEditor.Drawers
             var points = ellipse.Points.GetPoints();
             if (points.Count != 2) return;
 
-            foreach (var pt in points)
-            {
-                var rect = new Rectangle(
-                    (int)pt.X - ObjectRadius, (int)pt.Y - ObjectRadius,
-                    2 * ObjectRadius + 1, 2 * ObjectRadius + 1);
-                canvas.FillEllipse(Brushes.White, rect);
-                canvas.DrawEllipse(Pens.Black, rect);
-            }
+            CircleDrawer.DrawSelectionRoundShapes(points, canvas);
 
-            var rectangle = RectangleForEllipse(points[0], points[1]);
+            var rectangle = CircleDrawer.MakeRectangle(points[0], points[1], RoundShapeType.Ellipse);
 
             var pen = new Pen(Color.Black, 1)
                           { DashStyle = System.Drawing.Drawing2D.DashStyle.Dash};

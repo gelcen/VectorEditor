@@ -76,6 +76,7 @@
     <Compile Include="Presenter\LineHandler.cs" />
     <Compile Include="Presenter\PolygonHandler.cs" />
     <Compile Include="Presenter\PolylineHandler.cs" />
+    <Compile Include="RoundShapeType.cs" />
     <Compile Include="UndoRedo\AddFigureCommand.cs" />
     <Compile Include="UndoRedo\ClearCanvasCommand.cs" />
     <Compile Include="UndoRedo\CommandFactory.cs" />
