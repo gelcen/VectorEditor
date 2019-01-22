@@ -385,13 +385,15 @@ namespace VectorEditor.Presenter
                 MoveFigurePoints(_selectedFigure, e.X, e.Y, _offsetX, _offsetY);              
             }
             else
-            {                
-                var newX1 = e.X + _offsetX;
-                var newY1 = e.Y + _offsetY;
+            {
+                float dx;
+                float dy;
 
-                var dx = newX1 - _selectedFigure.Points.GetPoints()[0].X;
-                var dy = newY1 - _selectedFigure.Points.GetPoints()[0].Y;
-
+                CountDelta(e.X, e.Y,
+                           _offsetX, _offsetY,
+                          _selectedFigure.Points.GetPoints()[0],
+                          out dx, out dy);
+                
                 MoveFigurePoints(_selectedFigure, e.X, e.Y, _offsetX, _offsetY);
 
                 foreach (var figure in SelectedFigures)
@@ -419,17 +421,19 @@ namespace VectorEditor.Presenter
         /// <param name="offsetX">Смещение по X</param>
         /// <param name="offsetY">Смещение по Y</param>
         private static void MoveFigurePoints(BaseFigure figure, int eX, int eY, float offsetX, float offsetY)
-        {
-            var newX1 = eX + offsetX;
-            var newY1 = eY + offsetY;
+        {            
+            float dx;
+            float dy;
 
-            var dx = newX1 - figure.Points.GetPoints()[0].X;
-            var dy = newY1 - figure.Points.GetPoints()[0].Y;
+            CountDelta(eX, eY, 
+                       offsetX, offsetY, 
+                       figure.Points.GetPoints()[0], 
+                       out dx, out dy);
 
             if (Math.Abs(dx) < 0.000000001 && Math.Abs(dy) < 0.000000001) return;
 
-            var tmpPt0 = new PointF(newX1, newY1);
-            figure.Points.Replace(0, tmpPt0);
+            var tempPoint = new PointF(eX + offsetX, eY + offsetY);
+            figure.Points.Replace(0, tempPoint);
             var count = figure.Points.GetPoints().Count;
             for (var i = 1; i < count; i++)
             {
@@ -438,6 +442,27 @@ namespace VectorEditor.Presenter
                     figure.Points.GetPoints()[i].Y + dy);
                 figure.Points.Replace(i, tempPoint1);
             }
+        }
+
+        /// <summary>
+        /// Функция для расчета смещения
+        /// </summary>
+        /// <param name="eX">Текущие координата Х</param>
+        /// <param name="eY">Текущая координата Y</param>
+        /// <param name="offsetX">Смещение по X</param>
+        /// <param name="offsetY">Смещение по Y</param>
+        /// <param name="point">Точка</param>
+        /// <param name="dx">Смещение</param>
+        /// <param name="dy">Смещение</param>
+        private static void CountDelta(int eX, int eY, float offsetX, 
+                                                       float offsetY, 
+                                                       PointF point,
+                                                       out float dx, out float dy)
+        {
+            var newX = eX + offsetX;
+            var newY = eY + offsetY;
+            dx = newX - point.X;
+            dy = newY - point.Y;
         }
 
         /// <summary>
@@ -837,15 +862,7 @@ namespace VectorEditor.Presenter
             }
             else if (figure.GetType() == typeof(Circle))
             {
-                var width = (int)Math.Abs(points[0].X - points[1].X);
-                var height = (int)Math.Abs(points[0].Y - points[1].Y);
-
-                var radius = Math.Max(width, height);
-
-                var x = (int)Math.Min(points[0].X, points[1].X);
-                var y = (int)Math.Min(points[0].Y, points[1].Y);
-
-                var circleRect = new Rectangle(x, y, radius, radius);
+                var circleRect = CircleDrawer.MakeRectangle(points[0], points[1]);
                 path.AddEllipse(circleRect);
             }
             else if (figure.GetType() == typeof(Ellipse))

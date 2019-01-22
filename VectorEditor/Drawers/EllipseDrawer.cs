@@ -53,10 +53,10 @@ namespace VectorEditor.Drawers
         /// <param name="canvas">Канва</param>
         public override void DrawSelection(BaseFigure figure, Graphics canvas)
         {
-            var circle = figure as FillableFigure;
-            if (circle == null) return;
+            var ellipse = figure as FillableFigure;
+            if (ellipse == null) return;
 
-            var points = circle.Points.GetPoints();
+            var points = ellipse.Points.GetPoints();
             if (points.Count != 2) return;
 
             foreach (var pt in points)
@@ -74,7 +74,7 @@ namespace VectorEditor.Drawers
             var x = (int)Math.Min(points[0].X, points[1].X);
             var y = (int)Math.Min(points[0].Y, points[1].Y);
 
-            Rectangle circleRect = new Rectangle(x, y, width, height);
+            var circleRect = new Rectangle(x, y, width, height);
 
             var pen = new Pen(Color.Black, 1)
                           { DashStyle = System.Drawing.Drawing2D.DashStyle.Dash};

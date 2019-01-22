@@ -4,11 +4,13 @@ using VectorEditor.Figures;
 
 namespace VectorEditor.Drawers
 {
+    /// <inheritdoc />
     /// <summary>
     /// Класс-рисовальщик для окружности
     /// </summary>
     public class CircleDrawer : BaseDrawer
     {
+        /// <inheritdoc />
         /// <summary>
         /// Нарисовать фигуру
         /// </summary>
@@ -22,15 +24,7 @@ namespace VectorEditor.Drawers
             var points = circle.Points.GetPoints();
             if (points.Count != 2) return;
 
-            var width = (int)Math.Abs(points[0].X - points[1].X);
-            var height = (int)Math.Abs(points[0].Y - points[1].Y);
-
-            var radius = Math.Max(width, height);
-
-            var x = (int)Math.Min(points[0].X, points[1].X);
-            var y = (int)Math.Min(points[0].Y, points[1].Y);
-
-            var circleRect = new Rectangle(x, y, radius, radius);
+            var circleRect = MakeRectangle(points[0], points[1]);
 
             Brush brush = new SolidBrush(circle.FillProperty.FillColor);
             canvas.FillEllipse(brush, circleRect);
@@ -42,6 +36,25 @@ namespace VectorEditor.Drawers
 
             canvas.DrawEllipse(pen, circleRect);
             pen.Dispose();
+        }
+
+        /// <summary>
+        /// Создание прямоугольника
+        /// </summary>
+        /// <param name="pointA">Левая верхняя точка</param>
+        /// <param name="pointB">Нижнаяя правая точка</param>
+        /// <returns></returns>
+        public static Rectangle MakeRectangle(PointF pointA, PointF pointB)
+        {
+            var width = (int) Math.Abs(pointA.X - pointB.X);
+            var height = (int) Math.Abs(pointA.Y - pointB.Y);
+
+            var radius = Math.Max(width, height);
+
+            var x = (int)Math.Min(pointA.X, pointB.X);
+            var y = (int)Math.Min(pointA.Y, pointB.Y);
+
+            return  new Rectangle(x, y, radius, radius);
         }
 
         /// <inheritdoc />
@@ -67,15 +80,7 @@ namespace VectorEditor.Drawers
                 canvas.DrawEllipse(Pens.Black, rect);
             }
 
-            var width = (int)Math.Abs(points[0].X - points[1].X);
-            var height = (int)Math.Abs(points[0].Y - points[1].Y);
-
-            var radius = Math.Max(width, height);
-
-            var x = (int)Math.Min(points[0].X, points[1].X);
-            var y = (int)Math.Min(points[0].Y, points[1].Y);
-
-            var circleRect = new Rectangle(x, y, radius, radius);
+            var circleRect = MakeRectangle(points[0], points[1]);
 
             var pen = new Pen(Color.Black, 1)
                           { DashStyle = System.Drawing.Drawing2D.DashStyle.Dash};
