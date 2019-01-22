@@ -85,14 +85,7 @@ namespace VectorEditor.Figures
                     FillProperty = {FillColor = fillableFigure.FillProperty.FillColor}
                 };
 
-
-
-                foreach (var point in fillableFigure.Points.GetPoints())
-                {
-                    newFigure.Points.AddPoint(copyType == CopyType.CopyWithOffset
-                        ? new PointF(point.X + 15, point.Y)
-                        : new PointF(point.X, point.Y));
-                }
+                CopyPoints(fillableFigure, newFigure, copyType);
 
                 resultFigure = newFigure;
             }
@@ -110,12 +103,7 @@ namespace VectorEditor.Figures
                         }
                     };
 
-                    foreach (var point in figure.Points.GetPoints())
-                    {
-                        resultFigure.Points.AddPoint(copyType == CopyType.CopyWithOffset
-                            ? new PointF(point.X + 15, point.Y)
-                            : new PointF(point.X, point.Y));
-                    }
+                    CopyPoints(figure, resultFigure, copyType);
                 }
                 else if (figure.GetType() == typeof(Polyline))
                 {
@@ -129,12 +117,7 @@ namespace VectorEditor.Figures
                         }
                     };
 
-                    foreach (var point in figure.Points.GetPoints())
-                    {
-                        resultFigure.Points.AddPoint(copyType == CopyType.CopyWithOffset
-                            ? new PointF(point.X + 15, point.Y)
-                            : new PointF(point.X, point.Y));
-                    }
+                    CopyPoints(figure, resultFigure, copyType);
                 }
                 else if (figure.GetType() == typeof(Circle))
                 {
@@ -151,12 +134,7 @@ namespace VectorEditor.Figures
                     var temp = figure as FillableFigure;
                     if (temp != null) circle.FillProperty.FillColor = temp.FillProperty.FillColor;
 
-                    foreach (var point in figure.Points.GetPoints())
-                    {
-                        circle.Points.AddPoint(copyType == CopyType.CopyWithOffset
-                            ? new PointF(point.X + 15, point.Y)
-                            : new PointF(point.X, point.Y));
-                    }
+                    CopyPoints(figure, circle, copyType);
 
                     resultFigure = circle;
                 }
@@ -175,12 +153,7 @@ namespace VectorEditor.Figures
                     var temp = figure as FillableFigure;
                     if (temp != null) ellipse.FillProperty.FillColor = temp.FillProperty.FillColor;
 
-                    foreach (var point in figure.Points.GetPoints())
-                    {
-                        ellipse.Points.AddPoint(copyType == CopyType.CopyWithOffset
-                            ? new PointF(point.X + 15, point.Y)
-                            : new PointF(point.X, point.Y));
-                    }
+                    CopyPoints(figure, ellipse, copyType);
 
                     resultFigure = ellipse;
                 }
@@ -199,12 +172,7 @@ namespace VectorEditor.Figures
                     var temp = figure as FillableFigure;
                     if (temp != null) polygon.FillProperty.FillColor = temp.FillProperty.FillColor;
 
-                    foreach (var point in figure.Points.GetPoints())
-                    {
-                        polygon.Points.AddPoint(copyType == CopyType.CopyWithOffset
-                            ? new PointF(point.X + 15, point.Y)
-                            : new PointF(point.X, point.Y));
-                    }
+                    CopyPoints(figure, polygon, copyType);
 
                     resultFigure = polygon;
                 }
@@ -212,5 +180,22 @@ namespace VectorEditor.Figures
             return resultFigure;
         }
 
+        /// <summary>
+        /// Копирование точек фигур
+        /// </summary>
+        /// <param name="originalFigure">Оригинальная фигура</param>
+        /// <param name="copyFigure">Новая фигура</param>
+        /// <param name="copyType">Тип копирования</param>
+        private static void CopyPoints(BaseFigure originalFigure,
+                                       BaseFigure copyFigure,
+                                       CopyType copyType)
+        {
+            foreach (var point in originalFigure.Points.GetPoints())
+            {
+                copyFigure.Points.AddPoint(copyType == CopyType.CopyWithOffset
+                                                    ? new PointF(point.X + 15, point.Y)
+                                                    : new PointF(point.X, point.Y));
+            }
+        }
     }
 }
