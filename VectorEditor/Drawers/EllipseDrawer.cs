@@ -4,11 +4,13 @@ using VectorEditor.Figures;
 
 namespace VectorEditor.Drawers
 {
+    /// <inheritdoc />
     /// <summary>
     /// Класс-рисовальщик для эллипса
     /// </summary>
     public class EllipseDrawer : BaseDrawer
     {
+        /// <inheritdoc />
         /// <summary>
         /// Нарисовать фигуру
         /// </summary>
@@ -22,17 +24,11 @@ namespace VectorEditor.Drawers
             var points = circle.Points.GetPoints();
             if (points.Count != 2) return;
 
-            var width = (int)Math.Abs(points[0].X - points[1].X);
-            var height = (int)Math.Abs(points[0].Y - points[1].Y);
-
-            var x = (int)Math.Min(points[0].X, points[1].X);
-            var y = (int)Math.Min(points[0].Y, points[1].Y);
-
-            var circleRect = new Rectangle(x, y, width, height);
+            var ellipseRectangle= RectangleForEllipse(points[0], points[1]);
 
             Brush brush = new SolidBrush(circle.FillProperty.FillColor);
 
-            canvas.FillEllipse(brush, circleRect);
+            canvas.FillEllipse(brush, ellipseRectangle);
 
             brush.Dispose();
 
@@ -40,9 +36,26 @@ namespace VectorEditor.Drawers
                               circle.LineProperties.Thickness)
                 { DashStyle = circle.LineProperties.Style};
 
-            canvas.DrawEllipse(pen, circleRect);
+            canvas.DrawEllipse(pen, ellipseRectangle);
 
             pen.Dispose();
+        }
+
+        /// <summary>
+        /// Создание прямоугольника
+        /// </summary>
+        /// <param name="pointA">Левая верхняя точка</param>
+        /// <param name="pointB">Нижнаяя правая точка</param>
+        /// <returns></returns>
+        public static Rectangle RectangleForEllipse(PointF pointA, PointF pointB)
+        {
+            var width = (int)Math.Abs(pointA.X - pointB.X);
+            var height = (int)Math.Abs(pointA.Y - pointB.Y);
+
+            var x = (int)Math.Min(pointA.X, pointB.X);
+            var y = (int)Math.Min(pointA.Y, pointB.Y);
+
+            return new Rectangle(x, y, width, height);
         }
 
         /// <inheritdoc />
@@ -68,18 +81,12 @@ namespace VectorEditor.Drawers
                 canvas.DrawEllipse(Pens.Black, rect);
             }
 
-            var width = (int)Math.Abs(points[0].X - points[1].X);
-            var height = (int)Math.Abs(points[0].Y - points[1].Y);
-
-            var x = (int)Math.Min(points[0].X, points[1].X);
-            var y = (int)Math.Min(points[0].Y, points[1].Y);
-
-            var circleRect = new Rectangle(x, y, width, height);
+            var rectangle = RectangleForEllipse(points[0], points[1]);
 
             var pen = new Pen(Color.Black, 1)
                           { DashStyle = System.Drawing.Drawing2D.DashStyle.Dash};
 
-            canvas.DrawRectangle(pen, circleRect);
+            canvas.DrawRectangle(pen, rectangle);
 
             pen.Dispose();
         }

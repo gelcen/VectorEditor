@@ -867,13 +867,7 @@ namespace VectorEditor.Presenter
             }
             else if (figure.GetType() == typeof(Ellipse))
             {
-                var width = (int)Math.Abs(points[0].X - points[1].X);
-                var height = (int)Math.Abs(points[0].Y - points[1].Y);
-
-                var x = (int)Math.Min(points[0].X, points[1].X);
-                var y = (int)Math.Min(points[0].Y, points[1].Y);
-
-                var ellipseRect = new Rectangle(x, y, width, height);
+                var ellipseRect = EllipseDrawer.RectangleForEllipse(points[0], points[1]);
                 path.AddEllipse(ellipseRect);
             }
             else if (figure.GetType() == typeof(Polyline))
