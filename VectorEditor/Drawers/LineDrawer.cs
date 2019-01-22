@@ -3,11 +3,13 @@ using VectorEditor.Figures;
 
 namespace VectorEditor.Drawers
 {
+    /// <inheritdoc />
     /// <summary>
     /// Класс-рисовальщик для линии
     /// </summary>
     public class LineDrawer : BaseDrawer
     {
+        /// <inheritdoc />
         /// <summary>
         /// Нарисовать фигуру
         /// </summary>
@@ -32,6 +34,16 @@ namespace VectorEditor.Drawers
         /// <param name="figure">Рисуемая фигура</param>
         /// <param name="canvas">Канва</param>
         public override void DrawSelection(BaseFigure figure, Graphics canvas)
+        {
+            DrawLineSelection(figure, canvas);
+        }
+
+        /// <summary>
+        /// Рисовка маркеров для линии, полилинии, полигона
+        /// </summary>
+        /// <param name="figure">Рисуемая фигура</param>
+        /// <param name="canvas">Канва</param>
+        public static void DrawLineSelection(BaseFigure figure, Graphics canvas)
         {
             var points = figure.Points.GetPoints();
             foreach (var pt in points)

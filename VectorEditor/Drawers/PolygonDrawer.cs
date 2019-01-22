@@ -9,6 +9,7 @@ namespace VectorEditor.Drawers
     /// </summary>
     public class PolygonDrawer : BaseDrawer
     {
+        /// <inheritdoc />
         /// <summary>
         /// Нарисовать фигуру
         /// </summary>
@@ -43,15 +44,7 @@ namespace VectorEditor.Drawers
         /// <param name="canvas">Канва</param>
         public override void DrawSelection(BaseFigure figure, Graphics canvas)
         {
-            var points = figure.Points.GetPoints();
-            foreach (var pt in points)
-            {
-                var rect = new Rectangle(
-                    (int)pt.X - ObjectRadius, (int)pt.Y - ObjectRadius,
-                    2 * ObjectRadius + 1, 2 * ObjectRadius + 1);
-                canvas.FillEllipse(Brushes.White, rect);
-                canvas.DrawEllipse(Pens.Black, rect);
-            }
+            LineDrawer.DrawLineSelection(figure, canvas);
         }
     }
 }
