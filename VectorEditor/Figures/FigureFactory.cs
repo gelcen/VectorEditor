@@ -73,25 +73,25 @@ namespace VectorEditor.Figures
             if (figure.GetType() == typeof(FillableFigure))
             {
                 var fillableFigure = figure as FillableFigure;
-                FillableFigure newFigure = new FillableFigure();
+                if (fillableFigure == null) return null;
+                var newFigure = new FillableFigure
+                {
+                    LineProperties =
+                    {
+                        Color = fillableFigure.LineProperties.Color,
+                        Thickness = fillableFigure.LineProperties.Thickness,
+                        Style = fillableFigure.LineProperties.Style
+                    },
+                    FillProperty = {FillColor = fillableFigure.FillProperty.FillColor}
+                };
 
-                newFigure.LineProperties.Color = fillableFigure.LineProperties.Color;
-                newFigure.LineProperties.Thickness = fillableFigure.LineProperties.Thickness;
-                newFigure.LineProperties.Style = fillableFigure.LineProperties.Style;
 
-                newFigure.FillProperty.FillColor = fillableFigure.FillProperty.FillColor;
 
                 foreach (var point in fillableFigure.Points.GetPoints())
                 {
-                    if (copyType == CopyType.CopyWithOffset)
-                    {
-                        newFigure.Points.AddPoint(new PointF(point.X + 15, point.Y));
-                    }
-                    else
-                    {
-                        newFigure.Points.AddPoint(new PointF(point.X, point.Y));
-                    }
-                    
+                    newFigure.Points.AddPoint(copyType == CopyType.CopyWithOffset
+                        ? new PointF(point.X + 15, point.Y)
+                        : new PointF(point.X, point.Y));
                 }
 
                 resultFigure = newFigure;
@@ -100,111 +100,110 @@ namespace VectorEditor.Figures
             {
                 if (figure.GetType() == typeof(Line))
                 {
-                    resultFigure = new Line();
-                    resultFigure.LineProperties.Color = figure.LineProperties.Color;
-                    resultFigure.LineProperties.Thickness = figure.LineProperties.Thickness;
-                    resultFigure.LineProperties.Style = figure.LineProperties.Style;
+                    resultFigure = new Line
+                    {
+                        LineProperties =
+                        {
+                            Color = figure.LineProperties.Color,
+                            Thickness = figure.LineProperties.Thickness,
+                            Style = figure.LineProperties.Style
+                        }
+                    };
 
                     foreach (var point in figure.Points.GetPoints())
                     {
-                        if (copyType == CopyType.CopyWithOffset)
-                        {
-                            resultFigure.Points.AddPoint(new PointF(point.X + 15, point.Y));
-                        }
-                        else
-                        {
-                            resultFigure.Points.AddPoint(new PointF(point.X, point.Y));
-                        }
-                        
+                        resultFigure.Points.AddPoint(copyType == CopyType.CopyWithOffset
+                            ? new PointF(point.X + 15, point.Y)
+                            : new PointF(point.X, point.Y));
                     }
                 }
                 else if (figure.GetType() == typeof(Polyline))
                 {
-                    resultFigure = new Polyline();
-                    resultFigure.LineProperties.Color = figure.LineProperties.Color;
-                    resultFigure.LineProperties.Thickness = figure.LineProperties.Thickness;
-                    resultFigure.LineProperties.Style = figure.LineProperties.Style;
+                    resultFigure = new Polyline
+                    {
+                        LineProperties =
+                        {
+                            Color = figure.LineProperties.Color,
+                            Thickness = figure.LineProperties.Thickness,
+                            Style = figure.LineProperties.Style
+                        }
+                    };
 
                     foreach (var point in figure.Points.GetPoints())
                     {
-                        if (copyType == CopyType.CopyWithOffset)
-                        {
-                            resultFigure.Points.AddPoint(new PointF(point.X + 15, point.Y));
-                        }
-                        else
-                        {
-                            resultFigure.Points.AddPoint(new PointF(point.X, point.Y));
-                        }
+                        resultFigure.Points.AddPoint(copyType == CopyType.CopyWithOffset
+                            ? new PointF(point.X + 15, point.Y)
+                            : new PointF(point.X, point.Y));
                     }
                 }
                 else if (figure.GetType() == typeof(Circle))
                 {
-                    Circle circle = new Circle();
-                    circle.LineProperties.Color = figure.LineProperties.Color;
-                    circle.LineProperties.Thickness = figure.LineProperties.Thickness;
-                    circle.LineProperties.Style = figure.LineProperties.Style;
+                    var circle = new Circle
+                    {
+                        LineProperties =
+                        {
+                            Color = figure.LineProperties.Color,
+                            Thickness = figure.LineProperties.Thickness,
+                            Style = figure.LineProperties.Style
+                        }
+                    };
 
                     var temp = figure as FillableFigure;
-                    circle.FillProperty.FillColor = temp.FillProperty.FillColor;
+                    if (temp != null) circle.FillProperty.FillColor = temp.FillProperty.FillColor;
 
                     foreach (var point in figure.Points.GetPoints())
                     {
-                        if (copyType == CopyType.CopyWithOffset)
-                        {
-                            circle.Points.AddPoint(new PointF(point.X + 15, point.Y));
-                        }
-                        else
-                        {
-                            circle.Points.AddPoint(new PointF(point.X, point.Y));
-                        }
+                        circle.Points.AddPoint(copyType == CopyType.CopyWithOffset
+                            ? new PointF(point.X + 15, point.Y)
+                            : new PointF(point.X, point.Y));
                     }
 
                     resultFigure = circle;
                 }
                 else if (figure.GetType() == typeof(Ellipse))
                 {
-                    Ellipse ellipse = new Ellipse();
-                    ellipse.LineProperties.Color = figure.LineProperties.Color;
-                    ellipse.LineProperties.Thickness = figure.LineProperties.Thickness;
-                    ellipse.LineProperties.Style = figure.LineProperties.Style;
+                    var ellipse = new Ellipse
+                    {
+                        LineProperties =
+                        {
+                            Color = figure.LineProperties.Color,
+                            Thickness = figure.LineProperties.Thickness,
+                            Style = figure.LineProperties.Style
+                        }
+                    };
 
                     var temp = figure as FillableFigure;
-                    ellipse.FillProperty.FillColor = temp.FillProperty.FillColor;
+                    if (temp != null) ellipse.FillProperty.FillColor = temp.FillProperty.FillColor;
 
                     foreach (var point in figure.Points.GetPoints())
                     {
-                        if (copyType == CopyType.CopyWithOffset)
-                        {
-                            ellipse.Points.AddPoint(new PointF(point.X + 15, point.Y));
-                        }
-                        else
-                        {
-                            ellipse.Points.AddPoint(new PointF(point.X, point.Y));
-                        }
+                        ellipse.Points.AddPoint(copyType == CopyType.CopyWithOffset
+                            ? new PointF(point.X + 15, point.Y)
+                            : new PointF(point.X, point.Y));
                     }
 
                     resultFigure = ellipse;
                 }
                 else if (figure.GetType() == typeof(Polygon))
                 {
-                    Polygon polygon = new Polygon();
-                    polygon.LineProperties.Color = figure.LineProperties.Color;
-                    polygon.LineProperties.Thickness = figure.LineProperties.Thickness;
-                    polygon.LineProperties.Style = figure.LineProperties.Style;
+                    var polygon = new Polygon
+                    {
+                        LineProperties =
+                        {
+                            Color = figure.LineProperties.Color,
+                            Thickness = figure.LineProperties.Thickness,
+                            Style = figure.LineProperties.Style
+                        }
+                    };
 
                     var temp = figure as FillableFigure;
-                    polygon.FillProperty.FillColor = temp.FillProperty.FillColor;
+                    if (temp != null) polygon.FillProperty.FillColor = temp.FillProperty.FillColor;
 
                     foreach (var point in figure.Points.GetPoints())
                     {
-                        if (copyType == CopyType.CopyWithOffset)
-                        {
-                            polygon.Points.AddPoint(new PointF(point.X + 15, point.Y));
-                        }
-                        else
-                        {
-                            polygon.Points.AddPoint(new PointF(point.X, point.Y));
-                        }
+                        polygon.Points.AddPoint(copyType == CopyType.CopyWithOffset
+                            ? new PointF(point.X + 15, point.Y)
+                            : new PointF(point.X, point.Y));
                     }
 
                     resultFigure = polygon;

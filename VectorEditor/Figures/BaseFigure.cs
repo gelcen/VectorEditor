@@ -18,6 +18,9 @@ namespace VectorEditor.Figures
         /// </summary>
         protected Points _points;
 
+        /// <summary>
+        /// Свойства для параметров линии
+        /// </summary>
         public LineProperties LineProperties
         {
             get
@@ -30,6 +33,9 @@ namespace VectorEditor.Figures
             }
         }
 
+        /// <summary>
+        /// Свойства для точек
+        /// </summary>
         public Points Points
         {
             get

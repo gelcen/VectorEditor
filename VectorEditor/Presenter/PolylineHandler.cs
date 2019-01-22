@@ -8,15 +8,26 @@ using VectorEditor.View;
 
 namespace VectorEditor.Presenter
 {
+    /// <inheritdoc />
+    /// <summary>
+    /// Класс для обработки инструмента полилиния
+    /// </summary>
     public class PolylineHandler : IBaseHandler
     {
+        /// <summary>
+        /// Параметры полилинии
+        /// </summary>
         private FigureParameters _figureParameters;
 
-        private PictureBox _canvas;
-
+        /// <summary>
+        /// Полилиния
+        /// </summary>
         private BaseFigure _polyline;
 
-
+        /// <inheritdoc />
+        /// <summary>
+        /// Свойство для параметров
+        /// </summary>
         public FigureParameters FigureParameters
         {
             set
@@ -25,36 +36,47 @@ namespace VectorEditor.Presenter
             }
         }
 
-        public PictureBox Canvas
-        {
-            get
-            {
-                return _canvas;
-            }
-            set
-            {
-                _canvas = value;
-            }
-        }
+        /// <inheritdoc />
+        /// <summary>
+        /// Свойство для канвы
+        /// </summary>
+        public PictureBox Canvas { get; set; }
 
+        /// <inheritdoc />
+        /// <summary>
+        /// Свойство для делегата нажатия на мышку
+        /// </summary>
         public MouseOperation MouseDownDelegate
         {
             set;
             get;
         }
 
+        /// <inheritdoc />
+        /// <summary>
+        /// Свойство для делегата отпускания мышки
+        /// </summary>
         public MouseOperation MouseUpDelegate
         {
             set;
             get;
         }
 
+        /// <inheritdoc />
+        /// <summary>
+        /// Свойство для делегата движения мышкой
+        /// </summary>
         public MouseOperation MouseMoveDelegate
         {
             set;
             get;
         }
 
+        /// <summary>
+        /// Конструктор класса обработчика для полилинии
+        /// </summary>
+        /// <param name="canvas">Канва</param>
+        /// <param name="figureParameters">Параметры фигуры</param>
         public PolylineHandler(PictureBox canvas, FigureParameters figureParameters)
         {
             FigureParameters = figureParameters;
@@ -67,18 +89,28 @@ namespace VectorEditor.Presenter
             MouseMoveDelegate += MouseMove;
         }
 
+        /// <inheritdoc />
+        /// <summary>
+        /// Событие создания фигуры-полилинии
+        /// </summary>
         public event EventHandler<BaseFigure> FigureCreated;
 
+        /// <summary>
+        /// Вызов события создания фигуры
+        /// </summary>
+        /// <param name="createdFigure">Созданная фигура</param>
         private void OnFigureCreated(BaseFigure createdFigure)
         {
-            EventHandler<BaseFigure> handler = FigureCreated;
+            var handler = FigureCreated;
 
-            if (handler != null)
-            {
-                handler(null, createdFigure);
-            }
+            handler?.Invoke(null, createdFigure);
         }
 
+        /// <inheritdoc />
+        /// <summary>
+        /// Рисовка создаваемой фигуры
+        /// </summary>
+        /// <param name="g"></param>
         public void Draw(Graphics g)
         {
             if (_polyline != null)
@@ -87,53 +119,71 @@ namespace VectorEditor.Presenter
             }
         }
 
+        /// <summary>
+        /// Обработчик нажатия мышки
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void MouseDown(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Left)
+            switch (e.Button)
             {
-                if (_polyline == null)
-                {
-                    _polyline = FigureFactory.CreateFigure(Item.Polyline);
+                case MouseButtons.Left:
+                    if (_polyline == null)
+                    {
+                        _polyline = FigureFactory.CreateFigure(Item.Polyline);
 
-                    _polyline.LineProperties.Color = _figureParameters.LineColor;
-                    _polyline.LineProperties.Style = (DashStyle)_figureParameters.LineType;
-                    _polyline.LineProperties.Thickness = _figureParameters.LineThickness;
+                        _polyline.LineProperties.Color = _figureParameters.LineColor;
+                        _polyline.LineProperties.Style = (DashStyle)_figureParameters.LineStyle;
+                        _polyline.LineProperties.Thickness = _figureParameters.LineThickness;
 
-                    _polyline.Points.AddPoint(new PointF(e.X, e.Y));
-                    _polyline.Points.AddPoint(new PointF(e.X, e.Y));
+                        _polyline.Points.AddPoint(new PointF(e.X, e.Y));
+                        _polyline.Points.AddPoint(new PointF(e.X, e.Y));
 
-                    Canvas.Refresh();
-                }
-                else
-                {
-                    _polyline.Points.AddPoint(new PointF(e.X, e.Y));
+                        Canvas.Refresh();
+                    }
+                    else
+                    {
+                        _polyline.Points.AddPoint(new PointF(e.X, e.Y));
 
-                    Canvas.Refresh();
-                }
-            }
-            else if (e.Button == MouseButtons.Right)
-            {
-                if (_polyline == null) return;
-                OnFigureCreated(_polyline);
-                _polyline = null;
+                        Canvas.Refresh();
+                    }
+
+                    break;
+                case MouseButtons.Right:
+                    if (_polyline == null) return;
+                    OnFigureCreated(_polyline);
+                    _polyline = null;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
 
+        /// <summary>
+        /// Обработчик движения мыши
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void MouseMove(object sender, MouseEventArgs e)
         {
             if (_polyline == null) return;
-            PointF temp = new PointF(e.Location.X, e.Location.Y);
+            var temp = new PointF(e.Location.X, e.Location.Y);
             _polyline.Points.RemoveLast();
             _polyline.Points.AddPoint(temp);
 
             Canvas.Refresh();
         }
 
+        /// <summary>
+        /// Обработчик отпускания мыши
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void MouseUp(object sender, MouseEventArgs e)
         {
-
             if (_polyline == null) return;
-            PointF temp = new PointF(e.Location.X, e.Location.Y);
+            var temp = new PointF(e.Location.X, e.Location.Y);
             _polyline.Points.RemoveLast();
             _polyline.Points.AddPoint(temp);
 

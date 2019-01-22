@@ -7,15 +7,24 @@ using VectorEditor.Figures;
 using VectorEditor.Model;
 using VectorEditor.Presenter;
 using VectorEditor.UndoRedo;
-using VectorEditor.View;
 
-namespace VectorEditor
+namespace VectorEditor.View
 {
-    public partial class MainForm : Form, IView, IObserver
+    /// <inheritdoc cref="MainForm" />
+    /// <summary>
+    /// Класс главной формы
+    /// </summary>
+    public partial class MainForm : Form, IView
     {
-        private IBaseHandler _currentHandler;
-
+        /// <summary>
+        /// Список фигур
+        /// </summary>
         private List<BaseFigure> _figures;
+
+        /// <summary>
+        /// Словарь для кнопок инструментов
+        /// </summary>
+        private readonly Dictionary<Control, Item> _toolsDictionary;
 
         /// <summary>
         /// Текущие параметры
@@ -23,14 +32,27 @@ namespace VectorEditor
         private FigureParameters _figureParameters;
 
         #region Реализация IView
-        public PictureBox Canvas
+        /// <inheritdoc />
+        /// <summary>
+        /// Свойство для канвы
+        /// </summary>
+        public PictureBox Canvas { get; private set; }
+
+        /// <summary>
+        /// Список фигур
+        /// </summary>
+        public List<BaseFigure> Figures
         {
-            get
+            set
             {
-                return pbCanvas;
+                _figures = value;
             }
         }
 
+        /// <inheritdoc />
+        /// <summary>
+        /// Параметры фигур
+        /// </summary>
         public FigureParameters FigureParameters
         {
             get
@@ -43,24 +65,24 @@ namespace VectorEditor
                 nudLineThickness.Value = _figureParameters.LineThickness;
                 buttonLineColor.BackColor = _figureParameters.LineColor;
                 buttonFillColor.BackColor = _figureParameters.FillColor;
-                cbLineType.SelectedIndex = _figureParameters.LineType;
+                cbLineType.SelectedIndex = _figureParameters.LineStyle;
             }
         }
 
-        public IBaseHandler CurrentHandler
-        {
-            get
-            {
-                return _currentHandler;
-            }
-            set
-            {
-                _currentHandler = value;
-            }
-        }
+        /// <summary>
+        /// Текущий инструмент
+        /// </summary>
+        public IBaseHandler CurrentHandler { get; set; }
 
+        /// <summary>
+        /// Стек команд
+        /// </summary>
         private UndoRedoStack _undoRedoStack;
 
+        /// <inheritdoc />
+        /// <summary>
+        /// Свойство для стека команд
+        /// </summary>
         public UndoRedoStack CommandStack
         {
             set
@@ -73,118 +95,172 @@ namespace VectorEditor
         /// Событие выбора инструмента
         /// </summary>
         public event EventHandler<Item> ToolPicked;
-
+        
+        /// <summary>
+        /// Событие изменения параметров фигуры
+        /// </summary>
         public event EventHandler<FigureParameters> ParametersChanged;
 
+        /// <summary>
+        /// Событие нажатия на кнопку очистки канвы
+        /// </summary>
         public event EventHandler CanvasCleared;
 
+        /// <summary>
+        /// Событие нажатия на кнопку удаления
+        /// </summary>
         public event EventHandler FiguresDeleted;
 
+        /// <summary>
+        /// События нажатия на кнопку копирования 
+        /// </summary>
         public event EventHandler FigureCopied;
 
+        /// <summary>
+        /// Событие нажатия на отмену операции
+        /// </summary>
         public event EventHandler UndoPressed;
 
+        /// <summary>
+        /// События нажатия на возврат операции
+        /// </summary>
         public event EventHandler RedoPressed;
 
+        /// <summary>
+        /// Событие загрузки проекта
+        /// </summary>
         public event EventHandler<FileLoadedEventArgs> FileLoaded;
 
         #endregion
 
+        /// <summary>
+        /// Вызов события загрузки проекта
+        /// </summary>
+        /// <param name="e"></param>
         private void OnFileLoaded(FileLoadedEventArgs e)
         {
-            EventHandler<FileLoadedEventArgs> handler = FileLoaded;
+            var handler = FileLoaded;
 
-            if (handler != null)
-            {
-                handler(this, e);
-            }
+            handler?.Invoke(this, e);
         }
 
+        /// <summary>
+        /// Вызов события возврата команды
+        /// </summary>
         private void OnRedoPressed()
         {
-            EventHandler handler = RedoPressed;
+            var handler = RedoPressed;
 
-            if (handler != null)
-            {
-                handler(this, null);
-            }
+            handler?.Invoke(this, null);
         }
 
+        /// <summary>
+        /// Вызов события отмены команды
+        /// </summary>
         private void OnUndoPressed()
         {
-            EventHandler handler = UndoPressed;
+            var handler = UndoPressed;
 
-            if (handler != null)
-            {
-                handler(this, null);
-            }
+            handler?.Invoke(this, null);
         }
 
+        /// <summary>
+        /// Вызов события копирования фигур
+        /// </summary>
         private void OnFigureCopied()
         {
-            EventHandler handler = FigureCopied;
+            var handler = FigureCopied;
 
-            if (handler != null)
-            {
-                handler(this, null);
-            }
+            handler?.Invoke(this, null);
         }
 
+        /// <summary>
+        /// Вызов события удаления фигуры
+        /// </summary>
         private void OnFiguresDeleted()
         {
-            EventHandler handler = FiguresDeleted;
+            var handler = FiguresDeleted;
 
-            if (handler != null)
-            {
-                handler(this, null);
-            }
+            handler?.Invoke(this, null);
         }
 
+        /// <summary>
+        /// Вызов события очистки канвы
+        /// </summary>
         private void OnCanvasCleared()
         {
-            EventHandler handler = CanvasCleared;
+            var handler = CanvasCleared;
 
-            if (handler != null)
-            {
-                handler(this, null);
-            }
+            handler?.Invoke(this, null);
         }
 
+        /// <summary>
+        /// Вызов события выбора инструмента
+        /// </summary>
+        /// <param name="pickedItem"></param>
         private void OnToolPicked(Item pickedItem)
         {
-            EventHandler<Item> handler = ToolPicked;
+            var handler = ToolPicked;
 
-            if (handler != null)
-            {
-                handler(this, pickedItem);
-            }
+            handler?.Invoke(this, pickedItem);
         }
 
+        /// <summary>
+        /// Вызов события изменения параметров
+        /// </summary>
+        /// <param name="figureParameters"></param>
         private void OnParametersChanged(FigureParameters figureParameters)
         {
-            EventHandler<FigureParameters> handler = ParametersChanged;
-            if(handler != null)
-            {
-                handler(this, figureParameters);
-            }
+            var handler = ParametersChanged;
+            handler?.Invoke(this, figureParameters);
         }
 
+        /// <inheritdoc />
+        /// <summary>
+        /// Конструктор класса формы
+        /// </summary>
         public MainForm()
         {
             InitializeComponent();
 
-            _figureParameters = new FigureParameters();
+            _figureParameters = new FigureParameters
+            {
+                LineColor = Color.Black,
+                FillColor = Color.Transparent,
+                LineThickness = 1,
+                LineStyle = 0
+            };
 
-            this.DoubleBuffered = true;
 
-            _figureParameters.LineColor = Color.Black;
-            _figureParameters.FillColor = Color.Transparent;
-            _figureParameters.LineThickness = 1;
-            _figureParameters.LineType = 0;
+            _toolsDictionary = new Dictionary<Control, Item>();
+            InitTools();
 
             
-            pbCanvas.Parent = this;
+            Canvas.Parent = this;
 
+        }
+
+        /// <summary>
+        /// Инициализация словаря кнопок инструментов
+        /// </summary>
+        private void InitTools()
+        {
+            _toolsDictionary.Add(buttonCursor, Item.Cursor);
+            _toolsDictionary.Add(buttonLine, Item.Line);
+            _toolsDictionary.Add(buttonPolyLine, Item.Polyline);
+            _toolsDictionary.Add(buttonCircle, Item.Circle);
+            _toolsDictionary.Add(buttonEllipse, Item.Ellipse);
+            _toolsDictionary.Add(buttonPolygone, Item.Polygon);
+        }
+
+        /// <summary>
+        /// Обработчик нажатия на кнопку инструмента
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void toolButton_Click(object sender, EventArgs e)
+        {
+            OnToolPicked(_toolsDictionary[(Control)sender]);
         }
 
         /// <summary>
@@ -206,18 +282,16 @@ namespace VectorEditor
         /// <param name="e"></param>
         private void btnHeightResize_MouseMove(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Left)
-            {
-                btnHeightResize.Location = new Point(btnHeightResize.Location.X,
-                                                     PointToClient(Cursor.Position).Y);
-                pbCanvas.SetBounds(pbCanvas.Location.X, pbCanvas.Location.Y,
-                                   pbCanvas.Width,
-                                   btnHeightResize.Location.Y - pbCanvas.Location.Y);
-                btnDiagonalResize.Location = new Point(pbCanvas.Location.X + pbCanvas.Width,
-                                                       pbCanvas.Location.Y + pbCanvas.Height);
-                btnWidthResize.Location = new Point(btnWidthResize.Location.X, 
-                                                    pbCanvas.Location.Y + pbCanvas.Height / 2);
-            }
+            if (e.Button != MouseButtons.Left) return;
+            btnHeightResize.Location = new Point(btnHeightResize.Location.X,
+                PointToClient(Cursor.Position).Y);
+            Canvas.SetBounds(Canvas.Location.X, Canvas.Location.Y,
+                Canvas.Width,
+                btnHeightResize.Location.Y - Canvas.Location.Y);
+            btnDiagonalResize.Location = new Point(Canvas.Location.X + Canvas.Width,
+                Canvas.Location.Y + Canvas.Height);
+            btnWidthResize.Location = new Point(btnWidthResize.Location.X, 
+                Canvas.Location.Y + Canvas.Height / 2);
         }
 
         /// <summary>
@@ -227,18 +301,16 @@ namespace VectorEditor
         /// <param name="e"></param>
         private void btnWidthResize_MouseMove(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Left)
-            {
-                btnWidthResize.Location = new Point(PointToClient(Cursor.Position).X,
-                                                    btnWidthResize.Location.Y);
-                pbCanvas.SetBounds(pbCanvas.Location.X, pbCanvas.Location.Y,
-                                   btnWidthResize.Location.X - pbCanvas.Location.X,
-                                   pbCanvas.Height);
-                btnDiagonalResize.Location = new Point(pbCanvas.Location.X + pbCanvas.Width,
-                                                       pbCanvas.Location.Y + pbCanvas.Height);
-                btnHeightResize.Location = new Point(pbCanvas.Location.X + pbCanvas.Width / 2,
-                                                     btnHeightResize.Location.Y);
-            }
+            if (e.Button != MouseButtons.Left) return;
+            btnWidthResize.Location = new Point(PointToClient(Cursor.Position).X,
+                btnWidthResize.Location.Y);
+            Canvas.SetBounds(Canvas.Location.X, Canvas.Location.Y,
+                btnWidthResize.Location.X - Canvas.Location.X,
+                Canvas.Height);
+            btnDiagonalResize.Location = new Point(Canvas.Location.X + Canvas.Width,
+                Canvas.Location.Y + Canvas.Height);
+            btnHeightResize.Location = new Point(Canvas.Location.X + Canvas.Width / 2,
+                btnHeightResize.Location.Y);
         }
 
         /// <summary>
@@ -248,53 +320,25 @@ namespace VectorEditor
         /// <param name="e"></param>
         private void btnDiagonalResize_MouseMove(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Left)
-            {
-                btnDiagonalResize.Location = PointToClient(Cursor.Position);
-                btnHeightResize.Location = new Point(pbCanvas.Location.X + pbCanvas.Width / 2,
-                                                     btnDiagonalResize.Location.Y);
-                btnWidthResize.Location = new Point(btnDiagonalResize.Location.X, 
-                                                    pbCanvas.Location.Y + pbCanvas.Height / 2);
-                pbCanvas.SetBounds(pbCanvas.Location.X, pbCanvas.Location.Y,
-                                   btnDiagonalResize.Location.X - pbCanvas.Location.X,
-                                   btnDiagonalResize.Location.Y - pbCanvas.Location.Y);
-                
-            }
+            if (e.Button != MouseButtons.Left) return;
+            btnDiagonalResize.Location = PointToClient(Cursor.Position);
+            btnHeightResize.Location = new Point(Canvas.Location.X + Canvas.Width / 2,
+                btnDiagonalResize.Location.Y);
+            btnWidthResize.Location = new Point(btnDiagonalResize.Location.X, 
+                Canvas.Location.Y + Canvas.Height / 2);
+            Canvas.SetBounds(Canvas.Location.X, Canvas.Location.Y,
+                btnDiagonalResize.Location.X - Canvas.Location.X,
+                btnDiagonalResize.Location.Y - Canvas.Location.Y);
         }
         #endregion
 
-        private void buttonCursor_Click(object sender, EventArgs e)
-        {
-            OnToolPicked(Item.Cursor);
-        }
-
-        private void buttonLine_Click(object sender, EventArgs e)
-        {
-            OnToolPicked(Item.Line);
-        }
-
-        private void buttonPolyLine_Click(object sender, EventArgs e)
-        {
-            OnToolPicked(Item.Polyline);
-        }
-
-        private void buttonCircle_Click(object sender, EventArgs e)
-        {
-            OnToolPicked(Item.Circle);
-        }
-
-        private void buttonEllipse_Click(object sender, EventArgs e)
-        {
-            OnToolPicked(Item.Ellipse);
-        }
-
-        private void buttonPolygone_Click(object sender, EventArgs e)
-        {
-            OnToolPicked(Item.Polygon);
-        }
-
         #region Изменение параметров фигуры
 
+        /// <summary>
+        /// Обработчик изменения толщины линии
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void nudLineThickness_ValueChanged(object sender, EventArgs e)
         {
             _figureParameters.LineThickness = Convert.ToInt32(nudLineThickness.Value);
@@ -308,7 +352,7 @@ namespace VectorEditor
         /// <param name="e"></param>
         private void cbLineType_SelectedIndexChanged(object sender, EventArgs e)
         {
-            _figureParameters.LineType = cbLineType.SelectedIndex;
+            _figureParameters.LineStyle = cbLineType.SelectedIndex;
             OnParametersChanged(_figureParameters);
         }
 
@@ -319,12 +363,10 @@ namespace VectorEditor
         /// <param name="e"></param>
         private void buttonLineColor_Click(object sender, EventArgs e)
         {
-            if (colorDialogLineColor.ShowDialog()==DialogResult.OK)
-            {
-                buttonLineColor.BackColor = colorDialogLineColor.Color;
-                _figureParameters.LineColor = colorDialogLineColor.Color;
-                OnParametersChanged(_figureParameters);                
-            }
+            if (colorDialogLineColor.ShowDialog() != DialogResult.OK) return;
+            buttonLineColor.BackColor = colorDialogLineColor.Color;
+            _figureParameters.LineColor = colorDialogLineColor.Color;
+            OnParametersChanged(_figureParameters);
         }
 
         /// <summary>
@@ -334,94 +376,119 @@ namespace VectorEditor
         /// <param name="e"></param>
         private void buttonFillColor_Click(object sender, EventArgs e)
         {
-            if(colorDialogLineColor.ShowDialog()==DialogResult.OK)
-            {
-                buttonFillColor.BackColor = colorDialogLineColor.Color;
-                _figureParameters.FillColor = colorDialogLineColor.Color;
-                OnParametersChanged(_figureParameters);
-            }
+            if (colorDialogLineColor.ShowDialog() != DialogResult.OK) return;
+            buttonFillColor.BackColor = colorDialogLineColor.Color;
+            _figureParameters.FillColor = colorDialogLineColor.Color;
+            OnParametersChanged(_figureParameters);
         }
         #endregion
 
         #region Обработчики событий MouseDown, MouseMove, MouseUp, Paint
 
+        /// <summary>
+        /// Обработчик события нажатия мышки
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void pbCanvas_MouseDown(object sender, MouseEventArgs e)
         {
-            base.OnMouseDown(e);
-            if (CurrentHandler != null)
-            {
-                CurrentHandler.MouseDownDelegate(sender, e);                
-            }
+            OnMouseDown(e);
+            CurrentHandler?.MouseDownDelegate(sender, e);
         }
 
+        /// <summary>
+        /// Обработчик движения мышкой
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void pbCanvas_MouseMove(object sender, MouseEventArgs e)
         {
-            base.OnMouseMove(e);
-            if (CurrentHandler != null)
-            {
-                CurrentHandler.MouseMoveDelegate(sender, e);
-            }
+            OnMouseMove(e);
+            CurrentHandler?.MouseMoveDelegate(sender, e);
         }
 
+        /// <summary>
+        /// Обработчик отпускания нажатой мышки
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void pbCanvas_MouseUp(object sender, MouseEventArgs e)
         {
-            base.OnMouseUp(e);
-            if (CurrentHandler != null)
-            {
-                CurrentHandler.MouseUpDelegate(sender, e);
-            }
+            OnMouseUp(e);
+            CurrentHandler?.MouseUpDelegate(sender, e);
         }
 
+        /// <summary>
+        /// Обработчик события рисования PictureBox
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void pbCanvas_Paint(object sender, PaintEventArgs e)
         {
-            Graphics g = e.Graphics;
+            var g = e.Graphics;
             g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
 
             if (_figures != null)
             {
-                foreach (BaseFigure figure in _figures)
+                foreach (var figure in _figures)
                 {
                     FigureDrawer.DrawFigure(figure, g);
                 }
             }
 
-            if (CurrentHandler != null)
-            {
-                CurrentHandler.Draw(g);
-            }
+            CurrentHandler?.Draw(g);
         }
 
         #endregion        
 
-        //IObserver
-        public void Update(List<BaseFigure> figures)
-        {
-            _figures = figures;
-        }
-
+        /// <summary>
+        /// Обработчик события загрузки главной формы
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MainForm_Load(object sender, EventArgs e)
         {
-            this.KeyPreview = true;
+            KeyPreview = true;
             OnToolPicked(Item.Cursor);
         }
 
         #region Обработчики нажатий по пунктам меню
 
+        /// <summary>
+        /// Обработчик нажатия на пункт меню "Удалить"
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void DeleteToolStripMenuItem_Click(object sender, EventArgs e)
         {
             OnFiguresDeleted();
         }
 
+        /// <summary>
+        /// Обработчик нажатия на пункт меню "Копировать"
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void CopyToolStripMenuItem_Click(object sender, EventArgs e)
         {
             OnFigureCopied();
         }
 
+        /// <summary>
+        /// Обработчик нажатия на пункт меню "Отменить"
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void UndoToolStripMenuItem_Click(object sender, EventArgs e)
         {
             OnUndoPressed();
         }
 
+        /// <summary>
+        /// Обработчик нажатия на пункт меню "Вернуть"
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void RedoToolStripMenuItem_Click(object sender, EventArgs e)
         {
             OnRedoPressed();
@@ -436,17 +503,9 @@ namespace VectorEditor
         /// <param name="e"></param>
         private void exportToPngToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _saveToPNGDialog = new SaveFileDialog();
-            _saveToPNGDialog.Title = "Сохранить в PNG";
-            _saveToPNGDialog.OverwritePrompt = true;
-            _saveToPNGDialog.CheckPathExists = true;
-            _saveToPNGDialog.Filter = "Image Files(*.PNG)|*.PNG";
-            _saveToPNGDialog.ShowHelp = true;
-
-            PictureBox pictureBox = new PictureBox();
-            pictureBox.Size = pbCanvas.Size;
-            Bitmap bitmap = new Bitmap(pictureBox.Width, pictureBox.Height);
-            Graphics bitmapGraphics = Graphics.FromImage(bitmap);
+            var pictureBox = new PictureBox {Size = Canvas.Size};
+            var bitmap = new Bitmap(pictureBox.Width, pictureBox.Height);
+            var bitmapGraphics = Graphics.FromImage(bitmap);
 
             foreach (var figure in _figures)
             {
@@ -454,16 +513,14 @@ namespace VectorEditor
             }
 
             pictureBox.Image = bitmap;
-            if (_saveToPNGDialog.ShowDialog() == DialogResult.OK)
+            if (_saveToPNGDialog.ShowDialog() != DialogResult.OK) return;
+            try
             {
-                try
-                {
-                    pictureBox.Image.Save(_saveToPNGDialog.FileName);
-                }
-                catch (Exception)
-                {
-                    throw new Exception();
-                }
+                pictureBox.Image.Save(_saveToPNGDialog.FileName);
+            }
+            catch (Exception)
+            {
+                throw new Exception();
             }
         }
 
@@ -474,52 +531,57 @@ namespace VectorEditor
         /// <param name="e"></param>
         private void saveToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            Saver saver = new Saver();
-            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            var saver = new Saver();
+            if (saveFileDialog.ShowDialog() != DialogResult.OK) return;
+            try
             {
-                try
-                {
-                    saver.SaveToFile(_figures, 
-                                     _undoRedoStack.UndoStack,
-                                     _undoRedoStack.RedoStack,
-                                     saveFileDialog.FileName);
-                }
-                catch (Exception)
-                {
-                    throw new Exception();
-                }
+                saver.SaveToFile(_figures, 
+                    _undoRedoStack.UndoStack,
+                    _undoRedoStack.RedoStack,
+                    saveFileDialog.FileName);
+            }
+            catch (Exception)
+            {
+                throw new Exception();
             }
         }
 
+        /// <summary>
+        /// Обработчик события открытия файла
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void openFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Saver saver = new Saver();
-            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            var saver = new Saver();
+            if (openFileDialog.ShowDialog() != DialogResult.OK) return;
+            try
             {
-                try
-                {
-                    FileLoadedEventArgs fileLoadedEventArgs = new FileLoadedEventArgs();
-                    fileLoadedEventArgs = saver.OpenFromFile(openFileDialog.FileName);
-                    OnFileLoaded(fileLoadedEventArgs);
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception(ex.Message);
-                }
+                var fileLoadedEventArgs = saver.OpenFromFile(openFileDialog.FileName);
+                OnFileLoaded(fileLoadedEventArgs);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
             }
         }
 
+        /// <summary>
+        /// Обработчик нажатия горячих клавиш
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MainForm_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Control == true && e.KeyCode == Keys.Z)
+            if (e.Control && e.KeyCode == Keys.Z)
             {
                 OnUndoPressed();
             }
-            if (e.Control == true && e.KeyCode == Keys.Y)
+            if (e.Control && e.KeyCode == Keys.Y)
             {
                 OnRedoPressed();
             }
-            if (e.Control == true && e.KeyCode == Keys.C)
+            if (e.Control && e.KeyCode == Keys.C)
             {
                 OnFigureCopied();
             }

@@ -2,6 +2,7 @@
 
 namespace VectorEditor.Figures
 {
+    /// <inheritdoc />
     /// <summary>
     /// Базовый класс для фигур с заполнением
     /// </summary>

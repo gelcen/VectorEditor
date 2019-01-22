@@ -9,6 +9,9 @@ namespace VectorEditor.Figures
     [JsonObject(MemberSerialization.Fields)]
     public class FillProperty
     {
+        /// <summary>
+        /// Свойство для цвета заполнения
+        /// </summary>
         public Color FillColor
         {
             get;

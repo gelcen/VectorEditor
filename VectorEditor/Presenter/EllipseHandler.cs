@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using VectorEditor.Drawers;
 using VectorEditor.Figures;
@@ -12,15 +8,26 @@ using VectorEditor.View;
 
 namespace VectorEditor.Presenter
 {
+    /// <inheritdoc />
+    /// <summary>
+    /// Класс для обработки инструмента эллипса
+    /// </summary>
     public class EllipseHandler : IBaseHandler
     {
+        /// <summary>
+        /// Параметры эллипса
+        /// </summary>
         private FigureParameters _figureParameters;
 
-        private PictureBox _canvas;
-
+        /// <summary>
+        /// Эллипс
+        /// </summary>
         private BaseFigure _ellipse;
 
-
+        /// <inheritdoc />
+        /// <summary>
+        /// Свойство для параметров
+        /// </summary>
         public FigureParameters FigureParameters
         {
             set
@@ -29,36 +36,47 @@ namespace VectorEditor.Presenter
             }
         }
 
-        public PictureBox Canvas
-        {
-            get
-            {
-                return _canvas;
-            }
-            set
-            {
-                _canvas = value;
-            }
-        }
+        /// <inheritdoc />
+        /// <summary>
+        /// Свойство для канвы
+        /// </summary>
+        public PictureBox Canvas { get; set; }
 
+        /// <inheritdoc />
+        /// <summary>
+        /// Свойство для делегата нажатия на мышку
+        /// </summary>
         public MouseOperation MouseDownDelegate
         {
             set;
             get;
         }
 
+        /// <inheritdoc />
+        /// <summary>
+        /// Свойство для делегата отпускания мышки
+        /// </summary>
         public MouseOperation MouseUpDelegate
         {
             set;
             get;
         }
 
+        /// <inheritdoc />
+        /// <summary>
+        /// Свойство для делегата движения мышкой
+        /// </summary>
         public MouseOperation MouseMoveDelegate
         {
             set;
             get;
         }
 
+        /// <summary>
+        ///  Конструктор класса обработчика для эллипса
+        /// </summary>
+        /// <param name="canvas">Канва</param>
+        /// <param name="figureParameters">Параметры</param>
         public EllipseHandler(PictureBox canvas, FigureParameters figureParameters)
         {
             FigureParameters = figureParameters;
@@ -71,18 +89,28 @@ namespace VectorEditor.Presenter
             MouseMoveDelegate += MouseMove;
         }
 
+        /// <inheritdoc />
+        /// <summary>
+        /// Событие создания фигуры-полилинии
+        /// </summary>
         public event EventHandler<BaseFigure> FigureCreated;
 
+        /// <summary>
+        /// Вызов события создания фигуры
+        /// </summary>
+        /// <param name="createdFigure"></param>
         private void OnFigureCreated(BaseFigure createdFigure)
         {
-            EventHandler<BaseFigure> handler = FigureCreated;
+            var handler = FigureCreated;
 
-            if (handler != null)
-            {
-                handler(null, createdFigure);
-            }
+            handler?.Invoke(null, createdFigure);
         }
 
+        /// <inheritdoc />
+        /// <summary>
+        ///  Рисовка создаваемой фигуры
+        /// </summary>
+        /// <param name="g">Graphics</param>
         public void Draw(Graphics g)
         {
             if (_ellipse != null)
@@ -91,36 +119,52 @@ namespace VectorEditor.Presenter
             }
         }
 
+        /// <summary>
+        /// Обработчик нажатия мышки
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void MouseDown(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Left)
-            {
-                var ellipse = FigureFactory.CreateFillableFigure(Item.Ellipse) as FillableFigure;
+            if (e.Button != MouseButtons.Left) return;
+            var ellipse = FigureFactory.CreateFillableFigure(Item.Ellipse) as FillableFigure;
 
+            if (ellipse != null)
+            {
                 ellipse.LineProperties.Color = _figureParameters.LineColor;
-                ellipse.LineProperties.Style = (DashStyle)_figureParameters.LineType;
+                ellipse.LineProperties.Style = (DashStyle) _figureParameters.LineStyle;
                 ellipse.LineProperties.Thickness = _figureParameters.LineThickness;
                 ellipse.FillProperty.FillColor = _figureParameters.FillColor;
 
                 _ellipse = ellipse;
-
-                _ellipse.Points.AddPoint(new PointF(e.X, e.Y));
-                _ellipse.Points.AddPoint(new PointF(e.X, e.Y));
-
-                Canvas.Refresh();
             }
+
+            _ellipse.Points.AddPoint(new PointF(e.X, e.Y));
+            _ellipse.Points.AddPoint(new PointF(e.X, e.Y));
+
+            Canvas.Refresh();
         }
 
+        /// <summary>
+        /// Обработчик движения мыши
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void MouseMove(object sender, MouseEventArgs e)
         {
             if (_ellipse == null) return;
-            PointF temp = new PointF(e.Location.X, e.Location.Y);
+            var temp = new PointF(e.Location.X, e.Location.Y);
             _ellipse.Points.RemoveLast();
             _ellipse.Points.AddPoint(temp);
 
             Canvas.Refresh();
         }
 
+        /// <summary>
+        /// Обработчик отпускания мыши
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void MouseUp(object sender, MouseEventArgs e)
         {
             if (_ellipse == null) return;

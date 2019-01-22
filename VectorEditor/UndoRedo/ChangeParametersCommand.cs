@@ -6,28 +6,28 @@ using VectorEditor.View;
 
 namespace VectorEditor.UndoRedo
 {
+    /// <inheritdoc />
     /// <summary>
     /// Класс для команды изменения параметров фигуры
     /// </summary>
     [JsonObject(MemberSerialization.Fields)]
     public class ChangeParametersCommand : ICommand
     {
-        private IModel _model;
-        private Dictionary<int, BaseFigure> _beforeState;
-        private FigureParameters _newParameters;
+        /// <summary>
+        /// Состояние до изменения
+        /// </summary>
+        private readonly Dictionary<int, BaseFigure> _beforeState;
 
-        public IModel Model
-        {
-            get
-            {
-                return _model;
-            }
+        /// <summary>
+        /// Состояние после изменения
+        /// </summary>
+        private readonly FigureParameters _newParameters;
 
-            set
-            {
-                _model = value;
-            }
-        }
+        /// <inheritdoc />
+        /// <summary>
+        /// Свойство для модели
+        /// </summary>
+        public IModel Model { get; set; }
 
         /// <summary>
         /// Конструктор класса команды изменения параметров
@@ -44,6 +44,7 @@ namespace VectorEditor.UndoRedo
             _newParameters = newParameters;
         }
 
+        /// <inheritdoc />
         /// <summary>
         /// Выполнить
         /// </summary>
@@ -51,7 +52,7 @@ namespace VectorEditor.UndoRedo
         {
             foreach (var figure in _beforeState)
             {
-                _model.ChangeFigureParameters(figure.Key, _newParameters);                
+                Model.ChangeFigureParameters(figure.Key, _newParameters);                
             }
         }
 
@@ -64,6 +65,7 @@ namespace VectorEditor.UndoRedo
             return "Changed figure parameters";
         }
 
+        /// <inheritdoc />
         /// <summary>
         /// Отменить
         /// </summary>
@@ -71,8 +73,8 @@ namespace VectorEditor.UndoRedo
         {
             foreach (var figure in _beforeState)
             {
-                FigureParameters parameters = parameters = GetParameters(figure.Value);
-                _model.ChangeFigureParameters(figure.Key, parameters);
+                FigureParameters parameters = GetParameters(figure.Value);
+                Model.ChangeFigureParameters(figure.Key, parameters);
             }
         }
 
@@ -81,25 +83,27 @@ namespace VectorEditor.UndoRedo
         /// </summary>
         /// <param name="figure">Фигура, параметры которой нужно получить</param>
         /// <returns>Параметры фигуры из аргумента</returns>
-        private FigureParameters GetParameters(BaseFigure figure)
+        private static FigureParameters GetParameters(BaseFigure figure)
         {
             //REWORK
-            FigureParameters parameters;
-            parameters.FillColor = System.Drawing.Color.AliceBlue;
-            parameters.LineColor = System.Drawing.Color.AliceBlue;
-            parameters.LineThickness = 1;
-            parameters.LineType = 2;
+            var parameters = new FigureParameters
+            {
+                FillColor = System.Drawing.Color.AliceBlue,
+                LineColor = System.Drawing.Color.AliceBlue,
+                LineThickness = 1,
+                LineStyle = 2
+            };
             //***
 
             parameters.LineColor = figure.LineProperties.Color;
-            parameters.LineType = (int)figure.LineProperties.Style;
+            parameters.LineStyle = (int)figure.LineProperties.Style;
             parameters.LineThickness = figure.LineProperties.Thickness;
             if (figure.GetType() == typeof(Circle) ||
                 figure.GetType() == typeof(Ellipse) ||
                 figure.GetType() == typeof(Polygon))
             {
                 var tempFigure = figure as FillableFigure;
-                parameters.FillColor = tempFigure.FillProperty.FillColor;
+                if (tempFigure != null) parameters.FillColor = tempFigure.FillProperty.FillColor;
             }
             return parameters;
         }

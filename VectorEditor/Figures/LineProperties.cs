@@ -10,18 +10,27 @@ namespace VectorEditor.Figures
     [JsonObject(MemberSerialization.Fields)]
     public class LineProperties
     {
+        /// <summary>
+        /// Свойство для цвета линии
+        /// </summary>
         public Color Color
         {
             get;
             set;
         }
 
+        /// <summary>
+        /// Свойство для толщины линии
+        /// </summary>
         public int Thickness
         {
             get;
             set;
         }
 
+        /// <summary>
+        /// Свойство для стиля линии
+        /// </summary>
         public DashStyle Style
         {
             get;

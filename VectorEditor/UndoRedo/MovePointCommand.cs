@@ -5,54 +5,63 @@ using VectorEditor.Model;
 
 namespace VectorEditor.UndoRedo
 {
+    /// <inheritdoc />
     /// <summary>
     /// Класс для команды движения маркера
     /// </summary>
     [JsonObject(MemberSerialization.Fields)]
     public class MovePointCommand:ICommand
     {
-        IModel _model;
-        Dictionary<int, BaseFigure> _beforePointState;
-        Dictionary<int, BaseFigure> _newPointState;
+        /// <summary>
+        /// Состояние до изменения
+        /// </summary>
+        private readonly Dictionary<int, BaseFigure> _beforePointState;
 
-        public IModel Model
-        {
-            get
-            {
-                return _model;
-            }
+        /// <summary>
+        /// Новое состояние
+        /// </summary>
+        private readonly Dictionary<int, BaseFigure> _newPointState;
 
-            set
-            {
-                _model = value;
-            }
-        }
+        /// <inheritdoc />
+        /// <summary>
+        /// Свойство для модели
+        /// </summary>
+        public IModel Model { get; set; }
 
         /// <summary>
         /// Конструктор класса команды движения маркера
         /// </summary>
-        /// <param name="model"></param>
-        /// <param name="beforePointState"></param>
-        /// <param name="newPointState"></param>
+        /// <param name="model">Ссылка на модель</param>
+        /// <param name="beforePointState">Состояние до изменения</param>
+        /// <param name="newPointState">Состояние после изменения</param>
         public MovePointCommand(IModel model,
                                  Dictionary<int, BaseFigure> beforePointState,
                                  Dictionary<int, BaseFigure> newPointState)
         {
-            _model = model;
+            Model = model;
             _beforePointState = new Dictionary<int, BaseFigure>();
             _newPointState = new Dictionary<int, BaseFigure>();
-            foreach (KeyValuePair<int, BaseFigure> entry in beforePointState)
+
+            CopyToDictionary(beforePointState, _beforePointState);
+            CopyToDictionary(newPointState, _newPointState);
+        }
+
+        /// <summary>
+        /// Копирование словарей
+        /// </summary>
+        /// <param name="fromDictionary">Из словаря</param>
+        /// <param name="toDictionary">В словарь</param>
+        private static void CopyToDictionary(Dictionary<int, BaseFigure> fromDictionary,
+                                            Dictionary<int, BaseFigure> toDictionary)
+        {
+            foreach (var entry in fromDictionary)
             {
-                int index = entry.Key;
-                _beforePointState.Add(index, FigureFactory.CreateCopy(entry.Value));
-            }
-            foreach (KeyValuePair<int, BaseFigure> entry in newPointState)
-            {
-                int index = entry.Key;
-                _newPointState.Add(index, FigureFactory.CreateCopy(entry.Value));
+                var index = entry.Key;
+                toDictionary.Add(index, FigureFactory.CreateCopy(entry.Value));
             }
         }
 
+        /// <inheritdoc />
         /// <summary>
         /// Выполнить
         /// </summary>
@@ -60,10 +69,11 @@ namespace VectorEditor.UndoRedo
         {
             foreach (var figure in _newPointState)
             {
-                _model.MoveFigure(figure.Key, figure.Value);
+                Model.MoveFigure(figure.Key, figure.Value);
             }
         }
 
+        /// <inheritdoc />
         /// <summary>
         /// Отменить
         /// </summary>
@@ -71,7 +81,7 @@ namespace VectorEditor.UndoRedo
         {
             foreach (var figure in _beforePointState)
             {
-                _model.MoveFigure(figure.Key, figure.Value);
+                Model.MoveFigure(figure.Key, figure.Value);
             }
         }
 

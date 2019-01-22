@@ -67,16 +67,12 @@
     <Compile Include="Figures\LineProperties.cs" />
     <Compile Include="Figures\Points.cs" />
     <Compile Include="Figures\Polygon.cs" />
-    <Compile Include="FigureEntity.cs" />
     <Compile Include="Figures\Polyline.cs" />
     <Compile Include="Item.cs" />
-    <Compile Include="LineType.cs" />
-    <Compile Include="PolylineEntity.cs" />
     <Compile Include="Presenter\CircleHandler.cs" />
     <Compile Include="Presenter\CursorHandler.cs" />
     <Compile Include="Presenter\EllipseHandler.cs" />
     <Compile Include="Presenter\IBaseHandler.cs" />
-    <Compile Include="Presenter\IPropertyChanged.cs" />
     <Compile Include="Presenter\LineHandler.cs" />
     <Compile Include="Presenter\PolygonHandler.cs" />
     <Compile Include="Presenter\PolylineHandler.cs" />
@@ -89,12 +85,6 @@
     <Compile Include="UndoRedo\ChangeParametersCommand.cs" />
     <Compile Include="UndoRedo\MovePointCommand.cs" />
     <Compile Include="UndoRedo\UndoRedoStack.cs" />
-    <Compile Include="View\Canvas.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="View\Canvas.Designer.cs">
-      <DependentUpon>Canvas.cs</DependentUpon>
-    </Compile>
     <Compile Include="View\FigureParameters.cs" />
     <Compile Include="View\FileLoadedEventArgs.cs" />
     <Compile Include="View\MainForm.cs">
@@ -103,7 +93,6 @@
     <Compile Include="View\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="View\FigureCreatedEventArgs.cs" />
     <Compile Include="Model\IModel.cs" />
     <Compile Include="Model\FigureModel.cs" />
     <Compile Include="View\IView.cs" />

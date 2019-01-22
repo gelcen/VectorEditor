@@ -5,38 +5,23 @@ using VectorEditor.Model;
 
 namespace VectorEditor.UndoRedo
 {
+    /// <inheritdoc />
     /// <summary>
     /// Команда удаления фигуры
     /// </summary>
     [JsonObject(MemberSerialization.Fields)]
     public class DeleteFigureCommand : ICommand
     {
-        /// <summary>
-        /// Ссылка на модель
-        /// </summary>
-        private IModel _model;
-
-        public IModel Model
-        {
-            get
-            {
-                return _model;
-            }
-
-            set
-            {
-                _model = value;
-            }
-        }
+        public IModel Model { get; set; }
 
         /// <summary>
         /// Словарь для хранения удалённых фигур
         /// </summary>
-        private Dictionary<int, BaseFigure> _deletedFigures;
+        private readonly Dictionary<int, BaseFigure> _deletedFigures;
 
         public DeleteFigureCommand(IModel model, Dictionary<int, BaseFigure> deletedFigures)
         {
-            _model = model;
+            Model = model;
             _deletedFigures = deletedFigures;            
         }
 
@@ -49,6 +34,7 @@ namespace VectorEditor.UndoRedo
             return "Deleted figure or figures";
         }
 
+        /// <inheritdoc />
         /// <summary>
         /// Выполнение команды
         /// </summary>
@@ -56,10 +42,11 @@ namespace VectorEditor.UndoRedo
         {
             foreach (var figure in _deletedFigures)
             {
-                _model.DeleteFigure(figure.Value);
+                Model.DeleteFigure(figure.Value);
             }
         }
 
+        /// <inheritdoc />
         /// <summary>
         /// Отмена команды
         /// </summary>
@@ -67,7 +54,7 @@ namespace VectorEditor.UndoRedo
         {
             foreach (var figure in _deletedFigures)
             {
-                _model.AddFigure(figure.Value);
+                Model.AddFigure(figure.Value);
             }
         }
     }

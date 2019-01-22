@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace VectorEditor.UndoRedo
 {
@@ -11,9 +7,6 @@ namespace VectorEditor.UndoRedo
     /// </summary>
     public class UndoRedoStack
     {
-        private Stack<ICommand> _undo;
-        private Stack<ICommand> _redo;
-
         /// <summary>
         /// Конструктор класса стека команд
         /// </summary>
@@ -25,64 +18,30 @@ namespace VectorEditor.UndoRedo
         /// <summary>
         /// Свойство: Количество команд в Undo
         /// </summary>
-        public int UndoCount
-        {
-            get
-            {
-                return _undo.Count;
-            }
-        }
+        public int UndoCount => UndoStack.Count;
 
         /// <summary>
         /// Свойство: Количество команд в Redo
         /// </summary>
-        public int RedoCount
-        {
-            get
-            {
-                return _redo.Count;
-            }
-        }
+        public int RedoCount => RedoStack.Count;
 
         /// <summary>
         /// Свойство: Стек команд Undo
         /// </summary>
-        public Stack<ICommand> UndoStack
-        {
-            get
-            {
-                return _undo;
-            }
-
-            set
-            {
-                _undo = value;
-            }
-        }
+        public Stack<ICommand> UndoStack { get; set; }
 
         /// <summary>
         /// Свойство: Стек команд Redo
         /// </summary>
-        public Stack<ICommand> RedoStack
-        {
-            get
-            {
-                return _redo;
-            }
-
-            set
-            {
-                _redo = value;
-            }
-        }
+        public Stack<ICommand> RedoStack { get; set; }
 
         /// <summary>
         /// Очистить стеки и создать заново
         /// </summary>
         public void Reset()
         {
-            _undo = new Stack<ICommand>();
-            _redo = new Stack<ICommand>();
+            UndoStack = new Stack<ICommand>();
+            RedoStack = new Stack<ICommand>();
         }
 
         /// <summary>
@@ -93,9 +52,9 @@ namespace VectorEditor.UndoRedo
         {
             cmd.Do();
 
-            _undo.Push(cmd);
+            UndoStack.Push(cmd);
 
-            _redo.Clear();
+            RedoStack.Clear();
         }
 
         /// <summary>
@@ -103,14 +62,12 @@ namespace VectorEditor.UndoRedo
         /// </summary>
         public void Undo()
         {
-            if (_undo.Count > 0)
-            {
-                ICommand cmd = _undo.Pop();
+            if (UndoStack.Count <= 0) return;
+            var cmd = UndoStack.Pop();
 
-                cmd.Undo();
+            cmd.Undo();
 
-                _redo.Push(cmd);
-            }
+            RedoStack.Push(cmd);
         }
 
         /// <summary>
@@ -118,14 +75,12 @@ namespace VectorEditor.UndoRedo
         /// </summary>
         public void Redo()
         {
-            if (_redo.Count > 0)
-            {
-                ICommand cmd = _redo.Pop();
+            if (RedoStack.Count <= 0) return;
+            var cmd = RedoStack.Pop();
 
-                cmd.Do();
+            cmd.Do();
 
-                _undo.Push(cmd);
-            }
+            UndoStack.Push(cmd);
         }
     }
 }

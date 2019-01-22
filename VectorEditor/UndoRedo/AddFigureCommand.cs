@@ -1,31 +1,26 @@
-﻿using System;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using VectorEditor.Figures;
 using VectorEditor.Model;
 
 namespace VectorEditor.UndoRedo
 {
+    /// <inheritdoc />
     /// <summary>
     /// Класс для команды добавления фигуры
     /// </summary>
     [JsonObject(MemberSerialization.Fields)]
     public class AddFigureCommand:ICommand
     {
-        private IModel _model;
-        private BaseFigure _figure;
+        /// <summary>
+        /// Для хранения добавленной фигуры
+        /// </summary>
+        private readonly BaseFigure _figure;
 
-        public IModel Model
-        {
-            get
-            {
-                return _model;
-            }
-
-            set
-            {
-                _model = value;
-            }
-        }
+        /// <inheritdoc />
+        /// <summary>
+        /// Свойство для модели
+        /// </summary>
+        public IModel Model { get; set; }
 
         /// <summary>
         /// Конструктор класса команды добавления фигуры
@@ -47,20 +42,22 @@ namespace VectorEditor.UndoRedo
             return "Added " + _figure.GetType();
         }
 
+        /// <inheritdoc />
         /// <summary>
         /// Выполнить
         /// </summary>
         public void Do()
         {
-            _model.AddFigure(_figure);
+            Model.AddFigure(_figure);
         }
 
+        /// <inheritdoc />
         /// <summary>
         /// Отменить
         /// </summary>
         public void Undo()
         {
-            _model.DeleteFigure(_figure);
+            Model.DeleteFigure(_figure);
         }
 
     }

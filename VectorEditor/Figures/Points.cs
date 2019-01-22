@@ -10,7 +10,14 @@ namespace VectorEditor.Figures
     [JsonObject(MemberSerialization.Fields)]
     public class Points
     {
-        private List<PointF> _points = new List<PointF>();
+        /// <summary>
+        /// Список точек
+        /// </summary>
+        private readonly List<PointF> _points = new List<PointF>();
+
+        /// <summary>
+        /// Количество точек
+        /// </summary>
         private readonly int _count;
 
         /// <summary>

@@ -10,16 +10,12 @@ using VectorEditor.View;
 
 namespace VectorEditor.Presenter
 {
+    /// <inheritdoc cref="IBaseHandler" />
     /// <summary>
     /// Класс для инструмента "Указатель"
     /// </summary>
-    public class CursorHandler : IBaseHandler, IPropertyChanged
+    public class CursorHandler : IBaseHandler
     {
-        /// <summary>
-        /// Ссылка на канву
-        /// </summary>
-        private PictureBox _canvas;
-
         /// <summary>
         /// Выбранная фигура
         /// </summary>
@@ -28,42 +24,24 @@ namespace VectorEditor.Presenter
         /// <summary>
         /// Ссылка на презентер
         /// </summary>
-        private Presenter _presenter;
+        private readonly Presenter _presenter;
 
+        /// <inheritdoc />
         /// <summary>
         /// Параметры фигуры
         /// </summary>
         public FigureParameters FigureParameters
         {
-            set
-            {
-                //_figureParameters = value;
-                //if (_selectedFigure != null)
-                //{
-                //    SetParameters(_selectedFigure, _figureParameters);
-                //}
-                //if (_selectedFigures != null)
-                //{
-                //    SetParameters(_selectedFigures, _figureParameters);
-                //}
-            }
+            set { }
         }
 
+        /// <inheritdoc />
         /// <summary>
         /// Свойство для канвы
         /// </summary>
-        public PictureBox Canvas
-        {
-            get
-            {
-                return _canvas;
-            }
-            set
-            {
-                _canvas = value;
-            }
-        }
+        public PictureBox Canvas { get; set; }
 
+        /// <inheritdoc />
         /// <summary>
         /// Свойство для делегата нажатия мышки
         /// </summary>
@@ -73,6 +51,7 @@ namespace VectorEditor.Presenter
             get;
         }
 
+        /// <inheritdoc />
         /// <summary>
         /// Свойство для делегата отпускания мышки
         /// </summary>
@@ -106,9 +85,9 @@ namespace VectorEditor.Presenter
             _presenter = presenter;
 
             _selectedFigure = null;
-            _selectedFigures = new List<BaseFigure>();
-            _beforeState = new Dictionary<int, BaseFigure>();
-            _beforePointState = new Dictionary<int, BaseFigure>();
+            SelectedFigures = new List<BaseFigure>();
+            BeforeState = new Dictionary<int, BaseFigure>();
+            BeforePointState = new Dictionary<int, BaseFigure>();
 
             MouseDownDelegate += MouseDown;
             MouseUpDelegate += MouseUp;
@@ -125,14 +104,14 @@ namespace VectorEditor.Presenter
         /// </summary>
         public event EventHandler<FigureParameters> ParametersChanged;
         
+        /// <inheritdoc />
         /// <summary>
         /// Рисование выбранных фигур
         /// </summary>
-        /// <param name="g"></param>
+        /// <param name="g">Graphics</param>
         public void Draw(Graphics g)
         {
-            Pen pen = new Pen(Color.FromArgb(0, 120, 215), 1);
-            pen.DashStyle = DashStyle.Solid;
+            var pen = new Pen(Color.FromArgb(0, 120, 215), 1) {DashStyle = DashStyle.Solid};
 
             Brush brush = new SolidBrush(Color.FromArgb(80, 0, 102, 204));
 
@@ -141,9 +120,9 @@ namespace VectorEditor.Presenter
             pen.Dispose();
             brush.Dispose();
 
-            if (_selectedFigures.Count != 0)
+            if (SelectedFigures.Count != 0)
             {
-                foreach (var figure in _selectedFigures)
+                foreach (var figure in SelectedFigures)
                 {
                     FigureDrawer.DrawSelection(figure, g);
                 }
@@ -151,9 +130,7 @@ namespace VectorEditor.Presenter
             if (_selectedFigure != null && _isFigurePicked)
             {
                 FigureDrawer.DrawSelection(_selectedFigure, g);
-
             }
-
         }
 
         /// <summary>
@@ -161,30 +138,30 @@ namespace VectorEditor.Presenter
         /// </summary>
         public void ClearSelectedFigures()
         {
-            _selectedFigures.Clear();
+            SelectedFigures.Clear();
             _selectedFigure = null;
         }
 
         /// <summary>
         /// Расстояние для клика
         /// </summary>
-        private const int object_radius = 3;
+        private const int ObjectRadius = 3;
 
         /// <summary>
         /// Мышка над фигурой или маркером, 
         /// если расстояние между мышкой и объектом меньше этой.
         /// </summary>
-        private const int over_dist_squared = object_radius * object_radius;
+        private const int OverDistSquared = ObjectRadius * ObjectRadius;
 
         /// <summary>
         /// Флаг. Нажата ли мышка
         /// </summary>
-        private bool _isMouseDown = false;
+        private bool _isMouseDown;
 
         /// <summary>
         /// Флаг. Появился ли прямоугольник выборки.
         /// </summary>
-        private bool _isDraggingSelectionRect = false;
+        private bool _isDraggingSelectionRect;
 
         /// <summary>
         /// Первоначальная точка нажатия
@@ -196,17 +173,12 @@ namespace VectorEditor.Presenter
         /// Операция считается за движение - если двинули на большее
         /// расстояние, чем это. 
         /// </summary>
-        private static readonly double _dragTreshold = 5;
+        private static readonly double DragTreshold = 5;
 
         /// <summary>
         /// Флаг для выбора фигур
         /// </summary>
-        private bool _isFigurePicked = false;
-
-        /// <summary>
-        /// Список выбранных фигур
-        /// </summary>
-        private List<BaseFigure> _selectedFigures;
+        private bool _isFigurePicked;
 
         /// <summary>
         /// Прямоугольник выборки
@@ -242,46 +214,17 @@ namespace VectorEditor.Presenter
         /// Если выборка пуста. 
         /// Прямоугольник пуст или тыкнули в пустую точку
         /// </summary>
-        private bool _isSelectionEmpty = false;
-
-        /// <summary>
-        /// Поле-словарь для состояния до передвигания фигур.
-        /// Хранит индексы в главном списке и фигуры.
-        /// </summary>
-        private Dictionary<int, BaseFigure> _beforeState;
+        private bool _isSelectionEmpty;
 
         /// <summary>
         /// Свойство для состояния до передвигания фигур
         /// </summary>
-        public Dictionary<int, BaseFigure> BeforeState
-        {
-            get
-            {
-                return _beforeState;
-            }
-        }
-
-        /// <summary>
-        /// Поле-словарь для состояния до передвигания маркера.
-        /// Хранит индексы в главном списке и фигуры.
-        /// </summary>
-        private Dictionary<int, BaseFigure> _beforePointState;
+        public Dictionary<int, BaseFigure> BeforeState { get; }
 
         /// <summary>
         /// Свойство для состояния до передвигания маркера 
         /// </summary>
-        public Dictionary<int, BaseFigure> BeforePointState
-        {
-            get
-            {
-                return _beforePointState;
-            }
-
-            set
-            {
-                _beforePointState = value;
-            }
-        }
+        public Dictionary<int, BaseFigure> BeforePointState { get; set; }
 
         /// <summary>
         /// Индекс фигуры, у которой двигают маркером
@@ -298,26 +241,24 @@ namespace VectorEditor.Presenter
         {
             if (e.Button == MouseButtons.Left)
             {
-                if (_isFigurePicked != false &&
-                    _selectedFigures != null)
+                if (_isFigurePicked &&
+                    SelectedFigures != null)
                 {
                     if (IsPointOnFigure(e.Location))
                     {
-                        if ((_selectedFigures != null) &&
-                            _selectedFigures.Contains(GetFigurePointOn(e.Location)))
+                        if ((SelectedFigures != null) &&
+                            SelectedFigures.Contains(GetFigurePointOn(e.Location)))
                         {
                             _selectedFigure = GetFigurePointOn(e.Location);
 
                             //Сохраняем предыдущее состояние
-                            if (_beforeState != null) _beforeState.Clear();
+                            BeforeState?.Clear();
 
-                            foreach (var figure in _selectedFigures)
-                            {                                
-                                if (_presenter.GetFigures().Contains(figure))
-                                {
-                                    int index = _presenter.GetFigures().IndexOf(figure);
-                                    _beforeState.Add(index, FigureFactory.CreateCopy(figure));
-                                }
+                            foreach (var figure in SelectedFigures)
+                            {
+                                if (!_presenter.GetFigures().Contains(figure)) continue;
+                                var index = _presenter.GetFigures().IndexOf(figure);
+                                BeforeState?.Add(index, FigureFactory.CreateCopy(figure));
                             }
 
                             MouseMoveDelegate -= MouseMoveSelecting;
@@ -334,17 +275,14 @@ namespace VectorEditor.Presenter
                         MouseMoveDelegate += MouseMoveMarker;
                         MouseUpDelegate += MouseUpMarker;
 
-                        if (_beforePointState != null) _beforePointState.Clear();
+                        BeforePointState?.Clear();
 
                         foreach (var figure in _presenter.GetFigures())
                         {
-                            if (figure == _selectedFigures[_pickedFigureIndex])
-                            {
-                                _oldFigureIndex=_presenter.GetFigures().IndexOf(figure);
-                                _beforePointState.Add(_oldFigureIndex, 
-                                                      FigureFactory.CreateCopy(figure));
-
-                            }
+                            if (figure != SelectedFigures[_pickedFigureIndex]) continue;
+                            _oldFigureIndex=_presenter.GetFigures().IndexOf(figure);
+                            BeforePointState?.Add(_oldFigureIndex,
+                                FigureFactory.CreateCopy(figure));
                         }
 
                         _offsetX = _pickedPoint.X - e.X;
@@ -375,12 +313,9 @@ namespace VectorEditor.Presenter
         /// <param name="newState"></param>
         private void OnFiguresMoved(Dictionary<int, BaseFigure> newState)
         {
-            EventHandler< Dictionary < int, BaseFigure >> handler = FiguresMoved;
+            var handler = FiguresMoved;
 
-            if (handler != null)
-            {
-                handler(this, newState);
-            }
+            handler?.Invoke(this, newState);
         }
 
         //Отпускание фигуры
@@ -397,14 +332,12 @@ namespace VectorEditor.Presenter
 
             if (_reallyMoved)
             {
-                Dictionary<int, BaseFigure> newState = new Dictionary<int, BaseFigure>();
-                foreach (var figure in _selectedFigures)
+                var newState = new Dictionary<int, BaseFigure>();
+                foreach (var figure in SelectedFigures)
                 {
-                    if (_presenter.GetFigures().Contains(figure))
-                    {
-                        int index = _presenter.GetFigures().IndexOf(figure);
-                        newState.Add(index, FigureFactory.CreateCopy(figure));
-                    }
+                    if (!_presenter.GetFigures().Contains(figure)) continue;
+                    var index = _presenter.GetFigures().IndexOf(figure);
+                    newState.Add(index, FigureFactory.CreateCopy(figure));
                 }
 
                 OnFiguresMoved(newState);
@@ -418,13 +351,13 @@ namespace VectorEditor.Presenter
         /// Флаг для движения фигур. Становится true,
         /// если двинули фигурой(ами) на 5 пикселей и больше.
         /// </summary>
-        private bool _reallyMoved = false;
+        private bool _reallyMoved;
 
         /// <summary>
         /// Флаг для движения маркером. Становится true,
         /// если двинули маркером на 5 пикселей и больше.
         /// </summary>
-        private bool _isPointMoved = false;
+        private bool _isPointMoved;
 
         //Двигание фигурой
         /// <summary>
@@ -435,33 +368,33 @@ namespace VectorEditor.Presenter
         private void MouseMoveFigure(object obj, MouseEventArgs e)
         {
             PointF currentMouseDownPoint = e.Location;
-            float deltaX = Math.Abs(
+            var deltaX = Math.Abs(
                            currentMouseDownPoint.X - _originalMouseDownPoint.X);
-            float deltaY = Math.Abs(
+            var deltaY = Math.Abs(
                            currentMouseDownPoint.Y - _originalMouseDownPoint.Y);
-            double distance = Math.Sqrt(Math.Pow(deltaX, 2) + Math.Pow(deltaY, 2));
-            if (distance >= _dragTreshold)
+            var distance = Math.Sqrt(Math.Pow(deltaX, 2) + Math.Pow(deltaY, 2));
+            if (distance >= DragTreshold)
             {
                 _reallyMoved = true;
             }
 
-            if (_selectedFigures == null) return;
-            if (_selectedFigures.Count == 1)
+            if (SelectedFigures == null) return;
+            if (SelectedFigures.Count == 1)
             {
-                float newX1 = e.X + _offsetX;
-                float newY1 = e.Y + _offsetY;
+                var newX1 = e.X + _offsetX;
+                var newY1 = e.Y + _offsetY;
 
-                float dx = newX1 - _selectedFigure.Points.GetPoints()[0].X;
-                float dy = newY1 - _selectedFigure.Points.GetPoints()[0].Y;
+                var dx = newX1 - _selectedFigure.Points.GetPoints()[0].X;
+                var dy = newY1 - _selectedFigure.Points.GetPoints()[0].Y;
 
-                if (dx == 0 && dy == 0) return;
+                if (Math.Abs(dx) < 0.000000001 && Math.Abs(dy) < 0.000000001) return;
 
-                PointF tmpPt0 = new PointF(newX1, newY1);
+                var tmpPt0 = new PointF(newX1, newY1);
                 _selectedFigure.Points.Replace(0, tmpPt0);
-                int count = _selectedFigure.Points.GetPoints().Count;
-                for (int i = 1; i < count; i++)
+                var count = _selectedFigure.Points.GetPoints().Count;
+                for (var i = 1; i < count; i++)
                 {
-                    PointF tempPoint1 = new PointF(
+                    var tempPoint1 = new PointF(
                         _selectedFigure.Points.GetPoints()[i].X + dx,
                         _selectedFigure.Points.GetPoints()[i].Y + dy);
                     _selectedFigure.Points.Replace(i, tempPoint1);
@@ -469,36 +402,34 @@ namespace VectorEditor.Presenter
             }
             else
             {
-                float newX1 = e.X + _offsetX;
-                float newY1 = e.Y + _offsetY;
+                var newX1 = e.X + _offsetX;
+                var newY1 = e.Y + _offsetY;
 
-                float dx = newX1 - _selectedFigure.Points.GetPoints()[0].X;
-                float dy = newY1 - _selectedFigure.Points.GetPoints()[0].Y;
+                var dx = newX1 - _selectedFigure.Points.GetPoints()[0].X;
+                var dy = newY1 - _selectedFigure.Points.GetPoints()[0].Y;
 
-                if (dx == 0 && dy == 0) return;
+                if (Math.Abs(dx) < 0.000000001 && Math.Abs(dy) < 0.000000001) return;
 
-                PointF tmpPt0 = new PointF(newX1, newY1);
+                var tmpPt0 = new PointF(newX1, newY1);
                 _selectedFigure.Points.Replace(0, tmpPt0);
-                int count = _selectedFigure.Points.GetPoints().Count;
-                for (int i = 1; i < count; i++)    
+                var count = _selectedFigure.Points.GetPoints().Count;
+                for (var i = 1; i < count; i++)    
                 {
-                    PointF tempPoint1 = new PointF(
+                    var tempPoint1 = new PointF(
                         _selectedFigure.Points.GetPoints()[i].X + dx,
                         _selectedFigure.Points.GetPoints()[i].Y + dy);
                     _selectedFigure.Points.Replace(i, tempPoint1);
                 }
                 
-                foreach (var figure in _selectedFigures)
+                foreach (var figure in SelectedFigures)
                 {
-                    if (figure != _selectedFigure)
+                    if (figure == _selectedFigure) continue;
+                    for (var i = 0; i < figure.Points.GetPoints().Count; i++)
                     {
-                        for (int i = 0; i < figure.Points.GetPoints().Count; i++)
-                        {
-                            figure.Points.Replace(i,
-                                new PointF(
-                                    figure.Points.GetPoints()[i].X + dx,
-                                    figure.Points.GetPoints()[i].Y + dy));
-                        }
+                        figure.Points.Replace(i,
+                            new PointF(
+                                figure.Points.GetPoints()[i].X + dx,
+                                figure.Points.GetPoints()[i].Y + dy));
                     }
                 }
             }
@@ -517,12 +448,9 @@ namespace VectorEditor.Presenter
         /// <param name="newPointState"></param>
         private void OnPointMoved(Dictionary<int, BaseFigure> newPointState)
         {
-            EventHandler<Dictionary<int, BaseFigure>> handler = PointMoved;
+            var handler = PointMoved;
 
-            if (handler != null)
-            {
-                handler(this, newPointState);
-            }
+            handler?.Invoke(this, newPointState);
         }
 
         /// <summary>
@@ -536,11 +464,11 @@ namespace VectorEditor.Presenter
             MouseMoveDelegate -= MouseMoveMarker;
             MouseUpDelegate -= MouseUpMarker;
 
-            Dictionary<int, BaseFigure> newPointState = new Dictionary<int, BaseFigure>();
+            var newPointState = new Dictionary<int, BaseFigure>();
             if (_isPointMoved)
             {
                 newPointState.Add(_pickedFigureIndex, 
-                                    FigureFactory.CreateCopy(_selectedFigures[_pickedFigureIndex]));
+                                    FigureFactory.CreateCopy(SelectedFigures[_pickedFigureIndex]));
 
                 OnPointMoved(newPointState);
 
@@ -558,16 +486,16 @@ namespace VectorEditor.Presenter
         private void MouseMoveMarker(object obj, MouseEventArgs e)
         {
             PointF currentMouseDownPoint = e.Location;
-            float deltaX = Math.Abs(
+            var deltaX = Math.Abs(
                            currentMouseDownPoint.X - _originalMouseDownPoint.X);
-            float deltaY = Math.Abs(
+            var deltaY = Math.Abs(
                            currentMouseDownPoint.Y - _originalMouseDownPoint.Y);
-            double distance = Math.Sqrt(Math.Pow(deltaX, 2) + Math.Pow(deltaY, 2));
-            if (distance >= _dragTreshold)
+            var distance = Math.Sqrt(Math.Pow(deltaX, 2) + Math.Pow(deltaY, 2));
+            if (distance >= DragTreshold)
             {
                 _isPointMoved = true;
             }
-            _selectedFigures[_pickedFigureIndex].Points.Replace(
+            SelectedFigures[_pickedFigureIndex].Points.Replace(
                              _pickedPointIndex,
                              new PointF(e.X + _offsetX, e.Y + _offsetY));
 
@@ -590,12 +518,12 @@ namespace VectorEditor.Presenter
             else if (_isMouseDown)
             {
                 PointF currentMouseDownPoint = e.Location;
-                float deltaX = Math.Abs(
+                var deltaX = Math.Abs(
                                currentMouseDownPoint.X - _originalMouseDownPoint.X);
-                float deltaY = Math.Abs(
+                var deltaY = Math.Abs(
                                currentMouseDownPoint.Y - _originalMouseDownPoint.Y);
-                double distance = Math.Sqrt(Math.Pow(deltaX, 2) + Math.Pow(deltaY, 2));
-                if (distance > _dragTreshold)
+                var distance = Math.Sqrt(Math.Pow(deltaX, 2) + Math.Pow(deltaY, 2));
+                if (distance > DragTreshold)
                 {
                     _isDraggingSelectionRect = true;
                     InitDragSelectionRect(_originalMouseDownPoint,
@@ -644,7 +572,7 @@ namespace VectorEditor.Presenter
                     if (_isSelectionEmpty)
                     {
                         _isFigurePicked = false;
-                        _selectedFigures.Clear();
+                        SelectedFigures.Clear();
                         _selectedFigure = null;
                         _isSelectionEmpty = false;
                     }
@@ -653,24 +581,24 @@ namespace VectorEditor.Presenter
                 if (_isMouseDown)
                 {
                     PointF currentMouseDownPoint = e.Location;
-                    float deltaX = Math.Abs(
+                    var deltaX = Math.Abs(
                                    currentMouseDownPoint.X - _originalMouseDownPoint.X);
-                    float deltaY = Math.Abs(
+                    var deltaY = Math.Abs(
                                    currentMouseDownPoint.Y - _originalMouseDownPoint.Y);
-                    double distance = Math.Sqrt(Math.Pow(deltaX, 2) + Math.Pow(deltaY, 2));
-                    if (distance < _dragTreshold)
+                    var distance = Math.Sqrt(Math.Pow(deltaX, 2) + Math.Pow(deltaY, 2));
+                    if (distance < DragTreshold)
                     {
                         if (IsPointOnFigure(e.Location))
                         {
-                            _selectedFigures.Clear();
+                            SelectedFigures.Clear();
                             _selectedFigure = GetFigurePointOn(e.Location);
-                            _selectedFigures.Add(_selectedFigure);       
+                            SelectedFigures.Add(_selectedFigure);       
                             _isFigurePicked = true;
 
                         }
                         else
                         {
-                            _selectedFigures.Clear();
+                            SelectedFigures.Clear();
                             _selectedFigure = null;
                             _isFigurePicked = false;
                         }
@@ -691,12 +619,12 @@ namespace VectorEditor.Presenter
                 _selectionRect = new Rectangle();
                 return;
             }
-            int count = _presenter.GetFigures().Count;
-            List<BaseFigure> selectedFigures = new List<BaseFigure>();
-            for (int i = 0; i < count; i++)
+            var count = _presenter.GetFigures().Count;
+            var selectedFigures = new List<BaseFigure>();
+            for (var i = 0; i < count; i++)
             {
                 var points = _presenter.GetFigures()[i].Points.GetPoints();
-                Rectangle figureRect = GetRect(points);
+                var figureRect = GetRect(points);
                 if (_selectionRect.IntersectsWith(figureRect))
                 {
                     selectedFigures.Add(_presenter.GetFigures()[i]);
@@ -708,8 +636,8 @@ namespace VectorEditor.Presenter
             }
             else
             {
-                _selectedFigures.Clear();
-                _selectedFigures = selectedFigures;
+                SelectedFigures.Clear();
+                SelectedFigures = selectedFigures;
             }
             _selectionRect = new Rectangle();
         }
@@ -766,23 +694,19 @@ namespace VectorEditor.Presenter
         /// <returns></returns>
         private bool IsPointOnFigure(PointF point)
         {
-            bool result = false;
-            if (_presenter.GetFigures() != null)
+            var result = false;
+            if (_presenter.GetFigures() == null) return false;
+            var figures = _presenter.GetFigures();
+            var path = new GraphicsPath();
+            foreach (var figure in figures)
             {
-                var figures = _presenter.GetFigures();
-                GraphicsPath path = new GraphicsPath();
-                foreach (var figure in figures)
-                {
-                    var points = figure.Points.GetPoints();
-                    Pen pickPen = new Pen(Color.Transparent, 3);
+                var pickPen = new Pen(Color.Transparent, 3);
 
-                    //path.AddLine(points[0], points[1]);
-                    AddFigureToGraphicsPath(path, figure);
+                AddFigureToGraphicsPath(path, figure);
 
-                    result = path.IsOutlineVisible(point, pickPen);
-                    path.Reset();
-                    if (result) break;
-                }
+                result = path.IsOutlineVisible(point, pickPen);
+                path.Reset();
+                if (result) break;
             }
             return result;
         }
@@ -799,10 +723,9 @@ namespace VectorEditor.Presenter
                 var figures = _presenter.GetFigures();
                 foreach (var figure in figures)
                 {
-                    var points = figure.Points.GetPoints();
-                    Pen pickPen = new Pen(Color.Transparent, 3);
+                    var pickPen = new Pen(Color.Transparent, 3);
 
-                    GraphicsPath path = new GraphicsPath();
+                    var path = new GraphicsPath();
 
                     AddFigureToGraphicsPath(path, figure);
 
@@ -826,40 +749,34 @@ namespace VectorEditor.Presenter
         private bool IsPointOnMarker(PointF mousePoint,
                                      out PointF pickedPoint)
         {
-            if (_selectedFigures != null)
+            if (SelectedFigures != null)
             {
-                if (_selectedFigures.Count == 1)
+                if (SelectedFigures.Count == 1)
                 {
-                    var points = _selectedFigures[0].Points.GetPoints();
-                    int count = _selectedFigures[0].Points.GetPoints().Count;
-                    for (int i = 0; i < count; i++)
+                    var count = SelectedFigures[0].Points.GetPoints().Count;
+                    for (var i = 0; i < count; i++)
                     {
-                        if (FindDistanceToPointSquared(mousePoint,
-                            _selectedFigures[0].Points.GetPoints()[i]) < over_dist_squared)
-                        {
-                            pickedPoint = _selectedFigures[0].Points.GetPoints()[i];
-                            _pickedPointIndex = i;
-                            _pickedFigureIndex = 0;
-                            return true;
-                        }
+                        if (!(FindDistanceToPointSquared(mousePoint,
+                                  SelectedFigures[0].Points.GetPoints()[i]) < OverDistSquared)) continue;
+                        pickedPoint = SelectedFigures[0].Points.GetPoints()[i];
+                        _pickedPointIndex = i;
+                        _pickedFigureIndex = 0;
+                        return true;
                     }
                 }
                 else
                 {
-                    for (int i = 0; i < _selectedFigures.Count; i++)
+                    for (var i = 0; i < SelectedFigures.Count; i++)
                     {
-                        var points = _selectedFigures[i].Points.GetPoints();
-                        int count = _selectedFigures[i].Points.GetPoints().Count;
-                        for (int j = 0; j < count; j++)
+                        var count = SelectedFigures[i].Points.GetPoints().Count;
+                        for (var j = 0; j < count; j++)
                         {
-                            if (FindDistanceToPointSquared(mousePoint,
-                                _selectedFigures[i].Points.GetPoints()[j]) < over_dist_squared)
-                            {
-                                pickedPoint = _selectedFigures[i].Points.GetPoints()[j];
-                                _pickedPointIndex = j;
-                                _pickedFigureIndex = i;
-                                return true;
-                            }
+                            if (!(FindDistanceToPointSquared(mousePoint,
+                                      SelectedFigures[i].Points.GetPoints()[j]) < OverDistSquared)) continue;
+                            pickedPoint = SelectedFigures[i].Points.GetPoints()[j];
+                            _pickedPointIndex = j;
+                            _pickedFigureIndex = i;
+                            return true;
                         }
                     }
                 }
@@ -876,10 +793,10 @@ namespace VectorEditor.Presenter
         /// <param name="pt1"></param>
         /// <param name="pt2"></param>
         /// <returns></returns>
-        private float FindDistanceToPointSquared(PointF pt1, PointF pt2)
+        private static float FindDistanceToPointSquared(PointF pt1, PointF pt2)
         {
-            float dx = pt1.X - pt2.X;
-            float dy = pt1.Y - pt2.Y;
+            var dx = pt1.X - pt2.X;
+            var dy = pt1.Y - pt2.Y;
             return dx * dx + dy * dy;
         }
 
@@ -888,7 +805,7 @@ namespace VectorEditor.Presenter
         /// </summary>
         /// <param name="points">Точки фигуры</param>
         /// <returns>Прямоугольник</returns>
-        private Rectangle GetRect(IReadOnlyCollection<PointF> points)
+        private static Rectangle GetRect(IReadOnlyCollection<PointF> points)
         {
             int minX = (int)points.Min(x => x.X);
             int minY = (int)points.Min(y => y.Y);
@@ -900,20 +817,14 @@ namespace VectorEditor.Presenter
         /// <summary>
         /// Свойство для получения выбранных фигур
         /// </summary>
-        public List<BaseFigure> SelectedFigures
-        {
-            get
-            {
-                return _selectedFigures;
-            }
-        }
-       
+        public List<BaseFigure> SelectedFigures { get; private set; }
+
         /// <summary>
         /// Добавить фигуру в GraphicsPath
         /// </summary>
         /// <param name="path">GraphicsPath</param>
         /// <param name="figure">Добавляемая фигура</param>
-        private void AddFigureToGraphicsPath(GraphicsPath path, BaseFigure figure)
+        private static void AddFigureToGraphicsPath(GraphicsPath path, BaseFigure figure)
         {
             var points = figure.Points.GetPoints();
 
@@ -923,26 +834,26 @@ namespace VectorEditor.Presenter
             }
             else if (figure.GetType() == typeof(Circle))
             {
-                int width = (int)Math.Abs(points[0].X - points[1].X);
-                int height = (int)Math.Abs(points[0].Y - points[1].Y);
+                var width = (int)Math.Abs(points[0].X - points[1].X);
+                var height = (int)Math.Abs(points[0].Y - points[1].Y);
 
-                int radius = Math.Max(width, height);
+                var radius = Math.Max(width, height);
 
-                int x = (int)Math.Min(points[0].X, points[1].X);
-                int y = (int)Math.Min(points[0].Y, points[1].Y);
+                var x = (int)Math.Min(points[0].X, points[1].X);
+                var y = (int)Math.Min(points[0].Y, points[1].Y);
 
-                Rectangle circleRect = new Rectangle(x, y, radius, radius);
+                var circleRect = new Rectangle(x, y, radius, radius);
                 path.AddEllipse(circleRect);
             }
             else if (figure.GetType() == typeof(Ellipse))
             {
-                int width = (int)Math.Abs(points[0].X - points[1].X);
-                int height = (int)Math.Abs(points[0].Y - points[1].Y);
+                var width = (int)Math.Abs(points[0].X - points[1].X);
+                var height = (int)Math.Abs(points[0].Y - points[1].Y);
 
-                int x = (int)Math.Min(points[0].X, points[1].X);
-                int y = (int)Math.Min(points[0].Y, points[1].Y);
+                var x = (int)Math.Min(points[0].X, points[1].X);
+                var y = (int)Math.Min(points[0].Y, points[1].Y);
 
-                Rectangle ellipseRect = new Rectangle(x, y, width, height);
+                var ellipseRect = new Rectangle(x, y, width, height);
                 path.AddEllipse(ellipseRect);
             }
             else if (figure.GetType() == typeof(Polyline))
@@ -954,5 +865,6 @@ namespace VectorEditor.Presenter
                 path.AddPolygon(points.ToArray());
             }
         }
+
     }
 }

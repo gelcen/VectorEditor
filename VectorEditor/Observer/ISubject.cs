@@ -1,17 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace VectorEditor
+﻿namespace VectorEditor.Observer
 {
+    /// <summary>
+    /// Интерфейс объекта
+    /// </summary>
     public interface ISubject
     {
-        void RegisterObserver(IObserver o);
+        /// <summary>
+        /// Регистрация наблюдателей
+        /// </summary>
+        /// <param name="observer">Наблюдатель</param>
+        void RegisterObserver(IObserver observer);
 
-        void RemoveObserver(IObserver o);
+        /// <summary>
+        /// Удаление наблюдателей
+        /// </summary>
+        /// <param name="observer">Наблюдатель</param>
+        void RemoveObserver(IObserver observer);
 
+        /// <summary>
+        /// Оповещение наблюдателей
+        /// </summary>
         void NotifyObservers();
 
     }

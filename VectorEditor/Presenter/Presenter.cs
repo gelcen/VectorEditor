@@ -1,23 +1,49 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using VectorEditor.Figures;
 using VectorEditor.Model;
+using VectorEditor.Observer;
 using VectorEditor.UndoRedo;
 using VectorEditor.View;
 
 namespace VectorEditor.Presenter
 {
+    /// <inheritdoc />
     /// <summary>
-    /// Presenter class
+    /// Класс представителя
     /// </summary>
     public class Presenter : IObserver
     {
+        /// <summary>
+        /// Ссылка на представление
+        /// </summary>
         private readonly IView _view;
+
+        /// <summary>
+        /// Ссылка на модель
+        /// </summary>
         private readonly IModel _model;
+
+        /// <summary>
+        /// Текущий обработчик инструмента
+        /// </summary>
         private IBaseHandler _currentHandler;
+        
+        /// <summary>
+        /// Список фигур
+        /// </summary>
         private List<BaseFigure> _figures;
 
-        private UndoRedoStack _undoRedoStack;
+        /// <summary>
+        /// Менеджер Undo Redo
+        /// </summary>
+        private readonly UndoRedoStack _undoRedoStack;
 
+        /// <summary>
+        /// Конструктор представителя
+        /// </summary>
+        /// <param name="view">Представление</param>
+        /// <param name="model">Модель</param>
         public Presenter(IView view, IModel model)
         {
             _currentHandler = null;
@@ -40,9 +66,13 @@ namespace VectorEditor.Presenter
             _view.FileLoaded += _view_FileLoaded;
                             
             _model.RegisterObserver(this);
-            _model.RegisterObserver((IObserver)_view);
         }
 
+        /// <summary>
+        /// Обработчик события загрузки проекта
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void _view_FileLoaded(object sender, FileLoadedEventArgs e)
         {
             _model.ClearCanvas();
@@ -64,173 +94,211 @@ namespace VectorEditor.Presenter
             _view.Canvas.Refresh();
         }
 
-        private void _view_RedoPressed(object sender, System.EventArgs e)
+        /// <summary>
+        /// Обработчик события возврата команды
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void _view_RedoPressed(object sender, EventArgs e)
         {
             _undoRedoStack.Redo();
             _view.Canvas.Refresh();
         }
 
-        private void _view_UndoPressed(object sender, System.EventArgs e)
+        /// <summary>
+        /// Обработчик события отмены команды
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void _view_UndoPressed(object sender, EventArgs e)
         {
             _undoRedoStack.Undo();
-            if (_model.getFigureList().Count == 0)
+            if (_model.GetFigureList().Count == 0)
             {
                 if (_currentHandler.GetType() == typeof(CursorHandler))
                 {
-                    CursorHandler handler = _currentHandler as CursorHandler;
-                    handler.ClearSelectedFigures();
+                    var handler = _currentHandler as CursorHandler;
+                    handler?.ClearSelectedFigures();
                 }
             }
             _view.Canvas.Refresh();
         }
 
-        private void _view_FigureCopied(object sender, System.EventArgs e)
+        /// <summary>
+        /// Обработчик события копирования фигур(ы)
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void _view_FigureCopied(object sender, EventArgs e)
         {
-            if (_currentHandler.GetType() == typeof(CursorHandler))
+            if (_currentHandler.GetType() != typeof(CursorHandler)) return;
+            var handler = _currentHandler as CursorHandler;
+            if (handler == null) return;
+            foreach (var figure in handler.SelectedFigures)
             {
-                CursorHandler handler = _currentHandler as CursorHandler;
-                foreach (var figure in handler.SelectedFigures)
+                if (_model.GetFigureList().Contains(figure))
                 {
-                    if (_model.getFigureList().Contains(figure))
-                    {
-                        _model.CopyFigure(figure);
-                    }
+                    _model.CopyFigure(figure);
                 }
             }
         }
 
-        private void _view_FiguresDeleted(object sender, System.EventArgs e)
+        /// <summary>
+        /// Обработчик события удаления фигур(ы)
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void _view_FiguresDeleted(object sender, EventArgs e)
         {
-            if (_currentHandler.GetType() == typeof(CursorHandler))
+            if (_currentHandler.GetType() != typeof(CursorHandler)) return;
+            var handler = _currentHandler as CursorHandler;
+            var beforeState = new Dictionary<int, BaseFigure>();
+            if (handler == null) return;
+            foreach (var figure in handler.SelectedFigures)
             {
-                CursorHandler handler = _currentHandler as CursorHandler;
-                Dictionary<int, BaseFigure> beforeState = new Dictionary<int, BaseFigure>();
-                foreach (var figure in handler.SelectedFigures)
-                {
-                    if (_model.getFigureList().Contains(figure))
-                    {
-                        int index = _model.getFigureList().IndexOf(figure);
-                        beforeState.Add(index, figure);                                                
-                    }
-                }
-                DeleteFigureCommand cmd = new DeleteFigureCommand(_model, beforeState);
-                _undoRedoStack.Do(cmd);
-                handler.ClearSelectedFigures();
+                if (!_model.GetFigureList().Contains(figure)) continue;
+                var index = _model.GetFigureList().IndexOf(figure);
+                beforeState.Add(index, figure);
             }
+
+            var cmd = new DeleteFigureCommand(_model, beforeState);
+            _undoRedoStack.Do(cmd);
+            handler.ClearSelectedFigures();
         }
 
-        private void _view_CanvasCleared(object sender, System.EventArgs e)
+        /// <summary>
+        /// Обработчик очистки канвы
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void _view_CanvasCleared(object sender, EventArgs e)
         {
-            ClearCanvasCommand cmd = new ClearCanvasCommand(_model);
+            var cmd = new ClearCanvasCommand(_model);
             _undoRedoStack.Do(cmd);
             if (_currentHandler.GetType() == typeof(CursorHandler))
             {
-                CursorHandler handler = _currentHandler as CursorHandler;
-                handler.ClearSelectedFigures();
+                var handler = _currentHandler as CursorHandler;
+                handler?.ClearSelectedFigures();
             }
             _view.Canvas.Refresh();
         }
 
-        private void _view_ParametersChanged(object sender, View.FigureParameters e)
+        /// <summary>
+        /// Обработчик события изменения параметров фигур(ы)
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void _view_ParametersChanged(object sender, FigureParameters e)
         {
             _currentHandler.FigureParameters = e;
 
-            Dictionary<int, BaseFigure> beforeState = new Dictionary<int, BaseFigure>();
+            var beforeState = new Dictionary<int, BaseFigure>();
 
             if (_currentHandler.GetType() == typeof(CursorHandler))
             {
-                CursorHandler handler = _currentHandler as CursorHandler;                
-                foreach (var figure in handler.SelectedFigures)
-                {
-                    if (_model.getFigureList().Contains(figure))
+                var handler = _currentHandler as CursorHandler;
+                if (handler != null)
+                    foreach (var figure in handler.SelectedFigures)
                     {
-                        int index =_model.getFigureList().IndexOf(figure);
+                        if (!_model.GetFigureList().Contains(figure)) continue;
+                        var index = _model.GetFigureList().IndexOf(figure);
                         beforeState.Add(index, FigureFactory.CreateCopy(figure));
                     }
-                }
-            }            
-            if (beforeState != null)
+            }
             {
-                ChangeParametersCommand cmd = new ChangeParametersCommand(_model, beforeState, e);
+                var cmd = new ChangeParametersCommand(_model, beforeState, e);
                 _undoRedoStack.Do(cmd);
-            }            
+            }
             _view.Canvas.Invalidate();
         }
 
+        /// <summary>
+        /// Обработчик события выбора инструмента
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void _view_ToolPicked(object sender, Item e)
         {
-            if (e == Item.Line)
+            switch (e)
             {
-                _currentHandler = new LineHandler(_view.Canvas, _view.FigureParameters);
-                _currentHandler.FigureCreated += _currentHandler_FigureCreated;
-                _view.CurrentHandler = (LineHandler)_currentHandler;
-            }
-            else if (e == Item.Polyline)
-            {
-                _currentHandler = new PolylineHandler(_view.Canvas, _view.FigureParameters);
-                _currentHandler.FigureCreated += _currentHandler_FigureCreated;
-                _view.CurrentHandler = (PolylineHandler)_currentHandler;
-            }
-            else if (e == Item.Circle)
-            {
-                _currentHandler = new CircleHandler(_view.Canvas, _view.FigureParameters);
-                _currentHandler.FigureCreated += _currentHandler_FigureCreated;
-                _view.CurrentHandler = (CircleHandler)_currentHandler;
-            }
-            else if (e == Item.Ellipse)
-            {
-                _currentHandler = new EllipseHandler(_view.Canvas, _view.FigureParameters);
-                _currentHandler.FigureCreated += _currentHandler_FigureCreated;
-                _view.CurrentHandler = (EllipseHandler)_currentHandler;
-            }
-            else if (e == Item.Polygon)
-            {
-                _currentHandler = new PolygonHandler(_view.Canvas, _view.FigureParameters);
-                _currentHandler.FigureCreated += _currentHandler_FigureCreated;
-                _view.CurrentHandler = (PolygonHandler)_currentHandler;
-            }
-            else if (e == Item.Cursor)
-            {
-                CursorHandler cursorHandler = new CursorHandler(_view.Canvas, _view.FigureParameters, this);
-                cursorHandler.FiguresMoved += CursorHandler_FiguresMoved;
-                cursorHandler.PointMoved += CursorHandler_PointMoved;
-                _currentHandler = cursorHandler;
-                _view.CurrentHandler = (CursorHandler)_currentHandler;
+                case Item.Line:
+                    _currentHandler = new LineHandler(_view.Canvas, _view.FigureParameters);
+                    _currentHandler.FigureCreated += _currentHandler_FigureCreated;
+                    _view.CurrentHandler = (LineHandler)_currentHandler;
+                    break;
+                case Item.Polyline:
+                    _currentHandler = new PolylineHandler(_view.Canvas, _view.FigureParameters);
+                    _currentHandler.FigureCreated += _currentHandler_FigureCreated;
+                    _view.CurrentHandler = (PolylineHandler)_currentHandler;
+                    break;
+                case Item.Circle:
+                    _currentHandler = new CircleHandler(_view.Canvas, _view.FigureParameters);
+                    _currentHandler.FigureCreated += _currentHandler_FigureCreated;
+                    _view.CurrentHandler = (CircleHandler)_currentHandler;
+                    break;
+                case Item.Ellipse:
+                    _currentHandler = new EllipseHandler(_view.Canvas, _view.FigureParameters);
+                    _currentHandler.FigureCreated += _currentHandler_FigureCreated;
+                    _view.CurrentHandler = (EllipseHandler)_currentHandler;
+                    break;
+                case Item.Polygon:
+                    _currentHandler = new PolygonHandler(_view.Canvas, _view.FigureParameters);
+                    _currentHandler.FigureCreated += _currentHandler_FigureCreated;
+                    _view.CurrentHandler = (PolygonHandler)_currentHandler;
+                    break;
+                case Item.Cursor:
+                    var cursorHandler = new CursorHandler(_view.Canvas, _view.FigureParameters, this);
+                    cursorHandler.FiguresMoved += CursorHandler_FiguresMoved;
+                    cursorHandler.PointMoved += CursorHandler_PointMoved;
+                    _currentHandler = cursorHandler;
+                    _view.CurrentHandler = (CursorHandler)_currentHandler;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(e), e, null);
             }
         }
 
+        /// <summary>
+        /// Обработчик события движения точкой
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void CursorHandler_PointMoved(object sender, Dictionary<int, BaseFigure> e)
         {
-            if (_currentHandler.GetType() == typeof(CursorHandler))
-            {
-                CursorHandler handler = _currentHandler as CursorHandler;
-                MovePointCommand cmd = new MovePointCommand(_model, handler.BeforePointState, e);
-                _undoRedoStack.Do(cmd);
-                //_view.Canvas.Refresh();
-            }
-        }
-
-        private void CursorHandler_FiguresMoved(object sender, Dictionary<int, BaseFigure> e)
-        {
-            if (_currentHandler.GetType() == typeof(CursorHandler))
-            {
-                CursorHandler handler = _currentHandler as CursorHandler;
-                MoveFigureCommand cmd = new MoveFigureCommand(_model, handler.BeforeState, e);
-                _undoRedoStack.Do(cmd);
-            }
-        }
-
-        private void CursorHandler_FigureSelected(object sender, View.FigureParameters e)
-        {
-            _view.FigureParameters = e;
-        }
-
-        private void _currentHandler_FigureCreated(object sender, BaseFigure e)
-        {
-            AddFigureCommand cmd = new AddFigureCommand(_model, e);
+            if (_currentHandler.GetType() != typeof(CursorHandler)) return;
+            var handler = _currentHandler as CursorHandler;
+            if (handler == null) return;
+            var cmd = new MovePointCommand(_model, handler.BeforePointState, e);
             _undoRedoStack.Do(cmd);
         }
 
+        /// <summary>
+        /// Обработчик события движения фигур(ой)
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void CursorHandler_FiguresMoved(object sender, Dictionary<int, BaseFigure> e)
+        {
+            if (_currentHandler.GetType() != typeof(CursorHandler)) return;
+            var handler = _currentHandler as CursorHandler;
+            if (handler == null) return;
+            var cmd = new MoveFigureCommand(_model, handler.BeforeState, e);
+            _undoRedoStack.Do(cmd);
+        }
+
+        /// <summary>
+        /// Обработчик события создания фигуры
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void _currentHandler_FigureCreated(object sender, BaseFigure e)
+        {
+            var cmd = new AddFigureCommand(_model, e);
+            _undoRedoStack.Do(cmd);
+        }
+
+        
+        /// <inheritdoc />
         /// <summary>
         /// Обновление состояния представления
         /// </summary>
@@ -238,8 +306,13 @@ namespace VectorEditor.Presenter
         public void Update(List<BaseFigure> figures)
         {
             _figures = figures;
+            _view.Figures = figures;
         }
 
+        /// <summary>
+        /// Получить список фигур
+        /// </summary>
+        /// <returns></returns>
         public List<BaseFigure> GetFigures()
         {
             return _figures;

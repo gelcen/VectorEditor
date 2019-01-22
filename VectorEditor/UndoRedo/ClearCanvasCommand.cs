@@ -5,27 +5,23 @@ using VectorEditor.Model;
 
 namespace VectorEditor.UndoRedo
 {
+    /// <inheritdoc />
     /// <summary>
     /// Класс для команды очистки канвы
     /// </summary>
     [JsonObject(MemberSerialization.Fields)]
     public class ClearCanvasCommand : ICommand
     {
-        private IModel _model;
-        private List<BaseFigure> _figures;
+        /// <summary>
+        /// Хранение удаленных фигур
+        /// </summary>
+        private readonly List<BaseFigure> _figures;
 
-        public IModel Model
-        {
-            get
-            {
-                return _model;
-            }
-
-            set
-            {
-                _model = value;
-            }
-        }
+        /// <inheritdoc />
+        /// <summary>
+        /// Свойство модели
+        /// </summary>
+        public IModel Model { get; set; }
 
         /// <summary>
         /// Конструктор класса команды очистки канвы
@@ -33,9 +29,9 @@ namespace VectorEditor.UndoRedo
         /// <param name="model">Модель</param>
         public ClearCanvasCommand(IModel model)
         {
-            _model = model;
+            Model = model;
             _figures = new List<BaseFigure>();
-            foreach (var figure in model.getFigureList())
+            foreach (var figure in model.GetFigureList())
             {
                 _figures.Add(FigureFactory.CreateCopy(figure));
             }
@@ -50,14 +46,16 @@ namespace VectorEditor.UndoRedo
             return "Canvas has been cleared";
         }
 
+        /// <inheritdoc />
         /// <summary>
         /// Выполнить
         /// </summary>
         public void Do()
         {
-            _model.ClearCanvas();
+            Model.ClearCanvas();
         }
 
+        /// <inheritdoc />
         /// <summary>
         /// Отменить
         /// </summary>
@@ -65,7 +63,7 @@ namespace VectorEditor.UndoRedo
         {
             foreach (var figure in _figures)
             {
-                _model.AddFigure(figure);
+                Model.AddFigure(figure);
             }
         }
     }

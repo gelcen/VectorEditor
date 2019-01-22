@@ -5,28 +5,17 @@ using VectorEditor.Model;
 
 namespace VectorEditor.UndoRedo
 {
+    /// <inheritdoc />
     /// <summary>
     /// Класс для команды движения фигур
     /// </summary>
     [JsonObject(MemberSerialization.Fields)]
     public class MoveFigureCommand : ICommand
     {
-        IModel _model;
-        Dictionary<int, BaseFigure> _beforeState;
-        Dictionary<int, BaseFigure> _newState;
+        private readonly Dictionary<int, BaseFigure> _beforeState;
+        private readonly Dictionary<int, BaseFigure> _newState;
 
-        public IModel Model
-        {
-            get
-            {
-                return _model;
-            }
-
-            set
-            {
-                _model = value;
-            }
-        }
+        public IModel Model { get; set; }
 
         /// <summary>
         /// Конструктор класса команды движения фигур
@@ -38,22 +27,23 @@ namespace VectorEditor.UndoRedo
                                  Dictionary<int, BaseFigure> beforeState,
                                  Dictionary<int, BaseFigure> newState)
         {
-            _model = model;
+            Model = model;
             _beforeState = new Dictionary<int, BaseFigure>();
             _newState = new Dictionary<int, BaseFigure>();
 
-            foreach (KeyValuePair<int, BaseFigure> entry in beforeState)
+            foreach (var entry in beforeState)
             {
-                int index = entry.Key;
+                var index = entry.Key;
                 _beforeState.Add(index, FigureFactory.CreateCopy(entry.Value));
             }
-            foreach(KeyValuePair < int, BaseFigure > entry in newState)
+            foreach(var entry in newState)
             {
-                int index = entry.Key;
+                var index = entry.Key;
                 _newState.Add(index, FigureFactory.CreateCopy(entry.Value));
             }
         }
 
+        /// <inheritdoc />
         /// <summary>
         /// Выполнить
         /// </summary>
@@ -61,10 +51,11 @@ namespace VectorEditor.UndoRedo
         {
             foreach (var figure in _newState)
             {
-                _model.MoveFigure(figure.Key, figure.Value);
+                Model.MoveFigure(figure.Key, figure.Value);
             }
         }
 
+        /// <inheritdoc />
         /// <summary>
         /// Отменить
         /// </summary>
@@ -72,7 +63,7 @@ namespace VectorEditor.UndoRedo
         {
             foreach (var figure in _beforeState)
             {
-                _model.MoveFigure(figure.Key, figure.Value);
+                Model.MoveFigure(figure.Key, figure.Value);
             }
         }
 

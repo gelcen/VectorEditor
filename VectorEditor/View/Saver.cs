@@ -12,28 +12,34 @@ namespace VectorEditor.View
     /// </summary>
     public class Saver
     {
-
+        /// <summary>
+        /// Сохранения в файл
+        /// </summary>
+        /// <param name="figures"></param>
+        /// <param name="undo"></param>
+        /// <param name="redo"></param>
+        /// <param name="filename"></param>
         public void SaveToFile(List<BaseFigure> figures,
-                               Stack<ICommand> Undo,
-                               Stack<ICommand> Redo,                    
+                               Stack<ICommand> undo,
+                               Stack<ICommand> redo,                    
                                string filename)
         {            
             var file = new StreamWriter(filename);
             file.WriteLine(figures.Count);
-            file.WriteLine(Undo.Count);
+            file.WriteLine(undo.Count);
             foreach (var figure in figures)
             {
                 var jsonString = JsonConvert.SerializeObject(figure, 
                                 new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All });
                 file.WriteLine(jsonString);
             }
-            foreach (var command in Undo)
+            foreach (var command in undo)
             {
                 var jsonString = JsonConvert.SerializeObject(command,
                                 new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All });
                 file.WriteLine(jsonString);
             }
-            foreach (var command in Redo)
+            foreach (var command in redo)
             {
                 var jsonString = JsonConvert.SerializeObject(command,
                                 new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All });
@@ -42,13 +48,18 @@ namespace VectorEditor.View
             file.Close();
         }
 
+        /// <summary>
+        /// Чтение из файла
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <returns></returns>
         public FileLoadedEventArgs OpenFromFile(string filename)
         {
             var fileLoadedEventArgs = new FileLoadedEventArgs();
             var file = new StreamReader(filename);
-            int figuresCount = Convert.ToInt32(file.ReadLine());
-            int undoCount = Convert.ToInt32(file.ReadLine());
-            for (int i = 0; i < figuresCount; i++)
+            var figuresCount = Convert.ToInt32(file.ReadLine());
+            var undoCount = Convert.ToInt32(file.ReadLine());
+            for (var i = 0; i < figuresCount; i++)
             {
                 var line = file.ReadLine();
                 var figure = (BaseFigure)JsonConvert.DeserializeObject(line,
@@ -56,7 +67,7 @@ namespace VectorEditor.View
                 figure = FigureFactory.CreateCopy(figure);
                 fileLoadedEventArgs.Figures.Add(figure);
             }
-            for (int i = 0; i < undoCount; i++)
+            for (var i = 0; i < undoCount; i++)
             {
                 var line = file.ReadLine();
                 var command = (ICommand)JsonConvert.DeserializeObject(line,

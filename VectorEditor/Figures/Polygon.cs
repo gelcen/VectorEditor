@@ -2,6 +2,7 @@
 
 namespace VectorEditor.Figures
 {
+    /// <inheritdoc />
     /// <summary>
     /// Класс Полигон
     /// </summary>

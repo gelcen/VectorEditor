@@ -1,14 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using VectorEditor.Figures;
 
-namespace VectorEditor
+namespace VectorEditor.Observer
 {
+    /// <summary>
+    /// Интефейс наблюдателя
+    /// </summary>
     public interface IObserver
     {
+        /// <summary>
+        /// Обновление состояния предмета
+        /// </summary>
+        /// <param name="figures">Фигуры</param>
         void Update(List<BaseFigure> figures);
     }
 }
