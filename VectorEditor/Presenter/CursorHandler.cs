@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Drawing.Text;
 using System.Linq;
 using System.Windows.Forms;
 using VectorEditor.Drawers;
@@ -381,46 +382,18 @@ namespace VectorEditor.Presenter
             if (SelectedFigures == null) return;
             if (SelectedFigures.Count == 1)
             {
-                var newX1 = e.X + _offsetX;
-                var newY1 = e.Y + _offsetY;
-
-                var dx = newX1 - _selectedFigure.Points.GetPoints()[0].X;
-                var dy = newY1 - _selectedFigure.Points.GetPoints()[0].Y;
-
-                if (Math.Abs(dx) < 0.000000001 && Math.Abs(dy) < 0.000000001) return;
-
-                var tmpPt0 = new PointF(newX1, newY1);
-                _selectedFigure.Points.Replace(0, tmpPt0);
-                var count = _selectedFigure.Points.GetPoints().Count;
-                for (var i = 1; i < count; i++)
-                {
-                    var tempPoint1 = new PointF(
-                        _selectedFigure.Points.GetPoints()[i].X + dx,
-                        _selectedFigure.Points.GetPoints()[i].Y + dy);
-                    _selectedFigure.Points.Replace(i, tempPoint1);
-                }
+                MoveFigurePoints(_selectedFigure, e.X, e.Y, _offsetX, _offsetY);              
             }
             else
-            {
+            {                
                 var newX1 = e.X + _offsetX;
                 var newY1 = e.Y + _offsetY;
 
                 var dx = newX1 - _selectedFigure.Points.GetPoints()[0].X;
                 var dy = newY1 - _selectedFigure.Points.GetPoints()[0].Y;
 
-                if (Math.Abs(dx) < 0.000000001 && Math.Abs(dy) < 0.000000001) return;
+                MoveFigurePoints(_selectedFigure, e.X, e.Y, _offsetX, _offsetY);
 
-                var tmpPt0 = new PointF(newX1, newY1);
-                _selectedFigure.Points.Replace(0, tmpPt0);
-                var count = _selectedFigure.Points.GetPoints().Count;
-                for (var i = 1; i < count; i++)    
-                {
-                    var tempPoint1 = new PointF(
-                        _selectedFigure.Points.GetPoints()[i].X + dx,
-                        _selectedFigure.Points.GetPoints()[i].Y + dy);
-                    _selectedFigure.Points.Replace(i, tempPoint1);
-                }
-                
                 foreach (var figure in SelectedFigures)
                 {
                     if (figure == _selectedFigure) continue;
@@ -435,6 +408,36 @@ namespace VectorEditor.Presenter
             }
 
             Canvas.Refresh();
+        }
+
+        /// <summary>
+        /// Сдвиг точек фигуры
+        /// </summary>
+        /// <param name="figure">Фигура</param>
+        /// <param name="eX">Текущие координата Х</param>
+        /// <param name="eY">Текущая координата Y</param>
+        /// <param name="offsetX">Смещение по X</param>
+        /// <param name="offsetY">Смещение по Y</param>
+        private static void MoveFigurePoints(BaseFigure figure, int eX, int eY, float offsetX, float offsetY)
+        {
+            var newX1 = eX + offsetX;
+            var newY1 = eY + offsetY;
+
+            var dx = newX1 - figure.Points.GetPoints()[0].X;
+            var dy = newY1 - figure.Points.GetPoints()[0].Y;
+
+            if (Math.Abs(dx) < 0.000000001 && Math.Abs(dy) < 0.000000001) return;
+
+            var tmpPt0 = new PointF(newX1, newY1);
+            figure.Points.Replace(0, tmpPt0);
+            var count = figure.Points.GetPoints().Count;
+            for (var i = 1; i < count; i++)
+            {
+                var tempPoint1 = new PointF(
+                    figure.Points.GetPoints()[i].X + dx,
+                    figure.Points.GetPoints()[i].Y + dy);
+                figure.Points.Replace(i, tempPoint1);
+            }
         }
 
         /// <summary>
