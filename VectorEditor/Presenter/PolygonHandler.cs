@@ -174,12 +174,22 @@ namespace VectorEditor.Presenter
         /// <param name="e"></param>
         public void MouseMove(object sender, MouseEventArgs e)
         {
-            if (_polygon == null) return;
-            var temp = new PointF(e.Location.X, e.Location.Y);
-            _polygon.Points.RemoveLast();
-            _polygon.Points.AddPoint(temp);
+            AddPointToFigure(_polygon, e);
 
             Canvas.Refresh();
+        }
+
+        /// <summary>
+        /// Добавление точки в полигон, полилинию
+        /// </summary>
+        /// <param name="polygon">Полигон</param>
+        /// <param name="e">Точка</param>
+        public static void AddPointToFigure(BaseFigure polygon, MouseEventArgs e)
+        {
+            if (polygon == null) return;
+            var temp = new PointF(e.Location.X, e.Location.Y);
+            polygon.Points.RemoveLast();
+            polygon.Points.AddPoint(temp);
         }
 
         /// <summary>
@@ -189,10 +199,7 @@ namespace VectorEditor.Presenter
         /// <param name="e"></param>
         public void MouseUp(object sender, MouseEventArgs e)
         {
-            if (_polygon == null) return;
-            var temp = new PointF(e.Location.X, e.Location.Y);
-            _polygon.Points.RemoveLast();
-            _polygon.Points.AddPoint(temp);
+            AddPointToFigure(_polygon, e);
 
             Canvas.Refresh();
         }

@@ -167,10 +167,7 @@ namespace VectorEditor.Presenter
         /// <param name="e"></param>
         public void MouseMove(object sender, MouseEventArgs e)
         {
-            if (_polyline == null) return;
-            var temp = new PointF(e.Location.X, e.Location.Y);
-            _polyline.Points.RemoveLast();
-            _polyline.Points.AddPoint(temp);
+            PolygonHandler.AddPointToFigure(_polyline, e);
 
             Canvas.Refresh();
         }
@@ -182,10 +179,7 @@ namespace VectorEditor.Presenter
         /// <param name="e"></param>
         public void MouseUp(object sender, MouseEventArgs e)
         {
-            if (_polyline == null) return;
-            var temp = new PointF(e.Location.X, e.Location.Y);
-            _polyline.Points.RemoveLast();
-            _polyline.Points.AddPoint(temp);
+            PolygonHandler.AddPointToFigure(_polyline, e);
 
             Canvas.Refresh();
         }

@@ -46,14 +46,7 @@ namespace VectorEditor.Drawers
         public static void DrawLineSelection(BaseFigure figure, Graphics canvas)
         {
             var points = figure.Points.GetPoints();
-            foreach (var pt in points)
-            {
-                var rect = new Rectangle(
-                    (int)pt.X - ObjectRadius, (int)pt.Y - ObjectRadius,
-                    2 * ObjectRadius + 1, 2 * ObjectRadius + 1);
-                canvas.FillEllipse(Brushes.White, rect);
-                canvas.DrawEllipse(Pens.Black, rect);
-            }
+            CircleDrawer.DrawSelectionRoundShapes(points, canvas);
         }
     }
 }
