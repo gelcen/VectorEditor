@@ -49,7 +49,6 @@
             this.btnHeightResize = new System.Windows.Forms.Button();
             this.btnDiagonalResize = new System.Windows.Forms.Button();
             this.btnWidthResize = new System.Windows.Forms.Button();
-            this.Canvas = new System.Windows.Forms.PictureBox();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.файлToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.соToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -64,11 +63,12 @@
             this._saveToPNGDialog = new System.Windows.Forms.SaveFileDialog();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.pbCanvas = new System.Windows.Forms.PictureBox();
             this.gpFigures.SuspendLayout();
             this.gpProps.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudLineThickness)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.Canvas)).BeginInit();
             this.menuStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbCanvas)).BeginInit();
             this.SuspendLayout();
             // 
             // gpFigures
@@ -92,14 +92,12 @@
             // 
             // buttonClearCanvas
             // 
-            this.buttonClearCanvas.Enabled = false;
             this.buttonClearCanvas.Location = new System.Drawing.Point(5, 121);
             this.buttonClearCanvas.Name = "buttonClearCanvas";
             this.buttonClearCanvas.Size = new System.Drawing.Size(107, 31);
             this.buttonClearCanvas.TabIndex = 6;
             this.buttonClearCanvas.Text = "Очистить канву";
             this.buttonClearCanvas.UseVisualStyleBackColor = true;
-            this.buttonClearCanvas.Visible = false;
             this.buttonClearCanvas.Click += new System.EventHandler(this.buttonClearCanvas_Click);
             // 
             // buttonEllipse
@@ -317,20 +315,6 @@
             this.btnWidthResize.UseVisualStyleBackColor = true;
             this.btnWidthResize.MouseMove += new System.Windows.Forms.MouseEventHandler(this.btnWidthResize_MouseMove);
             // 
-            // pbCanvas
-            // 
-            this.Canvas.BackColor = System.Drawing.SystemColors.HighlightText;
-            this.Canvas.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.Canvas.Location = new System.Drawing.Point(9, 29);
-            this.Canvas.Name = "Canvas";
-            this.Canvas.Size = new System.Drawing.Size(587, 514);
-            this.Canvas.TabIndex = 6;
-            this.Canvas.TabStop = false;
-            this.Canvas.Paint += new System.Windows.Forms.PaintEventHandler(this.pbCanvas_Paint);
-            this.Canvas.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pbCanvas_MouseDown);
-            this.Canvas.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pbCanvas_MouseMove);
-            this.Canvas.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pbCanvas_MouseUp);
-            // 
             // menuStrip1
             // 
             this.menuStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
@@ -438,12 +422,26 @@
             this.openFileDialog.DefaultExt = "vec";
             this.openFileDialog.Filter = "Векторный файл (*.vec)|*.vec|Все файлы (*.*)|*.*";
             // 
+            // pbCanvas
+            // 
+            this.pbCanvas.BackColor = System.Drawing.Color.White;
+            this.pbCanvas.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pbCanvas.Location = new System.Drawing.Point(14, 28);
+            this.pbCanvas.Name = "pbCanvas";
+            this.pbCanvas.Size = new System.Drawing.Size(579, 512);
+            this.pbCanvas.TabIndex = 8;
+            this.pbCanvas.TabStop = false;
+            this.pbCanvas.Paint += new System.Windows.Forms.PaintEventHandler(this.pbCanvas_Paint);
+            this.pbCanvas.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pbCanvas_MouseDown);
+            this.pbCanvas.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pbCanvas_MouseMove);
+            this.pbCanvas.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pbCanvas_MouseUp);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(857, 573);
-            this.Controls.Add(this.Canvas);
+            this.Controls.Add(this.pbCanvas);
             this.Controls.Add(this.btnWidthResize);
             this.Controls.Add(this.btnDiagonalResize);
             this.Controls.Add(this.btnHeightResize);
@@ -461,9 +459,9 @@
             this.gpProps.ResumeLayout(false);
             this.gpProps.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudLineThickness)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.Canvas)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbCanvas)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -505,6 +503,7 @@
         private System.Windows.Forms.SaveFileDialog _saveToPNGDialog;
         private System.Windows.Forms.SaveFileDialog saveFileDialog;
         private System.Windows.Forms.OpenFileDialog openFileDialog;
+        private System.Windows.Forms.PictureBox pbCanvas;
     }
 }
 

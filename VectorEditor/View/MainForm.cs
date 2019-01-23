@@ -4,7 +4,6 @@ using System.Drawing;
 using System.Windows.Forms;
 using VectorEditor.Drawers;
 using VectorEditor.Figures;
-using VectorEditor.Model;
 using VectorEditor.Presenter;
 using VectorEditor.UndoRedo;
 
@@ -32,12 +31,17 @@ namespace VectorEditor.View
         private FigureParameters _figureParameters;
 
         #region Реализация IView
+
         /// <inheritdoc />
         /// <summary>
         /// Свойство для канвы
         /// </summary>
-        public PictureBox Canvas { get; private set; }
+        public PictureBox Canvas
+        {
+            get { return pbCanvas; }
+        }
 
+        /// <inheritdoc />
         /// <summary>
         /// Список фигур
         /// </summary>
@@ -69,6 +73,7 @@ namespace VectorEditor.View
             }
         }
 
+        /// <inheritdoc />
         /// <summary>
         /// Текущий инструмент
         /// </summary>
@@ -91,41 +96,49 @@ namespace VectorEditor.View
             }
         }
 
+        /// <inheritdoc />
         /// <summary>
         /// Событие выбора инструмента
         /// </summary>
         public event EventHandler<Item> ToolPicked;
         
+        /// <inheritdoc />
         /// <summary>
         /// Событие изменения параметров фигуры
         /// </summary>
         public event EventHandler<FigureParameters> ParametersChanged;
 
+        /// <inheritdoc />
         /// <summary>
         /// Событие нажатия на кнопку очистки канвы
         /// </summary>
         public event EventHandler CanvasCleared;
 
+        /// <inheritdoc />
         /// <summary>
         /// Событие нажатия на кнопку удаления
         /// </summary>
         public event EventHandler FiguresDeleted;
 
+        /// <inheritdoc />
         /// <summary>
         /// События нажатия на кнопку копирования 
         /// </summary>
         public event EventHandler FigureCopied;
 
+        /// <inheritdoc />
         /// <summary>
         /// Событие нажатия на отмену операции
         /// </summary>
         public event EventHandler UndoPressed;
 
+        /// <inheritdoc />
         /// <summary>
         /// События нажатия на возврат операции
         /// </summary>
         public event EventHandler RedoPressed;
 
+        /// <inheritdoc />
         /// <summary>
         /// Событие загрузки проекта
         /// </summary>
@@ -142,56 +155,6 @@ namespace VectorEditor.View
             var handler = FileLoaded;
 
             handler?.Invoke(this, e);
-        }
-
-        /// <summary>
-        /// Вызов события возврата команды
-        /// </summary>
-        private void OnRedoPressed()
-        {
-            var handler = RedoPressed;
-
-            handler?.Invoke(this, null);
-        }
-
-        /// <summary>
-        /// Вызов события отмены команды
-        /// </summary>
-        private void OnUndoPressed()
-        {
-            var handler = UndoPressed;
-
-            handler?.Invoke(this, null);
-        }
-
-        /// <summary>
-        /// Вызов события копирования фигур
-        /// </summary>
-        private void OnFigureCopied()
-        {
-            var handler = FigureCopied;
-
-            handler?.Invoke(this, null);
-        }
-
-        /// <summary>
-        /// Вызов события удаления фигуры
-        /// </summary>
-        private void OnFiguresDeleted()
-        {
-            var handler = FiguresDeleted;
-
-            handler?.Invoke(this, null);
-        }
-
-        /// <summary>
-        /// Вызов события очистки канвы
-        /// </summary>
-        private void OnCanvasCleared()
-        {
-            var handler = CanvasCleared;
-
-            handler?.Invoke(this, null);
         }
 
         /// <summary>
@@ -231,13 +194,10 @@ namespace VectorEditor.View
                 LineStyle = 0
             };
 
+            pbCanvas.Parent = this;
 
             _toolsDictionary = new Dictionary<Control, Item>();
-            InitTools();
-
-            
-            Canvas.Parent = this;
-
+            InitTools();            
         }
 
         /// <summary>
@@ -270,8 +230,7 @@ namespace VectorEditor.View
         /// <param name="e"></param>
         private void buttonClearCanvas_Click(object sender, EventArgs e)
         {
-            //pbCanvas.Image = null;
-            OnCanvasCleared();
+            CanvasCleared?.Invoke(this, e);
         }
 
         #region Изменение размера канвы
@@ -461,7 +420,7 @@ namespace VectorEditor.View
         /// <param name="e"></param>
         private void DeleteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            OnFiguresDeleted();
+            FiguresDeleted?.Invoke(this, e);
         }
 
         /// <summary>
@@ -471,7 +430,7 @@ namespace VectorEditor.View
         /// <param name="e"></param>
         private void CopyToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            OnFigureCopied();
+            FigureCopied?.Invoke(this, e);
         }
 
         /// <summary>
@@ -481,7 +440,7 @@ namespace VectorEditor.View
         /// <param name="e"></param>
         private void UndoToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            OnUndoPressed();
+            UndoPressed?.Invoke(this, e);
         }
 
         /// <summary>
@@ -491,7 +450,7 @@ namespace VectorEditor.View
         /// <param name="e"></param>
         private void RedoToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            OnRedoPressed();
+            RedoPressed?.Invoke(this, e);
         }
 
         #endregion
@@ -575,19 +534,19 @@ namespace VectorEditor.View
         {
             if (e.Control && e.KeyCode == Keys.Z)
             {
-                OnUndoPressed();
+                UndoPressed?.Invoke(this, e);
             }
             if (e.Control && e.KeyCode == Keys.Y)
-            {
-                OnRedoPressed();
+            {                
+                RedoPressed?.Invoke(this, e);
             }
             if (e.Control && e.KeyCode == Keys.C)
-            {
-                OnFigureCopied();
+            {                
+                FigureCopied?.Invoke(this, e);
             }
             if (e.KeyCode == Keys.Delete)
             {
-                OnFiguresDeleted();
+                FiguresDeleted?.Invoke(this, e);
             }
 
         }

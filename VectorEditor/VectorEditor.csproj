@@ -57,6 +57,7 @@
     <Compile Include="Drawers\LineDrawer.cs" />
     <Compile Include="Drawers\PolygonDrawer.cs" />
     <Compile Include="Drawers\PolylineDrawer.cs" />
+    <Compile Include="EventsType.cs" />
     <Compile Include="Figures\BaseFigure.cs" />
     <Compile Include="Figures\Circle.cs" />
     <Compile Include="Figures\Ellipse.cs" />

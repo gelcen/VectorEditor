@@ -164,6 +164,7 @@ namespace VectorEditor.Presenter
             var cmd = new DeleteFigureCommand(_model, beforeState);
             _undoRedoStack.Do(cmd);
             handler.ClearSelectedFigures();
+            _view.Canvas.Refresh();
         }
 
         /// <summary>

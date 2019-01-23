@@ -19,6 +19,11 @@ namespace VectorEditor.UndoRedo
         /// </summary>
         private readonly Dictionary<int, BaseFigure> _deletedFigures;
 
+        /// <summary>
+        /// Коснтруктор класса команды удаления фигур
+        /// </summary>
+        /// <param name="model">Ссылка на модель</param>
+        /// <param name="deletedFigures">Удаленные фигуры</param>
         public DeleteFigureCommand(IModel model, Dictionary<int, BaseFigure> deletedFigures)
         {
             Model = model;
