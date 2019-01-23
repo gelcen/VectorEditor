@@ -174,13 +174,16 @@ namespace VectorEditor.Presenter
         /// <param name="e"></param>
         private void _view_CanvasCleared(object sender, EventArgs e)
         {
-            var cmd = new ClearCanvasCommand(_model);
-            _undoRedoStack.Do(cmd);
-            if (_currentHandler.GetType() == typeof(CursorHandler))
+            var beforeState = new Dictionary<int, BaseFigure>();
+            foreach (var figure in _model.GetFigureList())
             {
-                var handler = _currentHandler as CursorHandler;
-                handler?.ClearSelectedFigures();
+                if (!_model.GetFigureList().Contains(figure)) continue;
+                var index = _model.GetFigureList().IndexOf(figure);
+                beforeState.Add(index, figure);
             }
+
+            var cmd = new DeleteFigureCommand(_model, beforeState);
+            _undoRedoStack.Do(cmd);
             _view.Canvas.Refresh();
         }
 

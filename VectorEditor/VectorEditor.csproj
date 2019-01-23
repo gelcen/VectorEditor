@@ -79,7 +79,6 @@
     <Compile Include="Presenter\PolylineHandler.cs" />
     <Compile Include="RoundShapeType.cs" />
     <Compile Include="UndoRedo\AddFigureCommand.cs" />
-    <Compile Include="UndoRedo\ClearCanvasCommand.cs" />
     <Compile Include="UndoRedo\CommandFactory.cs" />
     <Compile Include="UndoRedo\DeleteFigureCommand.cs" />
     <Compile Include="UndoRedo\ICommand.cs" />
