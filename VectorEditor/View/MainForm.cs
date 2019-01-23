@@ -147,17 +147,6 @@ namespace VectorEditor.View
         #endregion
 
         /// <summary>
-        /// Вызов события загрузки проекта
-        /// </summary>
-        /// <param name="e"></param>
-        private void OnFileLoaded(FileLoadedEventArgs e)
-        {
-            var handler = FileLoaded;
-
-            handler?.Invoke(this, e);
-        }
-
-        /// <summary>
         /// Вызов события выбора инструмента
         /// </summary>
         /// <param name="pickedItem"></param>
@@ -166,16 +155,6 @@ namespace VectorEditor.View
             var handler = ToolPicked;
 
             handler?.Invoke(this, pickedItem);
-        }
-
-        /// <summary>
-        /// Вызов события изменения параметров
-        /// </summary>
-        /// <param name="figureParameters"></param>
-        private void OnParametersChanged(FigureParameters figureParameters)
-        {
-            var handler = ParametersChanged;
-            handler?.Invoke(this, figureParameters);
         }
 
         /// <inheritdoc />
@@ -301,7 +280,7 @@ namespace VectorEditor.View
         private void nudLineThickness_ValueChanged(object sender, EventArgs e)
         {
             _figureParameters.LineThickness = Convert.ToInt32(nudLineThickness.Value);
-            OnParametersChanged(_figureParameters);
+            ParametersChanged?.Invoke(this, _figureParameters);
         }
 
         /// <summary>
@@ -312,7 +291,7 @@ namespace VectorEditor.View
         private void cbLineType_SelectedIndexChanged(object sender, EventArgs e)
         {
             _figureParameters.LineStyle = cbLineType.SelectedIndex;
-            OnParametersChanged(_figureParameters);
+            ParametersChanged?.Invoke(this, _figureParameters);
         }
 
         /// <summary>
@@ -325,7 +304,7 @@ namespace VectorEditor.View
             if (colorDialogLineColor.ShowDialog() != DialogResult.OK) return;
             buttonLineColor.BackColor = colorDialogLineColor.Color;
             _figureParameters.LineColor = colorDialogLineColor.Color;
-            OnParametersChanged(_figureParameters);
+            ParametersChanged?.Invoke(this, _figureParameters);
         }
 
         /// <summary>
@@ -338,7 +317,7 @@ namespace VectorEditor.View
             if (colorDialogLineColor.ShowDialog() != DialogResult.OK) return;
             buttonFillColor.BackColor = colorDialogLineColor.Color;
             _figureParameters.FillColor = colorDialogLineColor.Color;
-            OnParametersChanged(_figureParameters);
+            ParametersChanged?.Invoke(this, _figureParameters);
         }
         #endregion
 
@@ -517,7 +496,7 @@ namespace VectorEditor.View
             try
             {
                 var fileLoadedEventArgs = saver.OpenFromFile(openFileDialog.FileName);
-                OnFileLoaded(fileLoadedEventArgs);
+                FileLoaded?.Invoke(this, fileLoadedEventArgs);
             }
             catch (Exception ex)
             {
