@@ -100,6 +100,7 @@ namespace VectorEditor.Presenter
             //}
             _undoRedoStack.UndoStack = e.UndoStack;
             _undoRedoStack.RedoStack = e.RedoStack;
+            FixCommands();
             _view.Canvas.Refresh();
         }
 
@@ -203,8 +204,6 @@ namespace VectorEditor.Presenter
         /// <param name="e"></param>
         private void _view_ParametersChanged(object sender, FigureParameters e)
         {
-            _currentHandler.FigureParameters = e;
-
             var beforeState = new Dictionary<int, BaseFigure>();
 
             if (_currentHandler.GetType() == typeof(CursorHandler))
@@ -218,10 +217,14 @@ namespace VectorEditor.Presenter
                         beforeState.Add(index, FigureFactory.CreateCopy(figure));
                     }
             }
+            else
             {
-                var cmd = new ChangeParametersCommand(_model, beforeState, e);
-                _undoRedoStack.Do(cmd);
+                _currentHandler.FigureParameters = e;
             }
+
+            var cmd = new ChangeParametersCommand(_model, beforeState, e);
+            _undoRedoStack.Do(cmd);
+
             _view.Canvas.Invalidate();
         }
 
@@ -297,6 +300,22 @@ namespace VectorEditor.Presenter
             if (handler == null) return;
             var cmd = new MoveFigureCommand(_model, handler.BeforeState, e);
             _undoRedoStack.Do(cmd);
+        }
+
+        /// <summary>
+        /// Позволяет исправить команды после чтения. 
+        /// </summary>
+        private void FixCommands()
+        {
+            int count = _undoRedoStack.UndoCount;
+            for (int i = 0; i < count; i++)
+            {
+                _undoRedoStack.Undo();
+            }
+            for (int i = 0; i < count; i++)
+            {
+                _undoRedoStack.Redo();
+            }
         }
 
         /// <summary>

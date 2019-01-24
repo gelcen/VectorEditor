@@ -73,7 +73,7 @@ namespace VectorEditor.UndoRedo
         {
             foreach (var figure in _beforeState)
             {
-                FigureParameters parameters = GetParameters(figure.Value);
+                var parameters = GetParameters(figure.Value);
                 Model.ChangeFigureParameters(figure.Key, parameters);
             }
         }

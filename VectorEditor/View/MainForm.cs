@@ -66,10 +66,10 @@ namespace VectorEditor.View
             set
             {
                 _figureParameters = value;
-                nudLineThickness.Value = _figureParameters.LineThickness;
-                buttonLineColor.BackColor = _figureParameters.LineColor;
-                buttonFillColor.BackColor = _figureParameters.FillColor;
-                cbLineType.SelectedIndex = _figureParameters.LineStyle;
+                //nudLineThickness.Value = _figureParameters.LineThickness;
+                //buttonLineColor.BackColor = _figureParameters.LineColor;
+                //buttonFillColor.BackColor = _figureParameters.FillColor;
+                //cbLineType.SelectedIndex = _figureParameters.LineStyle;
             }
         }
 

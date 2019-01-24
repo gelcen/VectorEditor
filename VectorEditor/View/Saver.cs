@@ -77,17 +77,21 @@ namespace VectorEditor.View
                     new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All });
                 tempList.Add(command);
             }
-
             for (var i = tempList.Count-1; i >= 0; i--)
             {
                 fileLoadedEventArgs.UndoStack.Push(tempList[i]);
             }
+            tempList.Clear();
             while (!file.EndOfStream)
             {
                 var line = file.ReadLine();
                 var command = (ICommand)JsonConvert.DeserializeObject(line, 
                     new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All });
-                fileLoadedEventArgs.RedoStack.Push(command);
+                tempList.Add(command);
+            }
+            for (var i = tempList.Count - 1; i >= 0; i--)
+            {
+                fileLoadedEventArgs.RedoStack.Push(tempList[i]);
             }
             file.Close();
             Console.WriteLine("Has read: ");
