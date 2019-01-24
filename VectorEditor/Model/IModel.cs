@@ -12,6 +12,11 @@ namespace VectorEditor.Model
     public interface IModel: ISubject
     {
         /// <summary>
+        /// Установка ссылки на список фигур.
+        /// </summary>
+        List<BaseFigure> FiguresList { set; }
+
+        /// <summary>
         /// Добавление фигуры
         /// </summary>
         void AddFigure(BaseFigure figure);

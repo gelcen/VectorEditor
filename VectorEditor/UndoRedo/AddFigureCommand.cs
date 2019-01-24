@@ -23,14 +23,42 @@ namespace VectorEditor.UndoRedo
         public IModel Model { get; set; }
 
         /// <summary>
+        /// Индекс добавленной фигуры
+        /// </summary>
+        private int _index;
+
+        /// <summary>
+        /// Для хранения добавленной фигуры
+        /// </summary>
+        public BaseFigure Figure => _figure;
+
+        /// <summary>
+        /// Поле для индекса
+        /// </summary>
+        public int Index
+        {
+            get
+            {
+                return _index;
+            }
+
+            set
+            {
+                _index = value;
+            }
+        }
+
+        /// <summary>
         /// Конструктор класса команды добавления фигуры
         /// </summary>
         /// <param name="model">Модель</param>
         /// <param name="figure">Фигура для добавления</param>
-        public AddFigureCommand(IModel model, BaseFigure figure)
+        /// <param name="index">Индекс</param>
+        public AddFigureCommand(IModel model, BaseFigure figure, int index)
         {
             Model = model;
             _figure = figure;
+            Index = index;
         }
 
         /// <summary>
@@ -39,7 +67,7 @@ namespace VectorEditor.UndoRedo
         /// <returns></returns>
         public override string ToString()
         {
-            return "Added " + _figure.GetType();
+            return "Added " + Figure.GetType();
         }
 
         /// <inheritdoc />
@@ -48,7 +76,7 @@ namespace VectorEditor.UndoRedo
         /// </summary>
         public void Do()
         {
-            Model.AddFigure(_figure);
+            Model.AddFigure(Figure);
         }
 
         /// <inheritdoc />
@@ -57,7 +85,7 @@ namespace VectorEditor.UndoRedo
         /// </summary>
         public void Undo()
         {
-            Model.DeleteFigure(_figure);
+            Model.DeleteFigureAt(Index, Figure);
         }
 
     }

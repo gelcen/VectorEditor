@@ -78,7 +78,7 @@ namespace VectorEditor.Presenter
             _model.ClearCanvas();
             foreach (var figure in e.Figures)
             {
-                _model.AddFigure(FigureFactory.CreateCopy(figure));
+                _model.AddFigure(figure);
             }
             foreach (var command in e.UndoStack)
             {
@@ -88,7 +88,16 @@ namespace VectorEditor.Presenter
             {
                 CommandFactory.RestorePointersToModel(command, _model);
             }
+            //_model.FiguresList = e.Figures;
             _undoRedoStack.Reset();
+            //foreach (var command in e.UndoStack)
+            //{
+            //    _undoRedoStack.UndoStack.Push(command);
+            //}
+            //foreach (var command in e.RedoStack)
+            //{
+            //    _undoRedoStack.RedoStack.Push(command);
+            //}
             _undoRedoStack.UndoStack = e.UndoStack;
             _undoRedoStack.RedoStack = e.RedoStack;
             _view.Canvas.Refresh();
@@ -297,7 +306,8 @@ namespace VectorEditor.Presenter
         /// <param name="e"></param>
         private void _currentHandler_FigureCreated(object sender, BaseFigure e)
         {
-            var cmd = new AddFigureCommand(_model, e);
+            var index = _model.GetFigureList().Count;
+            var cmd = new AddFigureCommand(_model, e, index);
             _undoRedoStack.Do(cmd);
         }
 

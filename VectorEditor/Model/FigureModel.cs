@@ -26,6 +26,15 @@ namespace VectorEditor.Model
             _observers = new List<IObserver>();
         }
 
+        /// <inheritdoc />
+        /// <summary>
+        /// Установка списка фигур
+        /// </summary>
+        public List<BaseFigure> FiguresList
+        {
+            set { _figures = value; }
+        }
+
         /// <summary>
         /// Список фигур
         /// </summary>
@@ -222,6 +231,7 @@ namespace VectorEditor.Model
         public void ClearCanvas()
         {
             _figures.Clear();
+            _figures = new List<BaseFigure>();
             NotifyObservers();
         }
 

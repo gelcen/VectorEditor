@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using VectorEditor.Figures;
 using VectorEditor.UndoRedo;
 
@@ -27,19 +28,21 @@ namespace VectorEditor.View
             var file = new StreamWriter(filename);
             file.WriteLine(figures.Count);
             file.WriteLine(undo.Count);
+            var undoList = undo.ToList().AsReadOnly();
+            var redoList = redo.ToList().AsReadOnly();
             foreach (var figure in figures)
             {
                 var jsonString = JsonConvert.SerializeObject(figure, 
                                 new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All });
                 file.WriteLine(jsonString);
             }
-            foreach (var command in undo)
+            foreach (var command in undoList)
             {
                 var jsonString = JsonConvert.SerializeObject(command,
                                 new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All });
                 file.WriteLine(jsonString);
             }
-            foreach (var command in redo)
+            foreach (var command in redoList)
             {
                 var jsonString = JsonConvert.SerializeObject(command,
                                 new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All });
@@ -64,15 +67,20 @@ namespace VectorEditor.View
                 var line = file.ReadLine();
                 var figure = (BaseFigure)JsonConvert.DeserializeObject(line,
                     new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All });
-                figure = FigureFactory.CreateCopy(figure);
                 fileLoadedEventArgs.Figures.Add(figure);
             }
+            List<ICommand> tempList = new List<ICommand>();
             for (var i = 0; i < undoCount; i++)
             {
                 var line = file.ReadLine();
                 var command = (ICommand)JsonConvert.DeserializeObject(line,
                     new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All });
-                fileLoadedEventArgs.UndoStack.Push(command);
+                tempList.Add(command);
+            }
+
+            for (var i = tempList.Count-1; i >= 0; i--)
+            {
+                fileLoadedEventArgs.UndoStack.Push(tempList[i]);
             }
             while (!file.EndOfStream)
             {
@@ -82,6 +90,12 @@ namespace VectorEditor.View
                 fileLoadedEventArgs.RedoStack.Push(command);
             }
             file.Close();
+            Console.WriteLine("Has read: ");
+            foreach (var command in fileLoadedEventArgs.UndoStack)
+            {
+                Console.WriteLine(command);
+            }
+            Console.WriteLine("Poped from stack: " + fileLoadedEventArgs.UndoStack.Peek());
             return fileLoadedEventArgs;
         }
     }

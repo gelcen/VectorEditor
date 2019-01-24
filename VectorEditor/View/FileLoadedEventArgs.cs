@@ -5,11 +5,24 @@ using VectorEditor.Figures;
 
 namespace VectorEditor.View
 {
+    /// <inheritdoc />
     /// <summary>
     /// Класс для хранения данных события открытия файла
     /// </summary>
     public class FileLoadedEventArgs:EventArgs
     {
+        /// <inheritdoc />
+        /// <summary>
+        /// Конструктор класса для аргументов
+        /// события открытия файла.
+        /// </summary>
+        public FileLoadedEventArgs()
+        {
+            Figures = new List<BaseFigure>();
+            UndoStack = new Stack<ICommand>();
+            RedoStack = new Stack<ICommand>();
+        }
+
         /// <summary>
         /// Фигуры
         /// </summary>
