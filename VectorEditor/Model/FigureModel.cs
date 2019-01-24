@@ -107,7 +107,11 @@ namespace VectorEditor.Model
         /// <param name="figure"></param>
         public void DeleteFigure(BaseFigure figure)
         {
-            _figures.Remove(figure);
+            if (_figures.Contains(figure))
+            {
+                _figures.Remove(figure);
+            }
+            //_figures.Remove(figure);
             NotifyObservers();
         }
 

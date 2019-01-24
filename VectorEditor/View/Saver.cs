@@ -94,12 +94,6 @@ namespace VectorEditor.View
                 fileLoadedEventArgs.RedoStack.Push(tempList[i]);
             }
             file.Close();
-            Console.WriteLine("Has read: ");
-            foreach (var command in fileLoadedEventArgs.UndoStack)
-            {
-                Console.WriteLine(command);
-            }
-            Console.WriteLine("Poped from stack: " + fileLoadedEventArgs.UndoStack.Peek());
             return fileLoadedEventArgs;
         }
     }

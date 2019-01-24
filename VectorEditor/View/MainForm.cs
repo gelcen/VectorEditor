@@ -493,15 +493,15 @@ namespace VectorEditor.View
         {
             var saver = new Saver();
             if (openFileDialog.ShowDialog() != DialogResult.OK) return;
-            try
-            {
+            //try
+            //{
                 var fileLoadedEventArgs = saver.OpenFromFile(openFileDialog.FileName);
                 FileLoaded?.Invoke(this, fileLoadedEventArgs);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+            //}
+            //catch (Exception ex)
+            //{
+            //    throw new Exception(ex.Message);
+            //}
         }
 
         /// <summary>

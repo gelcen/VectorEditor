@@ -90,16 +90,16 @@ namespace VectorEditor.Presenter
             }
             //_model.FiguresList = e.Figures;
             _undoRedoStack.Reset();
-            //foreach (var command in e.UndoStack)
-            //{
-            //    _undoRedoStack.UndoStack.Push(command);
-            //}
-            //foreach (var command in e.RedoStack)
-            //{
-            //    _undoRedoStack.RedoStack.Push(command);
-            //}
-            _undoRedoStack.UndoStack = e.UndoStack;
-            _undoRedoStack.RedoStack = e.RedoStack;
+            foreach (var command in e.UndoStack)
+            {
+                _undoRedoStack.UndoStack.Push(command);
+            }
+            foreach (var command in e.RedoStack)
+            {
+                _undoRedoStack.RedoStack.Push(command);
+            }
+            //_undoRedoStack.UndoStack = e.UndoStack;
+            //_undoRedoStack.RedoStack = e.RedoStack;
             FixCommands();
             _view.Canvas.Refresh();
         }

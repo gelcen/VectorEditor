@@ -845,7 +845,7 @@ namespace VectorEditor.Presenter
         /// <param name="path">GraphicsPath</param>
         /// <param name="figure">Добавляемая фигура</param>
         private static void AddFigureToGraphicsPath(GraphicsPath path, BaseFigure figure)
-        {
+        {                     
             var points = figure.Points.GetPoints();
 
             if (figure.GetType() == typeof(Line))

@@ -47,7 +47,8 @@ namespace VectorEditor.UndoRedo
         {
             foreach (var figure in _deletedFigures)
             {
-                Model.DeleteFigureAt(figure.Key, figure.Value);
+                //Model.DeleteFigureAt(figure.Key, figure.Value);
+                Model.DeleteFigure(figure.Value);
             }
         }
 
