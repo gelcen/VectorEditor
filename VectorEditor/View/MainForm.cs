@@ -32,6 +32,24 @@ namespace VectorEditor.View
 
         #region Реализация IView
 
+        /// <summary>
+        /// Флаг изменения
+        /// </summary>
+        public bool IsChanged
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Тип сохранения
+        /// </summary>
+        public SaveState SaveType
+        {
+            get;
+            set;
+        }
+
         /// <inheritdoc />
         /// <summary>
         /// Свойство для канвы
@@ -143,6 +161,12 @@ namespace VectorEditor.View
         /// Событие загрузки проекта
         /// </summary>
         public event EventHandler<FileLoadedEventArgs> FileLoaded;
+
+        /// <inheritdoc />
+        /// <summary>
+        /// События создания нового файла
+        /// </summary>
+        public event EventHandler NewProjectCreated;
 
         #endregion
 
@@ -463,11 +487,9 @@ namespace VectorEditor.View
         }
 
         /// <summary>
-        /// Обработчик события нажатия на пункт меню "Сохранить"
+        /// Метод для сохранения
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void saveToolStripMenuItem1_Click(object sender, EventArgs e)
+        private void SaveToFile()
         {
             var saver = new Saver();
             if (saveFileDialog.ShowDialog() != DialogResult.OK) return;
@@ -484,6 +506,16 @@ namespace VectorEditor.View
         }
 
         /// <summary>
+        /// Обработчик события нажатия на пункт меню "Сохранить"
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void saveToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            SaveToFile();
+        }
+
+        /// <summary>
         /// Обработчик события открытия файла
         /// </summary>
         /// <param name="sender"></param>
@@ -492,15 +524,15 @@ namespace VectorEditor.View
         {
             var saver = new Saver();
             if (openFileDialog.ShowDialog() != DialogResult.OK) return;
-            //try
-            //{
+            try
+            {
                 var fileLoadedEventArgs = saver.OpenFromFile(openFileDialog.FileName);
                 FileLoaded?.Invoke(this, fileLoadedEventArgs);
-            //}
-            //catch (Exception ex)
-            //{
-            //    throw new Exception(ex.Message);
-            //}
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
 
         /// <summary>
@@ -527,6 +559,41 @@ namespace VectorEditor.View
                 FiguresDeleted?.Invoke(this, e);
             }
 
+        }
+
+        /// <summary>
+        /// Обработчик нажатия на пункт создания нового файла
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void newFileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            NewProjectCreated?.Invoke(this, e);
+        }
+
+        /// <summary>
+        /// Обработчик выхода из программы
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (!IsChanged) return;
+            var result = MessageBox.Show("Сохранить изменения?", "Внимание",
+                MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            switch (result)
+            {
+                case DialogResult.Cancel:
+                    e.Cancel = true;
+                    break;
+                case DialogResult.Yes:
+                    SaveToFile();
+                    break;
+                case DialogResult.No:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
     }
 }

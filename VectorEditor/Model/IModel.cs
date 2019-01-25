@@ -22,9 +22,9 @@ namespace VectorEditor.Model
         int CurrentIndex { get; set; }
 
         /// <summary>
-        /// Изменение флага IsChanged
+        /// Флаг IsChanged
         /// </summary>
-        void HasChanged();
+        bool IsChanged { get; }
 
         /// <summary>
         /// Копирование объекта

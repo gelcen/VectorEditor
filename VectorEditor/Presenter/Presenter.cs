@@ -40,6 +40,11 @@ namespace VectorEditor.Presenter
         private readonly UndoRedoStack _undoRedoStack;
 
         /// <summary>
+        /// Тип сохранения 
+        /// </summary>
+        private SaveState _saveState;
+
+        /// <summary>
         /// Конструктор представителя
         /// </summary>
         /// <param name="view">Представление</param>
@@ -53,7 +58,8 @@ namespace VectorEditor.Presenter
             _model = model;
 
             _model.NewProject();
-
+            _saveState = SaveState.NewFile;
+            _view.SaveType = _saveState;
 
             _view.ToolPicked += _view_ToolPicked;
             _view.ParametersChanged += _view_ParametersChanged;
@@ -64,8 +70,20 @@ namespace VectorEditor.Presenter
             _view.RedoPressed += _view_RedoPressed;
             _view.CommandStack = _undoRedoStack;
             _view.FileLoaded += _view_FileLoaded;
-                            
+            _view.NewProjectCreated += _view_NewProjectCreated;                
+
             _model.RegisterObserver(this);
+        }
+
+        /// <summary>
+        /// Создание нового файла
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void _view_NewProjectCreated(object sender, EventArgs e)
+        {
+            _model.ClearCanvas();
+            _undoRedoStack.Reset();
         }
 
         /// <summary>
@@ -81,6 +99,7 @@ namespace VectorEditor.Presenter
                 CommandFactory.RestorePointersToModel(command, _model);
             }
             _undoRedoStack.Reset();
+            _saveState = SaveState.OpenedFile;
             FixCommands(e.UndoCount, e.RedoList);
             _view.Canvas.Refresh();
         }
@@ -205,7 +224,6 @@ namespace VectorEditor.Presenter
 
             var cmd = new ChangeParametersCommand(_model, beforeState, e);
             _undoRedoStack.Do(cmd);
-
             _view.Canvas.Invalidate();
         }
 
@@ -321,6 +339,7 @@ namespace VectorEditor.Presenter
         {
             _figures = figures;
             _view.Figures = figures;
+            _view.IsChanged = _model.IsChanged;
         }
 
         /// <summary>

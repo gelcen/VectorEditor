@@ -45,7 +45,7 @@ namespace VectorEditor.Model
         /// <summary>
         /// Свойство для флага изменения проекта
         /// </summary>
-        public bool IsChanged { get; set; }
+        public bool IsChanged { get; private set; }
 
         /// <inheritdoc />
         /// <summary>
@@ -60,7 +60,6 @@ namespace VectorEditor.Model
             NotifyObservers();
         }
 
-        /// <inheritdoc />
         /// <summary>
         /// Есть изменение
         /// </summary>
@@ -102,6 +101,7 @@ namespace VectorEditor.Model
         public void DeleteFigureAt(int index, BaseFigure figure)
         {
             _figures.Remove(index);
+            HasChanged();
             NotifyObservers();
         }
 
@@ -124,6 +124,7 @@ namespace VectorEditor.Model
                 var tempFigure = figure as FillableFigure;
                 if (tempFigure != null) tempFigure.FillProperty.FillColor = newParameters.FillColor;
             }
+            HasChanged();
             NotifyObservers();
         }
 
@@ -174,6 +175,7 @@ namespace VectorEditor.Model
                 _figures[index].Points.Replace(i, new PointF(figure.Points.GetPoints()[i].X,
                                                              figure.Points.GetPoints()[i].Y));
             }
+            HasChanged();
             NotifyObservers();
         }
 
@@ -214,7 +216,7 @@ namespace VectorEditor.Model
         public void ClearCanvas()
         {
             _figures.Clear();
-
+            HasChanged();
             NotifyObservers();
         }
 

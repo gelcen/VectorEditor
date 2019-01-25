@@ -46,6 +46,24 @@ namespace VectorEditor.View
         }
 
         /// <summary>
+        /// Флаг изменения файла
+        /// </summary>
+        bool IsChanged
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Тип сохранения
+        /// </summary>
+        SaveState SaveType
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
         /// Событие загрузки файла
         /// </summary>
         event EventHandler<FileLoadedEventArgs> FileLoaded;
@@ -84,6 +102,11 @@ namespace VectorEditor.View
         /// События выбора инструмента
         /// </summary>
         event EventHandler<Item> ToolPicked;
+
+        /// <summary>
+        /// События создания нового файла
+        /// </summary>
+        event EventHandler NewProjectCreated;
 
         /// <summary>
         /// Свойство для текущего инструмента
