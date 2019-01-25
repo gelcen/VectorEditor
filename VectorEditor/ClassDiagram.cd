@@ -1,0 +1,373 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="FullSignature">
+  <Class Name="VectorEditor.Drawers.BaseDrawer" Collapsed="true">
+    <Position X="5.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAARAAAAA=</HashCode>
+      <FileName>Drawers\BaseDrawer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VectorEditor.Drawers.CircleDrawer" Collapsed="true">
+    <Position X="0.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAQAABAAAAAAAAACAAAQAAAAA=</HashCode>
+      <FileName>Drawers\CircleDrawer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VectorEditor.Drawers.EllipseDrawer" Collapsed="true">
+    <Position X="3" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAQAAAAA=</HashCode>
+      <FileName>Drawers\EllipseDrawer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VectorEditor.Drawers.FigureDrawer" Collapsed="true">
+    <Position X="14" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAQAAAAA=</HashCode>
+      <FileName>Drawers\FigureDrawer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VectorEditor.Drawers.LineDrawer" Collapsed="true">
+    <Position X="5.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAIAAAAAAAAAAAABAAAAAAAAAAAAAQAAAAA=</HashCode>
+      <FileName>Drawers\LineDrawer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VectorEditor.Drawers.PolygonDrawer" Collapsed="true">
+    <Position X="7.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAQAAAAA=</HashCode>
+      <FileName>Drawers\PolygonDrawer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VectorEditor.Drawers.PolylineDrawer" Collapsed="true">
+    <Position X="9.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAQAAAAA=</HashCode>
+      <FileName>Drawers\PolylineDrawer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VectorEditor.Figures.BaseFigure" Collapsed="true">
+    <Position X="5.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAgAAAgAAAAAAAAAAAAAAAAAAAAAAAJAA=</HashCode>
+      <FileName>Figures\BaseFigure.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VectorEditor.Figures.Circle" Collapsed="true">
+    <Position X="3" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Figures\Circle.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VectorEditor.Figures.Ellipse" Collapsed="true">
+    <Position X="7.5" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Figures\Ellipse.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VectorEditor.Figures.FigureFactory" Collapsed="true">
+    <Position X="15.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAgACAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAEAAA=</HashCode>
+      <FileName>Figures\FigureFactory.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VectorEditor.Figures.FillableFigure" Collapsed="true">
+    <Position X="5.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAABAAAAABAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Figures\FillableFigure.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VectorEditor.Figures.FillProperty" Collapsed="true">
+    <Position X="21" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAA=</HashCode>
+      <FileName>Figures\FillProperty.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VectorEditor.Figures.Line" Collapsed="true">
+    <Position X="9.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Figures\Line.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VectorEditor.Figures.LineProperties" Collapsed="true">
+    <Position X="14" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAABAAAAAAAAAAAAAAAAAAAABAAAgAAAAAA=</HashCode>
+      <FileName>Figures\LineProperties.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VectorEditor.Figures.Points" Collapsed="true">
+    <Position X="12.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAIIAAAAAAQAAAAgAAAAAAAAAAAAAAAAACAAAAAACg=</HashCode>
+      <FileName>Figures\Points.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VectorEditor.Figures.Polygon" Collapsed="true">
+    <Position X="5.25" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Figures\Polygon.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VectorEditor.Figures.Polyline" Collapsed="true">
+    <Position X="0.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Figures\Polyline.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VectorEditor.Program" Collapsed="true">
+    <Position X="19.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAA=</HashCode>
+      <FileName>Program.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VectorEditor.Model.FigureModel" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="17.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAoIgBAAgAAAAAMAACgCAAAAAAIAEGAAAAAAQwEAA=</HashCode>
+      <FileName>Model\FigureModel.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="VectorEditor.Model.ModelChangedEventArgs" Collapsed="true">
+    <Position X="17.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Model\ModelChangedEventArgs.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VectorEditor.Presenter.CircleHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="15.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAAAAAAAAkAAEAMAAEAAAAAAEAAgACAAAQCAAAA=</HashCode>
+      <FileName>Presenter\CircleHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="VectorEditor.Presenter.CursorHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="19.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>FIEAISiASSUBAsCgEAMEAuAQgAQBGCECCmAAAxIAAAA=</HashCode>
+      <FileName>Presenter\CursorHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="VectorEditor.Presenter.EllipseHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="12.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAAAAAACAkAAEAMAAAAAAAAAEAAgACAAAQCAAAA=</HashCode>
+      <FileName>Presenter\EllipseHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="VectorEditor.Presenter.LineHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="12.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAAAAAAAAkAAEAMBAAAAAAAAEAAgACAAAQCAAAA=</HashCode>
+      <FileName>Presenter\LineHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="VectorEditor.Presenter.PolygonHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="14" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAAAAAAAAkAAEAMAAAAAAAAIEAAgACAAEQCAAAA=</HashCode>
+      <FileName>Presenter\PolygonHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="VectorEditor.Presenter.PolylineHandler" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="15.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAAAAAAAAkAAEAMAAAAAAAAAEgAgACAAAQCAAAA=</HashCode>
+      <FileName>Presenter\PolylineHandler.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="VectorEditor.Presenter.Presenter" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="17.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AYQEAAAAAAEAEALAAgACAAACkAAEAACEACAAAAAABQA=</HashCode>
+      <FileName>Presenter\Presenter.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="VectorEditor.Properties.Resources" Collapsed="true">
+    <Position X="21" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAABEAAAAQAAAAAAAAAAAAAAAIA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VectorEditor.Properties.Settings" Collapsed="true">
+    <Position X="14" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAIAAAAAABAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VectorEditor.UndoRedo.AddFigureCommand" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="12.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAABAAEAAAgBAAACAAAEAAAAAkAAAAAAAA=</HashCode>
+      <FileName>UndoRedo\AddFigureCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="VectorEditor.UndoRedo.ChangeParametersCommand" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="14" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAIABAAEAAAAAAAACAAAAAAAAAgAoAAAAAA=</HashCode>
+      <FileName>UndoRedo\ChangeParametersCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="VectorEditor.UndoRedo.CommandFactory" Collapsed="true">
+    <Position X="17.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>UndoRedo\CommandFactory.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VectorEditor.UndoRedo.DeleteFigureCommand" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="21" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAABAAEAAAAAAAACAAAAAAAAAgEAAAAAAA=</HashCode>
+      <FileName>UndoRedo\DeleteFigureCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="VectorEditor.UndoRedo.MoveFigureCommand" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="19.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAABAAEAAAAAAAACAAAAAABAAgAIAAAAAA=</HashCode>
+      <FileName>UndoRedo\MoveFigureCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="VectorEditor.UndoRedo.MovePointCommand" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="21" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAAAAAJAAEAACAAAAACAAAAAAAAAgAAAAAAAA=</HashCode>
+      <FileName>UndoRedo\MovePointCommand.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="VectorEditor.UndoRedo.UndoRedoStack" Collapsed="true">
+    <Position X="15.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAABAAAAEAAAAABCAEAAgAAIAAAAAAAAAA=</HashCode>
+      <FileName>UndoRedo\UndoRedoStack.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VectorEditor.View.FileLoadedEventArgs" Collapsed="true">
+    <Position X="19.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAAAgAAAAAAAAAAAAAAAAAAAEAAgAAIAAAAAAAAAA=</HashCode>
+      <FileName>View\FileLoadedEventArgs.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VectorEditor.View.MainForm" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="15.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>JQAkIIGuACEQQzWCZt6CcCIC4EIBqA9pUCAQCABoaEw=</HashCode>
+      <FileName>View\MainForm.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="VectorEditor.View.Saver" Collapsed="true">
+    <Position X="12.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAA=</HashCode>
+      <FileName>View\Saver.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="VectorEditor.View.FigureParameters" Collapsed="true">
+    <Position X="12.25" Y="5.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAEAAAAgAAAA=</HashCode>
+      <FileName>View\FigureParameters.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Interface Name="VectorEditor.Model.IModel" Collapsed="true">
+    <Position X="0.5" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAoIgBAAAAAAAAAAAAgCAAAAAAAAEGAAAAAAAQEAA=</HashCode>
+      <FileName>Model\IModel.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="VectorEditor.Observer.IObserver" Collapsed="true">
+    <Position X="15.75" Y="7" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Observer\IObserver.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="VectorEditor.Observer.ISubject" Collapsed="true">
+    <Position X="0.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAgAAAAAAAAAAAAAAAAAIAAAAAAAAAAgAAA=</HashCode>
+      <FileName>Observer\ISubject.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="VectorEditor.Presenter.IBaseHandler" Collapsed="true">
+    <Position X="12.25" Y="7" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAAAAAAAAgAAAAMAAAAAAAAAAAAAACAAAQAAAAA=</HashCode>
+      <FileName>Presenter\IBaseHandler.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="VectorEditor.UndoRedo.ICommand" Collapsed="true">
+    <Position X="14" Y="7" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAABAAAAAAAAAAACAAAAAAAAAgAAAAAAAA=</HashCode>
+      <FileName>UndoRedo\ICommand.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="VectorEditor.View.IView" Collapsed="true">
+    <Position X="17.5" Y="7" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAIAEAAAAAAAAAQJKAICAAAAAACAlIACAAAAAAAAA=</HashCode>
+      <FileName>View\IView.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Enum Name="VectorEditor.Item" Collapsed="true">
+    <Position X="12.25" Y="8" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAACAQAAAAAAAAACAAAAAAgAAAAAAAAAAAABACA=</HashCode>
+      <FileName>Item.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="VectorEditor.RoundShapeType" Collapsed="true">
+    <Position X="14" Y="8" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAACAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>RoundShapeType.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="VectorEditor.SaveState" Collapsed="true">
+    <Position X="15.75" Y="8" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAIABAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>SaveState.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Delegate Name="VectorEditor.Presenter.MouseOperation" Collapsed="true">
+    <Position X="12.25" Y="9" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Presenter\IBaseHandler.cs</FileName>
+    </TypeIdentifier>
+  </Delegate>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

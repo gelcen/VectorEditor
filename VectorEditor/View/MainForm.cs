@@ -579,7 +579,7 @@ namespace VectorEditor.View
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (!IsChanged) return;
-            var result = MessageBox.Show("Сохранить изменения?", "Внимание",
+            var result = MessageBox.Show(@"Сохранить изменения?", @"Внимание",
                 MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             switch (result)
             {
