@@ -12,14 +12,14 @@ namespace VectorEditor.Model
     public interface IModel: ISubject
     {
         /// <summary>
-        /// Установка ссылки на список фигур.
-        /// </summary>
-        List<BaseFigure> FiguresList { set; }
-
-        /// <summary>
         /// Добавление фигуры
         /// </summary>
-        void AddFigure(BaseFigure figure);
+        void AddFigure(int index, BaseFigure figure);
+
+        /// <summary>
+        /// Текущий индекс
+        /// </summary>
+        int CurrentIndex { get; set; }
 
         /// <summary>
         /// Изменение флага IsChanged
@@ -29,8 +29,9 @@ namespace VectorEditor.Model
         /// <summary>
         /// Копирование объекта
         /// </summary>
-        /// <param name="figure"></param>
-        void CopyFigure(BaseFigure figure);
+        /// <param name="index">Индекс</param>
+        /// <param name="figure">Фигурa</param>
+        void CopyFigure(int index, BaseFigure figure);
 
         /// <summary>
         /// Вырезание объекта
@@ -44,19 +45,6 @@ namespace VectorEditor.Model
         /// <param name="index">Индекс удаляемой фигуры</param>
         /// <param name="figure">Фигурa</param>
         void DeleteFigureAt(int index, BaseFigure figure);
-
-        /// <summary>
-        /// Удаление фигуры по ссылке
-        /// </summary>
-        /// <param name="figure"></param>
-        void DeleteFigure(BaseFigure figure);
-
-        /// <summary>
-        /// Вставка фигуры
-        /// </summary>
-        /// <param name="index">Индекс вставки</param>
-        /// <param name="figure">Вставляемая фигур</param>
-        void InsertAt(int index, BaseFigure figure);
 
         /// <summary>
         /// Изменения параметров фигуры
@@ -104,6 +92,6 @@ namespace VectorEditor.Model
         /// Получение списка фигур
         /// </summary>
         /// <returns></returns>
-        List<BaseFigure> GetFigureList();       
+        Dictionary<int, BaseFigure> GetFigureList();       
     }
 }

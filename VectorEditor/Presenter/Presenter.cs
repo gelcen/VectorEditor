@@ -32,7 +32,7 @@ namespace VectorEditor.Presenter
         /// <summary>
         /// Список фигур
         /// </summary>
-        private List<BaseFigure> _figures;
+        private Dictionary<int, BaseFigure> _figures;
 
         /// <summary>
         /// Менеджер Undo Redo
@@ -76,31 +76,12 @@ namespace VectorEditor.Presenter
         private void _view_FileLoaded(object sender, FileLoadedEventArgs e)
         {
             _model.ClearCanvas();
-            foreach (var figure in e.Figures)
-            {
-                _model.AddFigure(figure);
-            }
-            foreach (var command in e.UndoStack)
+            foreach (var command in e.RedoList)
             {
                 CommandFactory.RestorePointersToModel(command, _model);
             }
-            foreach (var command in e.RedoStack)
-            {
-                CommandFactory.RestorePointersToModel(command, _model);
-            }
-            //_model.FiguresList = e.Figures;
             _undoRedoStack.Reset();
-            foreach (var command in e.UndoStack)
-            {
-                _undoRedoStack.UndoStack.Push(command);
-            }
-            foreach (var command in e.RedoStack)
-            {
-                _undoRedoStack.RedoStack.Push(command);
-            }
-            //_undoRedoStack.UndoStack = e.UndoStack;
-            //_undoRedoStack.RedoStack = e.RedoStack;
-            FixCommands();
+            FixCommands(e.UndoCount, e.RedoList);
             _view.Canvas.Refresh();
         }
 
@@ -146,9 +127,9 @@ namespace VectorEditor.Presenter
             if (handler == null) return;
             foreach (var figure in handler.SelectedFigures)
             {
-                if (_model.GetFigureList().Contains(figure))
+                if (_model.GetFigureList().ContainsKey(figure.Key))
                 {
-                    _model.CopyFigure(figure);
+                    _model.CopyFigure(figure.Key, figure.Value);
                 }
             }
         }
@@ -166,9 +147,9 @@ namespace VectorEditor.Presenter
             if (handler == null) return;
             foreach (var figure in handler.SelectedFigures)
             {
-                if (!_model.GetFigureList().Contains(figure)) continue;
-                var index = _model.GetFigureList().IndexOf(figure);
-                beforeState.Add(index, figure);
+                if (!_model.GetFigureList().ContainsKey(figure.Key)) continue;
+                var index = figure.Key;
+                beforeState.Add(index, figure.Value);
             }
 
             var cmd = new DeleteFigureCommand(_model, beforeState);
@@ -187,9 +168,9 @@ namespace VectorEditor.Presenter
             var beforeState = new Dictionary<int, BaseFigure>();
             foreach (var figure in _model.GetFigureList())
             {
-                if (!_model.GetFigureList().Contains(figure)) continue;
-                var index = _model.GetFigureList().IndexOf(figure);
-                beforeState.Add(index, figure);
+                if (!_model.GetFigureList().ContainsKey(figure.Key)) continue;
+                var index = figure.Key;
+                beforeState.Add(index, figure.Value);
             }
 
             var cmd = new DeleteFigureCommand(_model, beforeState);
@@ -212,9 +193,9 @@ namespace VectorEditor.Presenter
                 if (handler != null)
                     foreach (var figure in handler.SelectedFigures)
                     {
-                        if (!_model.GetFigureList().Contains(figure)) continue;
-                        var index = _model.GetFigureList().IndexOf(figure);
-                        beforeState.Add(index, FigureFactory.CreateCopy(figure));
+                        if (!_model.GetFigureList().ContainsKey(figure.Key)) continue;
+                        var index = figure.Key;
+                        beforeState.Add(index, FigureFactory.CreateCopy(figure.Value));
                     }
             }
             else
@@ -305,16 +286,15 @@ namespace VectorEditor.Presenter
         /// <summary>
         /// Позволяет исправить команды после чтения. 
         /// </summary>
-        private void FixCommands()
+        private void FixCommands(int undoCount, List<ICommand> redoList)
         {
-            int count = _undoRedoStack.UndoCount;
-            for (int i = 0; i < count; i++)
+            foreach (var command in redoList)
+            {
+                _undoRedoStack.Do(command);
+            }
+            for (int i = 0; i < undoCount; i++)
             {
                 _undoRedoStack.Undo();
-            }
-            for (int i = 0; i < count; i++)
-            {
-                _undoRedoStack.Redo();
             }
         }
 
@@ -325,7 +305,8 @@ namespace VectorEditor.Presenter
         /// <param name="e"></param>
         private void _currentHandler_FigureCreated(object sender, BaseFigure e)
         {
-            var index = _model.GetFigureList().Count;
+            _model.CurrentIndex += 1;
+            var index = _model.CurrentIndex;
             var cmd = new AddFigureCommand(_model, e, index);
             _undoRedoStack.Do(cmd);
         }
@@ -336,7 +317,7 @@ namespace VectorEditor.Presenter
         /// Обновление состояния представления
         /// </summary>
         /// <param name="figures"></param>
-        public void Update(List<BaseFigure> figures)
+        public void Update(Dictionary<int, BaseFigure> figures)
         {
             _figures = figures;
             _view.Figures = figures;
@@ -346,7 +327,7 @@ namespace VectorEditor.Presenter
         /// Получить список фигур
         /// </summary>
         /// <returns></returns>
-        public List<BaseFigure> GetFigures()
+        public Dictionary<int, BaseFigure> GetFigures()
         {
             return _figures;
         }

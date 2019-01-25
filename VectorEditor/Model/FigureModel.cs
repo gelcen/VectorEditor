@@ -19,6 +19,17 @@ namespace VectorEditor.Model
         private readonly List<IObserver> _observers;
 
         /// <summary>
+        /// Текущий индекс
+        /// </summary>
+        private int _currentIndex;
+
+        public int CurrentIndex
+        {
+            get { return _currentIndex; }
+            set { _currentIndex = value; }
+        }
+
+        /// <summary>
         /// Конструктор
         /// </summary>
         public FigureModel()
@@ -26,19 +37,10 @@ namespace VectorEditor.Model
             _observers = new List<IObserver>();
         }
 
-        /// <inheritdoc />
-        /// <summary>
-        /// Установка списка фигур
-        /// </summary>
-        public List<BaseFigure> FiguresList
-        {
-            set { _figures = value; }
-        }
-
         /// <summary>
         /// Список фигур
         /// </summary>
-        private List<BaseFigure> _figures;
+        private Dictionary<int, BaseFigure> _figures;
 
         /// <summary>
         /// Свойство для флага изменения проекта
@@ -49,10 +51,11 @@ namespace VectorEditor.Model
         /// <summary>
         /// Добавление фигуры в список фигур
         /// </summary>
+        /// <param name="index">Индекс фигуры</param>
         /// <param name="figure">Добавляемая фигура</param>
-        public void AddFigure(BaseFigure figure)
+        public void AddFigure(int index, BaseFigure figure)
         {
-            _figures.Add(figure);
+            _figures.Add(index, figure);
             HasChanged();
             NotifyObservers();
         }
@@ -70,11 +73,13 @@ namespace VectorEditor.Model
         /// <summary>
         /// Копирование объекта
         /// </summary>
-        /// <param name="figure"></param>
-        public void CopyFigure(BaseFigure figure)
+        /// <param name="index">Индек фигуры</param>
+        /// <param name="figure">Копируемая фигура</param>
+        public void CopyFigure(int index, BaseFigure figure)
         {
             var addingFigure = FigureFactory.CreateCopy(figure, FigureFactory.CopyType.CopyWithOffset);
-            _figures.Add(addingFigure);
+            CurrentIndex += 1;
+            _figures.Add(CurrentIndex, addingFigure);
             NotifyObservers();      
         }
 
@@ -96,34 +101,7 @@ namespace VectorEditor.Model
         /// <param name="figure">Фигурa</param>
         public void DeleteFigureAt(int index, BaseFigure figure)
         {
-            _figures.RemoveAt(index);
-            NotifyObservers();
-        }
-
-        /// <inheritdoc />
-        /// <summary>
-        /// Удаление фигуры по ссылке
-        /// </summary>
-        /// <param name="figure"></param>
-        public void DeleteFigure(BaseFigure figure)
-        {
-            if (_figures.Contains(figure))
-            {
-                _figures.Remove(figure);
-            }
-            //_figures.Remove(figure);
-            NotifyObservers();
-        }
-
-        /// <inheritdoc />
-        /// <summary>
-        /// Вставка фигуры
-        /// </summary>
-        /// <param name="index">Индекс вставки</param>
-        /// <param name="figure">Вставляемая фигура</param>
-        public void InsertAt(int index, BaseFigure figure)
-        {
-            _figures.Insert(index, figure);
+            _figures.Remove(index);
             NotifyObservers();
         }
 
@@ -224,8 +202,9 @@ namespace VectorEditor.Model
         /// </summary>
         public void NewProject()
         {
-            _figures = new List<BaseFigure>();
+            _figures = new Dictionary<int, BaseFigure>();
             IsChanged = false;
+            _currentIndex = 0;
         }
 
         /// <inheritdoc />
@@ -235,7 +214,7 @@ namespace VectorEditor.Model
         public void ClearCanvas()
         {
             _figures.Clear();
-            _figures = new List<BaseFigure>();
+
             NotifyObservers();
         }
 
@@ -244,7 +223,7 @@ namespace VectorEditor.Model
         /// Получить список фигур
         /// </summary>
         /// <returns>Список фигур</returns>
-        public List<BaseFigure> GetFigureList()
+        public Dictionary<int, BaseFigure> GetFigureList()
         {
             return _figures;
         }

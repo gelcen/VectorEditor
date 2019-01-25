@@ -12,6 +12,6 @@ namespace VectorEditor.Observer
         /// Обновление состояния предмета
         /// </summary>
         /// <param name="figures">Фигуры</param>
-        void Update(List<BaseFigure> figures);
+        void Update(Dictionary<int, BaseFigure> figures);
     }
 }

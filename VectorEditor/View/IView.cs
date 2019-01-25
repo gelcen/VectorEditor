@@ -23,7 +23,7 @@ namespace VectorEditor.View
         /// <summary>
         /// Список фигур
         /// </summary>
-        List<BaseFigure> Figures
+        Dictionary<int, BaseFigure> Figures
         {
             set;
         }

@@ -21,6 +21,25 @@ namespace VectorEditor.View
             Figures = new List<BaseFigure>();
             UndoStack = new Stack<ICommand>();
             RedoStack = new Stack<ICommand>();
+            RedoList = new List<ICommand>();
+        }
+
+        /// <summary>
+        /// Список операций
+        /// </summary>
+        public List<ICommand> RedoList
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Количество Undo 
+        /// </summary>
+        public int UndoCount
+        {
+            get;
+            set;
         }
 
         /// <summary>

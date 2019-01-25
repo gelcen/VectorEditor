@@ -76,7 +76,7 @@ namespace VectorEditor.UndoRedo
         /// </summary>
         public void Do()
         {
-            Model.AddFigure(Figure);
+            Model.AddFigure(Index, Figure);
         }
 
         /// <inheritdoc />

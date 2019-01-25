@@ -47,8 +47,7 @@ namespace VectorEditor.UndoRedo
         {
             foreach (var figure in _deletedFigures)
             {
-                //Model.DeleteFigureAt(figure.Key, figure.Value);
-                Model.DeleteFigure(figure.Value);
+                Model.DeleteFigureAt(figure.Key, figure.Value);
             }
         }
 
@@ -60,7 +59,7 @@ namespace VectorEditor.UndoRedo
         {
             foreach (var figure in _deletedFigures)
             {
-                Model.AddFigure(figure.Value);
+                Model.AddFigure(figure.Key, figure.Value);
             }
         }
     }

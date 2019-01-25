@@ -86,7 +86,7 @@ namespace VectorEditor.Presenter
             _presenter = presenter;
 
             _selectedFigure = null;
-            SelectedFigures = new List<BaseFigure>();
+            SelectedFigures = new Dictionary<int, BaseFigure>();
             BeforeState = new Dictionary<int, BaseFigure>();
             BeforePointState = new Dictionary<int, BaseFigure>();
 
@@ -125,7 +125,7 @@ namespace VectorEditor.Presenter
             {
                 foreach (var figure in SelectedFigures)
                 {
-                    FigureDrawer.DrawSelection(figure, g);
+                    FigureDrawer.DrawSelection(figure.Value, g);
                 }
             }
             if (_selectedFigure != null && _isFigurePicked)
@@ -248,9 +248,9 @@ namespace VectorEditor.Presenter
                     if (IsPointOnFigure(e.Location))
                     {
                         if ((SelectedFigures != null) &&
-                            SelectedFigures.Contains(GetFigurePointOn(e.Location)))
+                            SelectedFigures.ContainsKey(GetFigurePointOn(e.Location)))
                         {
-                            _selectedFigure = GetFigurePointOn(e.Location);
+                            _selectedFigure = _presenter.GetFigures()[GetFigurePointOn(e.Location)];
 
                             //Сохраняем предыдущее состояние
                             BeforeState?.Clear();
@@ -258,8 +258,8 @@ namespace VectorEditor.Presenter
                             foreach (var figure in SelectedFigures)
                             {
                                 if (!_presenter.GetFigures().Contains(figure)) continue;
-                                var index = _presenter.GetFigures().IndexOf(figure);
-                                BeforeState?.Add(index, FigureFactory.CreateCopy(figure));
+                                var index = figure.Key;
+                                BeforeState?.Add(index, FigureFactory.CreateCopy(figure.Value));
                             }
 
                             MouseMoveDelegate -= MouseMoveSelecting;
@@ -280,10 +280,10 @@ namespace VectorEditor.Presenter
 
                         foreach (var figure in _presenter.GetFigures())
                         {
-                            if (figure != SelectedFigures[_pickedFigureIndex]) continue;
-                            _oldFigureIndex=_presenter.GetFigures().IndexOf(figure);
+                            if (figure.Key != _pickedFigureIndex) continue;
+                            _oldFigureIndex=figure.Key;
                             BeforePointState?.Add(_oldFigureIndex,
-                                FigureFactory.CreateCopy(figure));
+                                FigureFactory.CreateCopy(figure.Value));
                         }
 
                         _offsetX = _pickedPoint.X - e.X;
@@ -336,9 +336,9 @@ namespace VectorEditor.Presenter
                 var newState = new Dictionary<int, BaseFigure>();
                 foreach (var figure in SelectedFigures)
                 {
-                    if (!_presenter.GetFigures().Contains(figure)) continue;
-                    var index = _presenter.GetFigures().IndexOf(figure);
-                    newState.Add(index, FigureFactory.CreateCopy(figure));
+                    if (!_presenter.GetFigures().ContainsKey(figure.Key)) continue;
+                    var index = figure.Key;
+                    newState.Add(index, FigureFactory.CreateCopy(figure.Value));
                 }
 
                 OnFiguresMoved(newState);
@@ -408,13 +408,13 @@ namespace VectorEditor.Presenter
 
                 foreach (var figure in SelectedFigures)
                 {
-                    if (figure == _selectedFigure) continue;
-                    for (var i = 0; i < figure.Points.GetPoints().Count; i++)
+                    if (figure.Value == _selectedFigure) continue;
+                    for (var i = 0; i < figure.Value.Points.GetPoints().Count; i++)
                     {
-                        figure.Points.Replace(i,
+                        figure.Value.Points.Replace(i,
                             new PointF(
-                                figure.Points.GetPoints()[i].X + dx,
-                                figure.Points.GetPoints()[i].Y + dy));
+                                figure.Value.Points.GetPoints()[i].X + dx,
+                                figure.Value.Points.GetPoints()[i].Y + dy));
                     }
                 }
             }
@@ -611,10 +611,10 @@ namespace VectorEditor.Presenter
                         if (IsPointOnFigure(e.Location))
                         {
                             SelectedFigures.Clear();
-                            _selectedFigure = GetFigurePointOn(e.Location);
-                            SelectedFigures.Add(_selectedFigure);       
+                            _selectedFigure = _presenter.GetFigures()[GetFigurePointOn(e.Location)];
+                            int index = GetFigurePointOn(e.Location);
+                            SelectedFigures.Add(index, _presenter.GetFigures()[index]);       
                             _isFigurePicked = true;
-
                         }
                         else
                         {
@@ -639,15 +639,16 @@ namespace VectorEditor.Presenter
                 _selectionRect = new Rectangle();
                 return;
             }
-            var count = _presenter.GetFigures().Count;
-            var selectedFigures = new List<BaseFigure>();
-            for (var i = 0; i < count; i++)
+
+            var selectedFigures = new Dictionary<int, BaseFigure>();
+
+            foreach (var figure in _presenter.GetFigures())
             {
-                var points = _presenter.GetFigures()[i].Points.GetPoints();
+                var points = figure.Value.Points.GetPoints();
                 var figureRect = GetRect(points);
                 if (_selectionRect.IntersectsWith(figureRect))
                 {
-                    selectedFigures.Add(_presenter.GetFigures()[i]);
+                    selectedFigures.Add(figure.Key, figure.Value);
                 }
             }
             if (selectedFigures.Count == 0)
@@ -722,7 +723,7 @@ namespace VectorEditor.Presenter
             {
                 var pickPen = new Pen(Color.Transparent, 3);
 
-                AddFigureToGraphicsPath(path, figure);
+                AddFigureToGraphicsPath(path, figure.Value);
 
                 result = path.IsOutlineVisible(point, pickPen);
                 path.Reset();
@@ -736,7 +737,7 @@ namespace VectorEditor.Presenter
         /// </summary>
         /// <param name="point">Точка мышки</param>
         /// <returns>Фигура</returns>
-        private BaseFigure GetFigurePointOn(PointF point)
+        private int GetFigurePointOn(PointF point)
         {
             if (_presenter.GetFigures() != null)
             {
@@ -747,16 +748,16 @@ namespace VectorEditor.Presenter
 
                     var path = new GraphicsPath();
 
-                    AddFigureToGraphicsPath(path, figure);
+                    AddFigureToGraphicsPath(path, figure.Value);
 
 
                     if (path.IsOutlineVisible(point, pickPen))
                     {
-                        return figure;
+                        return figure.Key;
                     }
                 }
             }
-            return null;
+            return -1;
         }
 
         //For selected figure
@@ -771,33 +772,17 @@ namespace VectorEditor.Presenter
         {
             if (SelectedFigures != null)
             {
-                if (SelectedFigures.Count == 1)
+                foreach (var figure in SelectedFigures)
                 {
-                    var count = SelectedFigures[0].Points.GetPoints().Count;
-                    for (var i = 0; i < count; i++)
+                    var count = figure.Value.Points.GetPoints().Count;
+                    for (var j = 0; j < count; j++)
                     {
                         if (!(FindDistanceToPointSquared(mousePoint,
-                                  SelectedFigures[0].Points.GetPoints()[i]) < OverDistSquared)) continue;
-                        pickedPoint = SelectedFigures[0].Points.GetPoints()[i];
-                        _pickedPointIndex = i;
-                        _pickedFigureIndex = 0;
+                                  figure.Value.Points.GetPoints()[j]) < OverDistSquared)) continue;
+                        pickedPoint = figure.Value.Points.GetPoints()[j];
+                        _pickedPointIndex = j;
+                        _pickedFigureIndex = figure.Key;
                         return true;
-                    }
-                }
-                else
-                {
-                    for (var i = 0; i < SelectedFigures.Count; i++)
-                    {
-                        var count = SelectedFigures[i].Points.GetPoints().Count;
-                        for (var j = 0; j < count; j++)
-                        {
-                            if (!(FindDistanceToPointSquared(mousePoint,
-                                      SelectedFigures[i].Points.GetPoints()[j]) < OverDistSquared)) continue;
-                            pickedPoint = SelectedFigures[i].Points.GetPoints()[j];
-                            _pickedPointIndex = j;
-                            _pickedFigureIndex = i;
-                            return true;
-                        }
                     }
                 }
             }
@@ -837,7 +822,7 @@ namespace VectorEditor.Presenter
         /// <summary>
         /// Свойство для получения выбранных фигур
         /// </summary>
-        public List<BaseFigure> SelectedFigures { get; private set; }
+        public Dictionary<int, BaseFigure> SelectedFigures { get; private set; }
 
         /// <summary>
         /// Добавить фигуру в GraphicsPath

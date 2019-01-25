@@ -16,38 +16,38 @@ namespace VectorEditor.View
         /// <summary>
         /// Сохранения в файл
         /// </summary>
-        /// <param name="figures"></param>
-        /// <param name="undo"></param>
-        /// <param name="redo"></param>
-        /// <param name="filename"></param>
-        public void SaveToFile(List<BaseFigure> figures,
-                               Stack<ICommand> undo,
-                               Stack<ICommand> redo,                    
+        /// <param name="undoRedoStack">Стек команд</param>
+        /// <param name="filename">Путь к файлу</param>
+        public void SaveToFile(UndoRedoStack undoRedoStack,                   
                                string filename)
         {            
             var file = new StreamWriter(filename);
-            file.WriteLine(figures.Count);
-            file.WriteLine(undo.Count);
-            var undoList = undo.ToList().AsReadOnly();
+
+            var redo = undoRedoStack.RedoStack;
+            var undoCount = undoRedoStack.UndoCount;
+            var redoCount = undoRedoStack.RedoCount;
+
+            file.WriteLine(redoCount);
+
+            for (int i = 0; i < undoCount; i++)
+            {
+                undoRedoStack.Undo();
+            }
+
             var redoList = redo.ToList().AsReadOnly();
-            foreach (var figure in figures)
-            {
-                var jsonString = JsonConvert.SerializeObject(figure, 
-                                new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All });
-                file.WriteLine(jsonString);
-            }
-            foreach (var command in undoList)
-            {
-                var jsonString = JsonConvert.SerializeObject(command,
-                                new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All });
-                file.WriteLine(jsonString);
-            }
+
             foreach (var command in redoList)
             {
                 var jsonString = JsonConvert.SerializeObject(command,
                                 new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All });
                 file.WriteLine(jsonString);
             }
+
+            for (int i = 0; i < undoCount; i++)
+            {
+                undoRedoStack.Redo();
+            }
+
             file.Close();
         }
 
@@ -60,28 +60,11 @@ namespace VectorEditor.View
         {
             var fileLoadedEventArgs = new FileLoadedEventArgs();
             var file = new StreamReader(filename);
-            var figuresCount = Convert.ToInt32(file.ReadLine());
             var undoCount = Convert.ToInt32(file.ReadLine());
-            for (var i = 0; i < figuresCount; i++)
-            {
-                var line = file.ReadLine();
-                var figure = (BaseFigure)JsonConvert.DeserializeObject(line,
-                    new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All });
-                fileLoadedEventArgs.Figures.Add(figure);
-            }
-            List<ICommand> tempList = new List<ICommand>();
-            for (var i = 0; i < undoCount; i++)
-            {
-                var line = file.ReadLine();
-                var command = (ICommand)JsonConvert.DeserializeObject(line,
-                    new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All });
-                tempList.Add(command);
-            }
-            for (var i = tempList.Count-1; i >= 0; i--)
-            {
-                fileLoadedEventArgs.UndoStack.Push(tempList[i]);
-            }
-            tempList.Clear();
+            fileLoadedEventArgs.UndoCount = undoCount;
+
+            var tempList = new List<ICommand>();
+
             while (!file.EndOfStream)
             {
                 var line = file.ReadLine();
@@ -89,11 +72,8 @@ namespace VectorEditor.View
                     new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All });
                 tempList.Add(command);
             }
-            for (var i = tempList.Count - 1; i >= 0; i--)
-            {
-                fileLoadedEventArgs.RedoStack.Push(tempList[i]);
-            }
             file.Close();
+            fileLoadedEventArgs.RedoList = tempList;
             return fileLoadedEventArgs;
         }
     }

@@ -18,7 +18,7 @@ namespace VectorEditor.View
         /// <summary>
         /// Список фигур
         /// </summary>
-        private List<BaseFigure> _figures;
+        private Dictionary<int, BaseFigure> _figures;
 
         /// <summary>
         /// Словарь для кнопок инструментов
@@ -45,7 +45,7 @@ namespace VectorEditor.View
         /// <summary>
         /// Список фигур
         /// </summary>
-        public List<BaseFigure> Figures
+        public Dictionary<int, BaseFigure> Figures
         {
             set
             {
@@ -370,7 +370,7 @@ namespace VectorEditor.View
             {
                 foreach (var figure in _figures)
                 {
-                    FigureDrawer.DrawFigure(figure, g);
+                    FigureDrawer.DrawFigure(figure.Value, g);
                 }
             }
 
@@ -447,7 +447,7 @@ namespace VectorEditor.View
 
             foreach (var figure in _figures)
             {
-                FigureDrawer.DrawFigure(figure, bitmapGraphics);
+                FigureDrawer.DrawFigure(figure.Value, bitmapGraphics);
             }
 
             pictureBox.Image = bitmap;
@@ -473,10 +473,9 @@ namespace VectorEditor.View
             if (saveFileDialog.ShowDialog() != DialogResult.OK) return;
             try
             {
-                saver.SaveToFile(_figures, 
-                    _undoRedoStack.UndoStack,
-                    _undoRedoStack.RedoStack,
+                saver.SaveToFile(_undoRedoStack,
                     saveFileDialog.FileName);
+                Canvas.Refresh();
             }
             catch (Exception)
             {
