@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using VectorEditor.Figures;
 
@@ -18,23 +18,30 @@ namespace VectorEditor.Drawers
         /// <param name="canvas">Канва</param>
         public override void DrawFigure(BaseFigure figure, Graphics canvas)
         {
-            var circle = figure as FillableFigure;
-            if (circle == null) return;
+            FillableFigure ellipse;
 
-            var points = circle.Points.GetPoints();
-            if (points.Count != 2) return;
+            IReadOnlyList<PointF> points;
 
-            var ellipseRectangle= CircleDrawer.MakeRectangle(points[0], points[1], RoundShapeType.Ellipse);
+            if (!CircleDrawer.GetFillableFigure(figure,
+                out ellipse,
+                out points))
+            {
+                return;
+            }
 
-            Brush brush = new SolidBrush(circle.FillProperty.FillColor);
+            var ellipseRectangle= CircleDrawer.MakeRectangle(
+                points[0], points[1],
+                RoundShapeType.Ellipse);
+
+            Brush brush = new SolidBrush(ellipse.FillProperty.FillColor);
 
             canvas.FillEllipse(brush, ellipseRectangle);
 
             brush.Dispose();
 
-            var pen = new Pen(circle.LineProperties.Color,
-                              circle.LineProperties.Thickness)
-                { DashStyle = circle.LineProperties.Style};
+            var pen = new Pen(ellipse.LineProperties.Color,
+                               ellipse.LineProperties.Thickness)
+                { DashStyle = ellipse.LineProperties.Style};
 
             canvas.DrawEllipse(pen, ellipseRectangle);
 
@@ -49,15 +56,22 @@ namespace VectorEditor.Drawers
         /// <param name="canvas">Канва</param>
         public override void DrawSelection(BaseFigure figure, Graphics canvas)
         {
-            var ellipse = figure as FillableFigure;
-            if (ellipse == null) return;
+            FillableFigure ellipse;
 
-            var points = ellipse.Points.GetPoints();
-            if (points.Count != 2) return;
+            IReadOnlyList<PointF> points;
 
+            if (!CircleDrawer.GetFillableFigure(figure, 
+                                            out ellipse, 
+                                            out points))
+            {
+                return;
+            }
+            
             CircleDrawer.DrawSelectionRoundShapes(points, canvas);
 
-            var rectangle = CircleDrawer.MakeRectangle(points[0], points[1], RoundShapeType.Ellipse);
+            var rectangle = CircleDrawer.MakeRectangle(
+                points[0], points[1], 
+                RoundShapeType.Ellipse);
 
             var pen = new Pen(Color.Black, 1)
                           { DashStyle = System.Drawing.Drawing2D.DashStyle.Dash};

@@ -131,12 +131,14 @@ namespace VectorEditor.Presenter
                 case MouseButtons.Left:
                     if (_polygon == null)
                     {
-                        var polygon = FigureFactory.CreateFigure(Item.Polygon) as FillableFigure;
+                        var polygon = 
+                            FigureFactory.CreateFigure(ToolType.Polygon) as FillableFigure;
 
                         if (polygon != null)
                         {
                             polygon.LineProperties.Color = _figureParameters.LineColor;
-                            polygon.LineProperties.Style = (DashStyle) _figureParameters.LineStyle;
+                            polygon.LineProperties.Style = (DashStyle) 
+                                _figureParameters.LineStyle;
                             polygon.LineProperties.Thickness = _figureParameters.LineThickness;
                             polygon.FillProperty.FillColor = _figureParameters.FillColor;
 

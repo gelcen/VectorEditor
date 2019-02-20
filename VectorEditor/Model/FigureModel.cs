@@ -23,6 +23,9 @@ namespace VectorEditor.Model
         /// </summary>
         private int _currentIndex;
 
+        /// <summary>
+        /// Текущий индекс
+        /// </summary>
         public int CurrentIndex
         {
             get { return _currentIndex; }
@@ -84,16 +87,6 @@ namespace VectorEditor.Model
 
         /// <inheritdoc />
         /// <summary>
-        /// Вырезание объекта
-        /// </summary>
-        /// <param name="figure"></param>
-        public void CutFigure(BaseFigure figure)
-        {
-
-        }
-
-        /// <inheritdoc />
-        /// <summary>
         /// Удаление фигуры по индексу
         /// </summary>
         /// <param name="index">Индекс удаляемой фигуры</param>
@@ -130,39 +123,6 @@ namespace VectorEditor.Model
 
         /// <inheritdoc />
         /// <summary>
-        /// Изменение фигуры
-        /// </summary>
-        /// <param name="index">Индекс фигуры</param>
-        /// <param name="newFigure">Новая фигуры</param>
-        public void ChangeFigure(int index, BaseFigure newFigure)
-        {
-            var figure = _figures[index];
-            figure.LineProperties.Color = newFigure.LineProperties.Color;
-            figure.LineProperties.Style = newFigure.LineProperties.Style;
-            figure.LineProperties.Thickness = newFigure.LineProperties.Thickness;
-            if (newFigure.GetType() == typeof(Circle) ||
-                newFigure.GetType() == typeof(Ellipse) ||
-                newFigure.GetType() == typeof(Polygon))
-            {
-                var tempFigure = newFigure as FillableFigure;
-                var changedFigure = figure as FillableFigure;
-                if (changedFigure != null)
-                {
-                    if (tempFigure != null) changedFigure.FillProperty.FillColor = tempFigure.FillProperty.FillColor;
-                    figure = changedFigure;
-                }
-            }
-            var count = figure.Points.GetPoints().Count;
-            for (var i = 0; i < count; i++)
-            {
-                figure.Points.Replace(i, new PointF(newFigure.Points.GetPoints()[i].X,
-                                                    newFigure.Points.GetPoints()[i].Y));
-            }
-            NotifyObservers();
-        }
-
-        /// <inheritdoc />
-        /// <summary>
         /// Перемещение объекта
         /// </summary>
         /// <param name="index">Индекс</param>
@@ -177,25 +137,6 @@ namespace VectorEditor.Model
             }
             HasChanged();
             NotifyObservers();
-        }
-
-        /// <inheritdoc />
-        /// <summary>
-        /// Сохранение проекта
-        /// </summary>
-        /// <param name="filename">Имя файла</param>
-        public void Save(string filename)
-        {
-
-        }
-
-        /// <inheritdoc />
-        /// <summary>
-        /// Загрузка проекта
-        /// </summary>
-        public  void Load()
-        {
-
         }
 
         /// <inheritdoc />

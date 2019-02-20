@@ -127,7 +127,7 @@ namespace VectorEditor.Presenter
         public void MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button != MouseButtons.Left) return;
-            var circle = FigureFactory.CreateFillableFigure(Item.Circle) as FillableFigure;
+            var circle = FigureFactory.CreateFillableFigure(ToolType.Circle) as FillableFigure;
 
             if (circle != null)
             {

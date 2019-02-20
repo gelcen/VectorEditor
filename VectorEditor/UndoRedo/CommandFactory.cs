@@ -13,7 +13,7 @@ namespace VectorEditor.UndoRedo
         /// <param name="command">Команда</param>
         /// <param name="figureModel">Модель</param>
         public static void RestorePointersToModel(ICommand command, IModel figureModel)
-        {
+        {                  
             if (command.GetType() == typeof(AddFigureCommand))
             {
                 command.Model = figureModel;

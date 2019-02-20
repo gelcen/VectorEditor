@@ -23,7 +23,7 @@ namespace VectorEditor.View
         /// <summary>
         /// Словарь для кнопок инструментов
         /// </summary>
-        private readonly Dictionary<Control, Item> _toolsDictionary;
+        private readonly Dictionary<Control, ToolType> _toolsDictionary;
 
         /// <summary>
         /// Текущие параметры
@@ -84,10 +84,6 @@ namespace VectorEditor.View
             set
             {
                 _figureParameters = value;
-                //nudLineThickness.Value = _figureParameters.LineThickness;
-                //buttonLineColor.BackColor = _figureParameters.LineColor;
-                //buttonFillColor.BackColor = _figureParameters.FillColor;
-                //cbLineType.SelectedIndex = _figureParameters.LineStyle;
             }
         }
 
@@ -118,7 +114,7 @@ namespace VectorEditor.View
         /// <summary>
         /// Событие выбора инструмента
         /// </summary>
-        public event EventHandler<Item> ToolPicked;
+        public event EventHandler<ToolType> ToolPicked;
         
         /// <inheritdoc />
         /// <summary>
@@ -173,12 +169,12 @@ namespace VectorEditor.View
         /// <summary>
         /// Вызов события выбора инструмента
         /// </summary>
-        /// <param name="pickedItem"></param>
-        private void OnToolPicked(Item pickedItem)
+        /// <param name="pickedToolType"></param>
+        private void OnToolPicked(ToolType pickedToolType)
         {
             var handler = ToolPicked;
 
-            handler?.Invoke(this, pickedItem);
+            handler?.Invoke(this, pickedToolType);
         }
 
         /// <inheritdoc />
@@ -199,7 +195,7 @@ namespace VectorEditor.View
 
             pbCanvas.Parent = this;
 
-            _toolsDictionary = new Dictionary<Control, Item>();
+            _toolsDictionary = new Dictionary<Control, ToolType>();
             InitTools();            
         }
 
@@ -208,12 +204,12 @@ namespace VectorEditor.View
         /// </summary>
         private void InitTools()
         {
-            _toolsDictionary.Add(buttonCursor, Item.Cursor);
-            _toolsDictionary.Add(buttonLine, Item.Line);
-            _toolsDictionary.Add(buttonPolyLine, Item.Polyline);
-            _toolsDictionary.Add(buttonCircle, Item.Circle);
-            _toolsDictionary.Add(buttonEllipse, Item.Ellipse);
-            _toolsDictionary.Add(buttonPolygone, Item.Polygon);
+            _toolsDictionary.Add(buttonCursor, ToolType.Cursor);
+            _toolsDictionary.Add(buttonLine, ToolType.Line);
+            _toolsDictionary.Add(buttonPolyLine, ToolType.Polyline);
+            _toolsDictionary.Add(buttonCircle, ToolType.Circle);
+            _toolsDictionary.Add(buttonEllipse, ToolType.Ellipse);
+            _toolsDictionary.Add(buttonPolygone, ToolType.Polygon);
         }
 
         /// <summary>
@@ -411,7 +407,7 @@ namespace VectorEditor.View
         private void MainForm_Load(object sender, EventArgs e)
         {
             KeyPreview = true;
-            OnToolPicked(Item.Cursor);
+            OnToolPicked(ToolType.Cursor);
         }
 
         #region Обработчики нажатий по пунктам меню

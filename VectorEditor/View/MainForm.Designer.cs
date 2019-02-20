@@ -342,29 +342,29 @@
             // newFileToolStripMenuItem
             // 
             this.newFileToolStripMenuItem.Name = "newFileToolStripMenuItem";
-            this.newFileToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.newFileToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
             this.newFileToolStripMenuItem.Text = "Создать";
             this.newFileToolStripMenuItem.Click += new System.EventHandler(this.newFileToolStripMenuItem_Click);
             // 
             // openFileToolStripMenuItem
             // 
             this.openFileToolStripMenuItem.Name = "openFileToolStripMenuItem";
-            this.openFileToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.openFileToolStripMenuItem.Text = "Открыть";
+            this.openFileToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
+            this.openFileToolStripMenuItem.Text = "Открыть...";
             this.openFileToolStripMenuItem.Click += new System.EventHandler(this.openFileToolStripMenuItem_Click);
             // 
             // saveToolStripMenuItem1
             // 
             this.saveToolStripMenuItem1.Name = "saveToolStripMenuItem1";
-            this.saveToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
-            this.saveToolStripMenuItem1.Text = "Сохранить";
+            this.saveToolStripMenuItem1.Size = new System.Drawing.Size(189, 22);
+            this.saveToolStripMenuItem1.Text = "Сохранить...";
             this.saveToolStripMenuItem1.Click += new System.EventHandler(this.saveToolStripMenuItem1_Click);
             // 
             // exportToPngToolStripMenuItem
             // 
             this.exportToPngToolStripMenuItem.Name = "exportToPngToolStripMenuItem";
-            this.exportToPngToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.exportToPngToolStripMenuItem.Text = "Сохранить как PNG";
+            this.exportToPngToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
+            this.exportToPngToolStripMenuItem.Text = "Сохранить как PNG...";
             this.exportToPngToolStripMenuItem.Click += new System.EventHandler(this.exportToPngToolStripMenuItem_Click);
             // 
             // правкаToolStripMenuItem

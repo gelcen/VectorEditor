@@ -3,7 +3,7 @@
     /// <summary>
     /// Перечисление инструментов
     /// </summary>
-    public enum Item
+    public enum ToolType
     {
         Cursor,
         Line,

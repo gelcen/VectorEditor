@@ -12,7 +12,14 @@ namespace VectorEditor.UndoRedo
     [JsonObject(MemberSerialization.Fields)]
     public class MoveFigureCommand : ICommand
     {
+        /// <summary>
+        /// Состояние до изменения
+        /// </summary>
         private readonly Dictionary<int, BaseFigure> _beforeState;
+
+        /// <summary>
+        /// Состояние после изменения
+        /// </summary>
         private readonly Dictionary<int, BaseFigure> _newState;
 
         public IModel Model { get; set; }

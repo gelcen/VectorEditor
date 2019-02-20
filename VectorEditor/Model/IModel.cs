@@ -34,12 +34,6 @@ namespace VectorEditor.Model
         void CopyFigure(int index, BaseFigure figure);
 
         /// <summary>
-        /// Вырезание объекта
-        /// </summary>
-        /// <param name="figure"></param>
-        void CutFigure(BaseFigure figure);
-
-        /// <summary>
         /// Удаление фигуры по индексу
         /// </summary>
         /// <param name="index">Индекс удаляемой фигуры</param>
@@ -59,24 +53,6 @@ namespace VectorEditor.Model
         /// <param name="index">Индекс</param>
         /// <param name="figure">Фигура с новыми точками</param>
         void MoveFigure(int index, BaseFigure figure);
-
-        /// <summary>
-        /// Изменение фигуры
-        /// </summary>
-        /// <param name="index">Индекс фигуры</param>
-        /// <param name="figure">Новая фигуры</param>
-        void ChangeFigure(int index, BaseFigure figure);
-
-        /// <summary>
-        /// Сохранение проекта
-        /// </summary>
-        /// <param name="filename">Имя файла</param>
-        void Save(string filename);
-
-        /// <summary>
-        /// Загрузка проекта
-        /// </summary>
-        void Load();
 
         /// <summary>
         ///  Создание нового проекта

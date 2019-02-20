@@ -209,7 +209,7 @@ namespace VectorEditor.Presenter
             if (_currentHandler.GetType() == typeof(CursorHandler))
             {
                 var handler = _currentHandler as CursorHandler;
-                if (handler != null)
+                if (handler != null)                   
                     foreach (var figure in handler.SelectedFigures)
                     {
                         if (!_model.GetFigureList().ContainsKey(figure.Key)) continue;
@@ -232,37 +232,38 @@ namespace VectorEditor.Presenter
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void _view_ToolPicked(object sender, Item e)
+        private void _view_ToolPicked(object sender, ToolType e)
         {
             switch (e)
             {
-                case Item.Line:
+                case ToolType.Line:
                     _currentHandler = new LineHandler(_view.Canvas, _view.FigureParameters);
                     _currentHandler.FigureCreated += _currentHandler_FigureCreated;
                     _view.CurrentHandler = (LineHandler)_currentHandler;
                     break;
-                case Item.Polyline:
+                case ToolType.Polyline:
                     _currentHandler = new PolylineHandler(_view.Canvas, _view.FigureParameters);
                     _currentHandler.FigureCreated += _currentHandler_FigureCreated;
                     _view.CurrentHandler = (PolylineHandler)_currentHandler;
                     break;
-                case Item.Circle:
+                case ToolType.Circle:
                     _currentHandler = new CircleHandler(_view.Canvas, _view.FigureParameters);
                     _currentHandler.FigureCreated += _currentHandler_FigureCreated;
                     _view.CurrentHandler = (CircleHandler)_currentHandler;
                     break;
-                case Item.Ellipse:
+                case ToolType.Ellipse:
                     _currentHandler = new EllipseHandler(_view.Canvas, _view.FigureParameters);
                     _currentHandler.FigureCreated += _currentHandler_FigureCreated;
                     _view.CurrentHandler = (EllipseHandler)_currentHandler;
                     break;
-                case Item.Polygon:
+                case ToolType.Polygon:
                     _currentHandler = new PolygonHandler(_view.Canvas, _view.FigureParameters);
                     _currentHandler.FigureCreated += _currentHandler_FigureCreated;
                     _view.CurrentHandler = (PolygonHandler)_currentHandler;
                     break;
-                case Item.Cursor:
-                    var cursorHandler = new CursorHandler(_view.Canvas, _view.FigureParameters, this);
+                case ToolType.Cursor:
+                    var cursorHandler = new CursorHandler(_view.Canvas, 
+                        _view.FigureParameters, this);
                     cursorHandler.FiguresMoved += CursorHandler_FiguresMoved;
                     cursorHandler.PointMoved += CursorHandler_PointMoved;
                     _currentHandler = cursorHandler;

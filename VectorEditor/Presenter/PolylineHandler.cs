@@ -131,10 +131,11 @@ namespace VectorEditor.Presenter
                 case MouseButtons.Left:
                     if (_polyline == null)
                     {
-                        _polyline = FigureFactory.CreateFigure(Item.Polyline);
+                        _polyline = FigureFactory.CreateFigure(ToolType.Polyline);
 
                         _polyline.LineProperties.Color = _figureParameters.LineColor;
-                        _polyline.LineProperties.Style = (DashStyle)_figureParameters.LineStyle;
+                        _polyline.LineProperties.Style = (DashStyle)
+                            _figureParameters.LineStyle;
                         _polyline.LineProperties.Thickness = _figureParameters.LineThickness;
 
                         _polyline.Points.AddPoint(new PointF(e.X, e.Y));

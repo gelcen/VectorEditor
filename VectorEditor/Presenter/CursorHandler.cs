@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Drawing.Text;
 using System.Linq;
 using System.Windows.Forms;
 using VectorEditor.Drawers;
@@ -250,7 +249,8 @@ namespace VectorEditor.Presenter
                         if ((SelectedFigures != null) &&
                             SelectedFigures.ContainsKey(GetFigurePointOn(e.Location)))
                         {
-                            _selectedFigure = _presenter.GetFigures()[GetFigurePointOn(e.Location)];
+                            _selectedFigure = _presenter.GetFigures()
+                                [GetFigurePointOn(e.Location)];
 
                             //Сохраняем предыдущее состояние
                             BeforeState?.Clear();
@@ -430,7 +430,9 @@ namespace VectorEditor.Presenter
         /// <param name="eY">Текущая координата Y</param>
         /// <param name="offsetX">Смещение по X</param>
         /// <param name="offsetY">Смещение по Y</param>
-        private static void MoveFigurePoints(BaseFigure figure, int eX, int eY, float offsetX, float offsetY)
+        private static void MoveFigurePoints(BaseFigure figure, 
+            int eX, int eY, 
+            float offsetX, float offsetY)
         {            
             float dx;
             float dy;
@@ -506,7 +508,8 @@ namespace VectorEditor.Presenter
             if (_isPointMoved)
             {
                 newPointState.Add(_pickedFigureIndex, 
-                                    FigureFactory.CreateCopy(SelectedFigures[_pickedFigureIndex]));
+                                    FigureFactory.CreateCopy(
+                                        SelectedFigures[_pickedFigureIndex]));
 
                 OnPointMoved(newPointState);
 
@@ -611,7 +614,8 @@ namespace VectorEditor.Presenter
                         if (IsPointOnFigure(e.Location))
                         {
                             SelectedFigures.Clear();
-                            _selectedFigure = _presenter.GetFigures()[GetFigurePointOn(e.Location)];
+                            _selectedFigure = _presenter.GetFigures()
+                                [GetFigurePointOn(e.Location)];
                             int index = GetFigurePointOn(e.Location);
                             SelectedFigures.Add(index, _presenter.GetFigures()[index]);       
                             _isFigurePicked = true;
@@ -778,7 +782,8 @@ namespace VectorEditor.Presenter
                     for (var j = 0; j < count; j++)
                     {
                         if (!(FindDistanceToPointSquared(mousePoint,
-                                  figure.Value.Points.GetPoints()[j]) < OverDistSquared)) continue;
+                                  figure.Value.Points.GetPoints()[j]) < OverDistSquared))
+                            continue;
                         pickedPoint = figure.Value.Points.GetPoints()[j];
                         _pickedPointIndex = j;
                         _pickedFigureIndex = figure.Key;
@@ -839,12 +844,14 @@ namespace VectorEditor.Presenter
             }
             else if (figure.GetType() == typeof(Circle))
             {
-                var circleRect = CircleDrawer.MakeRectangle(points[0], points[1], RoundShapeType.Circle);
+                var circleRect = CircleDrawer.MakeRectangle(points[0], points[1], 
+                    RoundShapeType.Circle);
                 path.AddEllipse(circleRect);
             }
             else if (figure.GetType() == typeof(Ellipse))
             {
-                var ellipseRect = CircleDrawer.MakeRectangle(points[0], points[1], RoundShapeType.Ellipse);
+                var ellipseRect = CircleDrawer.MakeRectangle(points[0], points[1], 
+                    RoundShapeType.Ellipse);
                 path.AddEllipse(ellipseRect);
             }
             else if (figure.GetType() == typeof(Polyline))

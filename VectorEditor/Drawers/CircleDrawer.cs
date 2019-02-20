@@ -19,13 +19,14 @@ namespace VectorEditor.Drawers
         /// <param name="canvas">Канва</param>
         public override void DrawFigure(BaseFigure figure, Graphics canvas)
         {
-            var circle = figure as FillableFigure;
-            if (circle == null) return;
+            FillableFigure circle;
 
-            var points = circle.Points.GetPoints();
-            if (points.Count != 2) return;
+            IReadOnlyList<PointF> points;
 
-            var circleRect = MakeRectangle(points[0], points[1], RoundShapeType.Circle);
+            if (!GetFillableFigure(figure, out circle, out points)) return;
+
+            var circleRect = MakeRectangle(points[0], points[1], 
+                RoundShapeType.Circle);
 
             Brush brush = new SolidBrush(circle.FillProperty.FillColor);
             canvas.FillEllipse(brush, circleRect);
@@ -46,7 +47,9 @@ namespace VectorEditor.Drawers
         /// <param name="pointB">Нижнаяя правая точка</param>
         /// <param name="shapeType">Тип фигуры</param>
         /// <returns></returns>
-        public static Rectangle MakeRectangle(PointF pointA, PointF pointB, RoundShapeType shapeType)
+        public static Rectangle MakeRectangle(PointF pointA, 
+            PointF pointB, 
+            RoundShapeType shapeType)
         {
             var width = (int) Math.Abs(pointA.X - pointB.X);
             var height = (int) Math.Abs(pointA.Y - pointB.Y);
@@ -56,8 +59,9 @@ namespace VectorEditor.Drawers
             var x = (int)Math.Min(pointA.X, pointB.X);
             var y = (int)Math.Min(pointA.Y, pointB.Y);
 
-            return shapeType == RoundShapeType.Circle ? new Rectangle(x, y, radius, radius) : 
-                                                        new Rectangle(x, y, width, height);
+            return shapeType == 
+                   RoundShapeType.Circle ? new Rectangle(x, y, radius, radius) : 
+                                           new Rectangle(x, y, width, height);
         }
 
         /// <summary>
@@ -86,15 +90,16 @@ namespace VectorEditor.Drawers
         /// <param name="canvas">Канва</param>
         public override void DrawSelection(BaseFigure figure, Graphics canvas)
         {
-            var circle = figure as FillableFigure;
-            if (circle == null) return;
+            FillableFigure circle;
 
-            var points = circle.Points.GetPoints();
-            if (points.Count != 2) return;
+            IReadOnlyList<PointF> points;
+
+            if (!GetFillableFigure(figure, out circle, out points)) return;
 
             DrawSelectionRoundShapes(points, canvas);
 
-            var circleRect = MakeRectangle(points[0], points[1], RoundShapeType.Circle);
+            var circleRect = MakeRectangle(points[0], points[1], 
+                RoundShapeType.Circle);
 
             var pen = new Pen(Color.Black, 1)
                           { DashStyle = System.Drawing.Drawing2D.DashStyle.Dash};
@@ -102,6 +107,33 @@ namespace VectorEditor.Drawers
             canvas.DrawRectangle(pen, circleRect);
 
             pen.Dispose();
+        }
+
+        /// <summary>
+        /// Получить заливаемую фигуру и его точки
+        /// </summary>
+        /// <param name="inFigure">Фигура на вход</param>
+        /// <param name="outFigure">Заполняемая фигура</param>
+        /// <param name="points">Точки фигуры</param>
+        /// <returns></returns>
+        public static bool GetFillableFigure(BaseFigure inFigure,
+                                       out FillableFigure outFigure,
+                                       out IReadOnlyList<PointF> points)
+        {
+            var fillableFigure = inFigure as FillableFigure;
+            if (fillableFigure != null)
+            {
+                outFigure = fillableFigure;
+                points = fillableFigure.Points.GetPoints();
+                if (points.Count != 2)
+                {                   
+                    return false;
+                }
+                return true;
+            }
+            outFigure = null;
+            points = null;
+            return false;
         }
     }
 }

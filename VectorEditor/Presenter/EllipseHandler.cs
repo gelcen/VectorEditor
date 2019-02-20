@@ -127,7 +127,7 @@ namespace VectorEditor.Presenter
         public void MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button != MouseButtons.Left) return;
-            var ellipse = FigureFactory.CreateFillableFigure(Item.Ellipse) as FillableFigure;
+            var ellipse = FigureFactory.CreateFillableFigure(ToolType.Ellipse) as FillableFigure;
 
             if (ellipse != null)
             {

@@ -12,6 +12,9 @@ namespace VectorEditor.UndoRedo
     [JsonObject(MemberSerialization.Fields)]
     public class DeleteFigureCommand : ICommand
     {
+        /// <summary>
+        /// Свойство для модели
+        /// </summary>
         public IModel Model { get; set; }
 
         /// <summary>
@@ -24,7 +27,8 @@ namespace VectorEditor.UndoRedo
         /// </summary>
         /// <param name="model">Ссылка на модель</param>
         /// <param name="deletedFigures">Удаленные фигуры</param>
-        public DeleteFigureCommand(IModel model, Dictionary<int, BaseFigure> deletedFigures)
+        public DeleteFigureCommand(IModel model, 
+            Dictionary<int, BaseFigure> deletedFigures)
         {
             Model = model;
             _deletedFigures = deletedFigures;            

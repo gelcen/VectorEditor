@@ -38,7 +38,8 @@ namespace VectorEditor.View
             foreach (var command in redoList)
             {
                 var jsonString = JsonConvert.SerializeObject(command,
-                                new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All });
+                                new JsonSerializerSettings
+                                { TypeNameHandling = TypeNameHandling.All });
                 file.WriteLine(jsonString);
             }
 
@@ -68,7 +69,8 @@ namespace VectorEditor.View
             {
                 var line = file.ReadLine();
                 var command = (ICommand)JsonConvert.DeserializeObject(line, 
-                    new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All });
+                    new JsonSerializerSettings
+                        { TypeNameHandling = TypeNameHandling.All });
                 tempList.Add(command);
             }
             file.Close();

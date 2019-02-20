@@ -127,7 +127,7 @@ namespace VectorEditor.Presenter
         public void MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button != MouseButtons.Left) return;
-            _line = FigureFactory.CreateFigure(Item.Line);
+            _line = FigureFactory.CreateFigure(ToolType.Line);
             _line.LineProperties.Color = _figureParameters.LineColor;
             _line.LineProperties.Style = (DashStyle)_figureParameters.LineStyle;
             _line.LineProperties.Thickness = _figureParameters.LineThickness;

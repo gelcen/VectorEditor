@@ -53,7 +53,9 @@ namespace VectorEditor.Figures
         /// <param name="lineColor">Цвет линии</param>
         /// <param name="thickness">Толщина линии</param>
         /// <param name="style">Стиль линии</param>
-        public LineProperties(Color lineColor, int thickness, DashStyle style)
+        public LineProperties(Color lineColor, 
+            int thickness, 
+            DashStyle style)
         {
             Color = lineColor;
             Thickness = thickness;

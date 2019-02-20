@@ -98,14 +98,34 @@ namespace VectorEditor.UndoRedo
             parameters.LineColor = figure.LineProperties.Color;
             parameters.LineStyle = (int)figure.LineProperties.Style;
             parameters.LineThickness = figure.LineProperties.Thickness;
+            if (IsFigureFillable(figure))
+            {
+                var tempFigure = figure as FillableFigure;
+                if (tempFigure != null)
+                {
+                    parameters.FillColor = tempFigure.FillProperty.FillColor;
+                }                    
+            }
+            return parameters;
+        }
+
+        /// <summary>
+        /// Проверка типа фигуры
+        /// </summary>
+        /// <param name="figure"></param>
+        /// <returns></returns>
+        public static bool IsFigureFillable(BaseFigure figure)
+        {
             if (figure.GetType() == typeof(Circle) ||
                 figure.GetType() == typeof(Ellipse) ||
                 figure.GetType() == typeof(Polygon))
             {
-                var tempFigure = figure as FillableFigure;
-                if (tempFigure != null) parameters.FillColor = tempFigure.FillProperty.FillColor;
+                return true;
             }
-            return parameters;
+            else
+            {
+                return false;
+            }
         }
     }
 }

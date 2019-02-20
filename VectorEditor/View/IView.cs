@@ -101,7 +101,7 @@ namespace VectorEditor.View
         /// <summary>
         /// События выбора инструмента
         /// </summary>
-        event EventHandler<Item> ToolPicked;
+        event EventHandler<ToolType> ToolPicked;
 
         /// <summary>
         /// События создания нового файла

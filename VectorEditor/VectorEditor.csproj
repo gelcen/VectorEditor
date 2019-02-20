@@ -69,7 +69,7 @@
     <Compile Include="Figures\Points.cs" />
     <Compile Include="Figures\Polygon.cs" />
     <Compile Include="Figures\Polyline.cs" />
-    <Compile Include="Item.cs" />
+    <Compile Include="ToolType.cs" />
     <Compile Include="Presenter\CircleHandler.cs" />
     <Compile Include="Presenter\CursorHandler.cs" />
     <Compile Include="Presenter\EllipseHandler.cs" />
@@ -98,7 +98,6 @@
     <Compile Include="Model\IModel.cs" />
     <Compile Include="Model\FigureModel.cs" />
     <Compile Include="View\IView.cs" />
-    <Compile Include="Model\ModelChangedEventArgs.cs" />
     <Compile Include="Presenter\Presenter.cs" />
     <Compile Include="Observer\IObserver.cs" />
     <Compile Include="Observer\ISubject.cs" />
@@ -117,7 +116,6 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <None Include="ClassDiagram.cd" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
