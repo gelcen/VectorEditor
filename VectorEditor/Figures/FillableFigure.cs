@@ -1,15 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Newtonsoft.Json;
 
 namespace VectorEditor.Figures
 {
-    public class FillableFigure: BaseFigure
+    /// <inheritdoc />
+    /// <summary>
+    /// Базовый класс для фигур с заполнением
+    /// </summary>
+    [JsonObject(MemberSerialization.Fields)]
+    public abstract class FillableFigure: BaseFigure
     {
+        /// <summary>
+        /// Цвет заполнения
+        /// </summary>
         protected FillProperty _fillProperty;
 
+        /// <summary>
+        /// Свойство для цвета заполнения
+        /// </summary>
         public FillProperty FillProperty
         {
             get

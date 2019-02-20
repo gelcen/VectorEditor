@@ -1,75 +1,82 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using VectorEditor.Figures;
 
 namespace VectorEditor.Drawers
 {
+    /// <inheritdoc />
+    /// <summary>
+    /// Класс-рисовальщик для эллипса
+    /// </summary>
     public class EllipseDrawer : BaseDrawer
     {
+        /// <inheritdoc />
+        /// <summary>
+        /// Нарисовать фигуру
+        /// </summary>
+        /// <param name="figure">Рисуемая фигура</param>
+        /// <param name="canvas">Канва</param>
         public override void DrawFigure(BaseFigure figure, Graphics canvas)
         {
-            var circle = figure as FillableFigure;
-            if (circle == null) return;
+            FillableFigure ellipse;
 
-            var points = circle.Points.GetPoints();
-            if (points.Count != 2) return;
+            IReadOnlyList<PointF> points;
 
-            int width = (int)Math.Abs(points[0].X - points[1].X);
-            int height = (int)Math.Abs(points[0].Y - points[1].Y);
+            if (!CircleDrawer.GetFillableFigure(figure,
+                out ellipse,
+                out points))
+            {
+                return;
+            }
 
-            int x = (int)Math.Min(points[0].X, points[1].X);
-            int y = (int)Math.Min(points[0].Y, points[1].Y);
+            var ellipseRectangle= CircleDrawer.MakeRectangle(
+                points[0], points[1],
+                RoundShapeType.Ellipse);
 
-            Rectangle circleRect = new Rectangle(x, y, width, height);
+            Brush brush = new SolidBrush(ellipse.FillProperty.FillColor);
 
-            Brush brush = new SolidBrush(circle.FillProperty.FillColor);
-
-            canvas.FillEllipse(brush, circleRect);
+            canvas.FillEllipse(brush, ellipseRectangle);
 
             brush.Dispose();
 
-            Pen pen = new Pen(circle.LineProperties.Color,
-                              circle.LineProperties.Thickness);
-            pen.DashStyle = circle.LineProperties.Style;
+            var pen = new Pen(ellipse.LineProperties.Color,
+                               ellipse.LineProperties.Thickness)
+                { DashStyle = ellipse.LineProperties.Style};
 
-            canvas.DrawEllipse(pen, circleRect);
+            canvas.DrawEllipse(pen, ellipseRectangle);
 
             pen.Dispose();
         }
 
+        /// <inheritdoc />
+        /// <summary>
+        /// Нарисовать маркеры
+        /// </summary>
+        /// <param name="figure">Рисуемая фигура</param>
+        /// <param name="canvas">Канва</param>
         public override void DrawSelection(BaseFigure figure, Graphics canvas)
         {
-            var circle = figure as FillableFigure;
-            if (circle == null) return;
+            FillableFigure ellipse;
 
-            var points = circle.Points.GetPoints();
-            if (points.Count != 2) return;
+            IReadOnlyList<PointF> points;
 
-            foreach (var pt in points)
+            if (!CircleDrawer.GetFillableFigure(figure, 
+                                            out ellipse, 
+                                            out points))
             {
-                Rectangle rect = new Rectangle(
-                    (int)pt.X - object_radius, (int)pt.Y - object_radius,
-                    2 * object_radius + 1, 2 * object_radius + 1);
-                canvas.FillEllipse(Brushes.White, rect);
-                canvas.DrawEllipse(Pens.Black, rect);
+                return;
             }
+            
+            CircleDrawer.DrawSelectionRoundShapes(points, canvas);
 
-            int width = (int)Math.Abs(points[0].X - points[1].X);
-            int height = (int)Math.Abs(points[0].Y - points[1].Y);
+            var rectangle = CircleDrawer.MakeRectangle(
+                points[0], points[1], 
+                RoundShapeType.Ellipse);
 
-            int x = (int)Math.Min(points[0].X, points[1].X);
-            int y = (int)Math.Min(points[0].Y, points[1].Y);
+            var pen = new Pen(Color.Black, 1)
+                          { DashStyle = System.Drawing.Drawing2D.DashStyle.Dash};
 
-            Rectangle circleRect = new Rectangle(x, y, width, height);
-
-            Pen pen = new Pen(Color.Black, 1);
-            pen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dash;
-
-            canvas.DrawRectangle(pen, circleRect);
+            canvas.DrawRectangle(pen, rectangle);
 
             pen.Dispose();
         }

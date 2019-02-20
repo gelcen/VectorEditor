@@ -1,148 +1,191 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Drawing;
 
 namespace VectorEditor.Figures
 {
+    /// <summary>
+    /// Статический класс. Фабрика фигур.
+    /// </summary>
     public static class FigureFactory
     {
-        public static BaseFigure CreateFigure(Item type)
+        /// <summary>
+        /// Создание фигур
+        /// </summary>
+        /// <param name="type">Тип фигур</param>
+        /// <returns>Новая фигура</returns>
+        public static BaseFigure CreateFigure(ToolType type)
         {
             switch (type)
             {
-                case Item.Line:
+                case ToolType.Line:
                     return new Line();
-                case Item.Polyline:
+                case ToolType.Polyline:
                     return new Polyline();
-                case Item.Polygon:
+                case ToolType.Polygon:
                     return new Polygon();
-                case Item.Circle:
+                case ToolType.Circle:
                     return new Circle();
-                case Item.Ellipse:
+                case ToolType.Ellipse:
                     return new Ellipse();
                 default:
                     return null;
             }
         }
 
-        public static BaseFigure CreateFillableFigure(Item type)
+        /// <summary>
+        /// Создание фигур с заливкой
+        /// </summary>
+        /// <param name="type">Тип фигуры</param>
+        /// <returns>Новая фигура</returns>
+        public static BaseFigure CreateFillableFigure(ToolType type)
         {
             switch (type)
             {
-                case Item.Polygon:
+                case ToolType.Polygon:
                     return new Polygon();
-                case Item.Circle:
+                case ToolType.Circle:
                     return new Circle();
-                case Item.Ellipse:
+                case ToolType.Ellipse:
                     return new Ellipse();
                 default:
                     return null;
             }
         }
 
-        public static BaseFigure CreateCopy(BaseFigure figure)
+        /// <summary>
+        /// Перечисления для типов копирования.
+        /// Есть нормальное и со сдигом координат. 
+        /// </summary>
+        public enum CopyType
+        {
+            NormalCopy,
+            CopyWithOffset
+        }
+
+        /// <summary>
+        /// Статический метод для создания копии фигуры
+        /// </summary>
+        /// <param name="figure">Фигура для копирования</param>
+        /// <param name="copyType">Тип копирования</param>
+        /// <returns>Копия фигуры</returns>
+        public static BaseFigure CreateCopy(BaseFigure figure, 
+            CopyType copyType=CopyType.NormalCopy)
         {
             BaseFigure resultFigure = null;
-            if (figure.GetType() == typeof(FillableFigure))
+            if (figure.GetType() == typeof(Line))
             {
-                var fillableFigure = figure as FillableFigure;
-                FillableFigure newFigure = new FillableFigure();
-
-                newFigure.LineProperties.Color = fillableFigure.LineProperties.Color;
-                newFigure.LineProperties.Thickness = fillableFigure.LineProperties.Thickness;
-                newFigure.LineProperties.Style = fillableFigure.LineProperties.Style;
-
-                newFigure.FillProperty.FillColor = fillableFigure.FillProperty.FillColor;
-
-                foreach (var point in fillableFigure.Points.GetPoints())
+                resultFigure = new Line
                 {
-                    newFigure.Points.AddPoint(new PointF(point.X + 15, point.Y));
-                }
+                    LineProperties =
+                        {
+                            Color = figure.LineProperties.Color,
+                            Thickness = figure.LineProperties.Thickness,
+                            Style = figure.LineProperties.Style
+                        }
+                };
 
-                resultFigure = newFigure;
+                CopyPoints(figure, resultFigure, copyType);
             }
-            else
+            else if (figure.GetType() == typeof(Polyline))
             {
-                if (figure.GetType() == typeof(Line))
+                resultFigure = new Polyline
                 {
-                    resultFigure = new Line();
-                    resultFigure.LineProperties.Color = figure.LineProperties.Color;
-                    resultFigure.LineProperties.Thickness = figure.LineProperties.Thickness;
-                    resultFigure.LineProperties.Style = figure.LineProperties.Style;
+                    LineProperties =
+                        {
+                            Color = figure.LineProperties.Color,
+                            Thickness = figure.LineProperties.Thickness,
+                            Style = figure.LineProperties.Style
+                        }
+                };
 
-                    foreach (var point in figure.Points.GetPoints())
-                    {
-                        resultFigure.Points.AddPoint(new PointF(point.X + 15, point.Y));
-                    }
-                }
-                else if (figure.GetType() == typeof(Polyline))
-                {
-                    resultFigure = new Polyline();
-                    resultFigure.LineProperties.Color = figure.LineProperties.Color;
-                    resultFigure.LineProperties.Thickness = figure.LineProperties.Thickness;
-                    resultFigure.LineProperties.Style = figure.LineProperties.Style;
-
-                    foreach (var point in figure.Points.GetPoints())
-                    {
-                        resultFigure.Points.AddPoint(new PointF(point.X + 15, point.Y));
-                    }
-                }
-                else if (figure.GetType() == typeof(Circle))
-                {
-                    Circle circle = new Circle();
-                    circle.LineProperties.Color = figure.LineProperties.Color;
-                    circle.LineProperties.Thickness = figure.LineProperties.Thickness;
-                    circle.LineProperties.Style = figure.LineProperties.Style;
-
-                    var temp = figure as FillableFigure;
-                    circle.FillProperty.FillColor = temp.FillProperty.FillColor;
-
-                    foreach (var point in figure.Points.GetPoints())
-                    {
-                        circle.Points.AddPoint(new PointF(point.X + 15, point.Y));
-                    }
-
-                    resultFigure = circle;
-                }
-                else if (figure.GetType() == typeof(Ellipse))
-                {
-                    Ellipse circle = new Ellipse();
-                    circle.LineProperties.Color = figure.LineProperties.Color;
-                    circle.LineProperties.Thickness = figure.LineProperties.Thickness;
-                    circle.LineProperties.Style = figure.LineProperties.Style;
-
-                    var temp = figure as FillableFigure;
-                    circle.FillProperty.FillColor = temp.FillProperty.FillColor;
-
-                    foreach (var point in figure.Points.GetPoints())
-                    {
-                        circle.Points.AddPoint(new PointF(point.X + 15, point.Y));
-                    }
-
-                    resultFigure = circle;
-                }
-                else if (figure.GetType() == typeof(Polygon))
-                {
-                    Polygon circle = new Polygon();
-                    circle.LineProperties.Color = figure.LineProperties.Color;
-                    circle.LineProperties.Thickness = figure.LineProperties.Thickness;
-                    circle.LineProperties.Style = figure.LineProperties.Style;
-
-                    var temp = figure as FillableFigure;
-                    circle.FillProperty.FillColor = temp.FillProperty.FillColor;
-
-                    foreach (var point in figure.Points.GetPoints())
-                    {
-                        circle.Points.AddPoint(new PointF(point.X + 15, point.Y));
-                    }
-
-                    resultFigure = circle;
-                }
+                CopyPoints(figure, resultFigure, copyType);
             }
+            else if (figure.GetType() == typeof(Circle))
+            {
+                var circle = new Circle
+                {
+                    LineProperties =
+                        {
+                            Color = figure.LineProperties.Color,
+                            Thickness = figure.LineProperties.Thickness,
+                            Style = figure.LineProperties.Style
+                        }
+                };
+
+                var temp = figure as FillableFigure;
+                if (temp != null)
+                {
+                    circle.FillProperty.FillColor = temp.FillProperty.FillColor;
+                }
+
+
+                CopyPoints(figure, circle, copyType);
+
+                resultFigure = circle;
+            }
+            else if (figure.GetType() == typeof(Ellipse))
+            {
+                var ellipse = new Ellipse
+                {
+                    LineProperties =
+                        {
+                            Color = figure.LineProperties.Color,
+                            Thickness = figure.LineProperties.Thickness,
+                            Style = figure.LineProperties.Style
+                        }
+                };
+
+                var temp = figure as FillableFigure;
+                if (temp != null)
+                {
+                    ellipse.FillProperty.FillColor = temp.FillProperty.FillColor;
+                }
+
+                CopyPoints(figure, ellipse, copyType);
+
+                resultFigure = ellipse;
+            }
+            else if (figure.GetType() == typeof(Polygon))
+            {
+                var polygon = new Polygon
+                {
+                    LineProperties =
+                        {
+                            Color = figure.LineProperties.Color,
+                            Thickness = figure.LineProperties.Thickness,
+                            Style = figure.LineProperties.Style
+                        }
+                };
+
+                var temp = figure as FillableFigure;
+                if (temp != null)
+                {
+                    polygon.FillProperty.FillColor = temp.FillProperty.FillColor;
+                }
+
+                CopyPoints(figure, polygon, copyType);
+
+                resultFigure = polygon;
+            }
+
             return resultFigure;
+        }
+
+        /// <summary>
+        /// Копирование точек фигур
+        /// </summary>
+        /// <param name="originalFigure">Оригинальная фигура</param>
+        /// <param name="copyFigure">Новая фигура</param>
+        /// <param name="copyType">Тип копирования</param>
+        private static void CopyPoints(BaseFigure originalFigure,
+                                       BaseFigure copyFigure,
+                                       CopyType copyType)
+        {
+            foreach (var point in originalFigure.Points.GetPoints())
+            {
+                copyFigure.Points.AddPoint(copyType == CopyType.CopyWithOffset
+                                                    ? new PointF(point.X + 15, point.Y)
+                                                    : new PointF(point.X, point.Y));
+            }
         }
     }
 }

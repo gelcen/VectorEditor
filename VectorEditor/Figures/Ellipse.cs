@@ -1,13 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Newtonsoft.Json;
 
 namespace VectorEditor.Figures
 {
+    /// <inheritdoc />
+    /// <summary>
+    /// Класс для эллипса
+    /// </summary>
+    [JsonObject(MemberSerialization.Fields)]
     public class Ellipse:FillableFigure
     {
+        /// <summary>
+        /// Конструктор класса эллипс
+        /// </summary>
         public Ellipse()
         {
             _lineProperties = new LineProperties();

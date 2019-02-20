@@ -8,15 +8,26 @@ using VectorEditor.View;
 
 namespace VectorEditor.Presenter
 {
+    /// <inheritdoc />
+    /// <summary>
+    /// Класс для обработчика инструмента линии
+    /// </summary>
     public class LineHandler : IBaseHandler
     {
+        /// <summary>
+        /// Параметры линии
+        /// </summary>
         private FigureParameters _figureParameters;
 
-        private PictureBox _canvas;
-
+        /// <summary>
+        /// Линия
+        /// </summary>
         private BaseFigure _line;
-                
 
+        /// <inheritdoc />
+        /// <summary>
+        /// Свойство для параметров
+        /// </summary>
         public FigureParameters FigureParameters
         {
             set
@@ -25,36 +36,47 @@ namespace VectorEditor.Presenter
             }
         }
 
-        public PictureBox Canvas
-        {
-            get
-            {
-                return _canvas;
-            }
-            set
-            {
-                _canvas = value;
-            }
-        }
+        /// <inheritdoc />
+        /// <summary>
+        /// Свойство для канвы
+        /// </summary>
+        public PictureBox Canvas { get; set; }
 
+        /// <inheritdoc />
+        /// <summary>
+        /// Свойство для делегата нажатия на мышку
+        /// </summary>
         public MouseOperation MouseDownDelegate
         {
             set;
             get;
         }
 
+        /// <inheritdoc />
+        /// <summary>
+        /// Свойство для делегата отпускания мышки
+        /// </summary>
         public MouseOperation MouseUpDelegate
         {
             set;
             get;
         }
 
+        /// <inheritdoc />
+        /// <summary>
+        /// Свойство для делегата движения мышкой
+        /// </summary>
         public MouseOperation MouseMoveDelegate
         {
             set;
             get;
         }
 
+        /// <summary>
+        /// Конструктор класса обработчика для линии
+        /// </summary>
+        /// <param name="canvas"></param>
+        /// <param name="figureParameters"></param>
         public LineHandler(PictureBox canvas, FigureParameters figureParameters)
         {
             FigureParameters = figureParameters;
@@ -67,18 +89,28 @@ namespace VectorEditor.Presenter
             MouseMoveDelegate += MouseMove;
         }
 
+        /// <inheritdoc />
+        /// <summary>
+        /// Событие создания фигуры-линии
+        /// </summary>
         public event EventHandler<BaseFigure> FigureCreated;
 
+        /// <summary>
+        /// Вызов события создания фигуры
+        /// </summary>
+        /// <param name="createdFigure">Созданная фигура</param>
         private void OnFigureCreated(BaseFigure createdFigure)
         {
-            EventHandler<BaseFigure> handler = FigureCreated;
+            var handler = FigureCreated;
 
-            if (handler != null)
-            {
-                handler(null, createdFigure);
-            }
+            handler?.Invoke(null, createdFigure);
         }
 
+        /// <inheritdoc />
+        /// <summary>
+        /// Рисовка создаваемой фигуры
+        /// </summary>
+        /// <param name="g"></param>
         public void Draw(Graphics g)
         {
             if (_line != null)
@@ -87,32 +119,45 @@ namespace VectorEditor.Presenter
             }
         }
 
+        /// <summary>
+        /// Обработчик нажатия мышки
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void MouseDown(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Left)
-            {
-                _line = FigureFactory.CreateFigure(Item.Line);
-                _line.LineProperties.Color = _figureParameters.LineColor;
-                _line.LineProperties.Style = (DashStyle)_figureParameters.LineType;
-                _line.LineProperties.Thickness = _figureParameters.LineThickness;
+            if (e.Button != MouseButtons.Left) return;
+            _line = FigureFactory.CreateFigure(ToolType.Line);
+            _line.LineProperties.Color = _figureParameters.LineColor;
+            _line.LineProperties.Style = (DashStyle)_figureParameters.LineStyle;
+            _line.LineProperties.Thickness = _figureParameters.LineThickness;
 
-                _line.Points.AddPoint(new PointF(e.X, e.Y));
-                _line.Points.AddPoint(new PointF(e.X, e.Y));
+            _line.Points.AddPoint(new PointF(e.X, e.Y));
+            _line.Points.AddPoint(new PointF(e.X, e.Y));
 
-                Canvas.Refresh();
-            }
+            Canvas.Refresh();
         }
 
+        /// <summary>
+        /// Обработчик движения мыши
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void MouseMove(object sender, MouseEventArgs e)
         {
             if (_line == null) return;
-            PointF temp = new PointF(e.Location.X, e.Location.Y);
+            var temp = new PointF(e.Location.X, e.Location.Y);
             _line.Points.RemoveLast();
             _line.Points.AddPoint(temp);
 
             Canvas.Refresh();
         }
 
+        /// <summary>
+        /// Обработчик отпускания мыши
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void MouseUp(object sender, MouseEventArgs e)
         {
             if (_line == null) return;

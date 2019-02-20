@@ -1,13 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Newtonsoft.Json;
 
 namespace VectorEditor.Figures
 {
+    /// <inheritdoc />
+    /// <summary>
+    /// Класс для окружности
+    /// </summary>
+    [JsonObject(MemberSerialization.Fields)]
     public class Circle:FillableFigure
     {
+        /// <summary>
+        /// Конструктор класса окружности
+        /// </summary>
         public Circle()
         {
             _lineProperties = new LineProperties();

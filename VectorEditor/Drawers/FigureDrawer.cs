@@ -4,61 +4,75 @@ using VectorEditor.Figures;
 
 namespace VectorEditor.Drawers
 {
+    /// <summary>
+    /// Фабрика для рисовальщиков. Также рисует фигуру
+    /// </summary>
     public static class FigureDrawer
     {
+        /// <summary>
+        /// Создать рисовальщик и нарисовать фигуру
+        /// </summary>
+        /// <param name="figure">Фигура для рисования</param>
+        /// <param name="canvas">Канва</param>
         public static void DrawFigure(BaseFigure figure, Graphics canvas)
         {
             if (figure.GetType() == typeof(Line))
             {
-                LineDrawer lineDrawer = new LineDrawer();
+                var lineDrawer = new LineDrawer();
                 lineDrawer.DrawFigure(figure, canvas);
             }
             else if (figure.GetType() == typeof(Polyline))
             {
-                PolylineDrawer drawer = new PolylineDrawer();
+                var drawer = new PolylineDrawer();
                 drawer.DrawFigure(figure, canvas);
             }
             else if (figure.GetType() == typeof(Circle))
             {
-                CircleDrawer circleDrawer = new CircleDrawer();
+                var circleDrawer = new CircleDrawer();
                 circleDrawer.DrawFigure(figure, canvas);
             }
             else if (figure.GetType() == typeof(Ellipse))
             {
-                EllipseDrawer ellipseDrawer = new EllipseDrawer();
+                var ellipseDrawer = new EllipseDrawer();
                 ellipseDrawer.DrawFigure(figure, canvas);
             }
             else if (figure.GetType() == typeof(Polygon))
             {
-                PolygonDrawer polygonDrawer = new PolygonDrawer();
+                var polygonDrawer = new PolygonDrawer();
                 polygonDrawer.DrawFigure(figure, canvas);
             }
         }
+
+        /// <summary>
+        /// Рисовка маркеров фигуры
+        /// </summary>
+        /// <param name="figure"></param>
+        /// <param name="canvas"></param>
         public static void DrawSelection(BaseFigure figure, Graphics canvas)
         {
             if (figure.GetType() == typeof(Line))
             {
-                LineDrawer lineDrawer = new LineDrawer();
+                var lineDrawer = new LineDrawer();
                 lineDrawer.DrawSelection(figure, canvas);
             }
             else if (figure.GetType() == typeof(Polyline))
             {
-                PolylineDrawer drawer = new PolylineDrawer();
+                var drawer = new PolylineDrawer();
                 drawer.DrawSelection(figure, canvas);
             }
             else if (figure.GetType() == typeof(Circle))
             {
-                CircleDrawer circleDrawer = new CircleDrawer();
+                var circleDrawer = new CircleDrawer();
                 circleDrawer.DrawSelection(figure, canvas);
             }
             else if (figure.GetType() == typeof(Ellipse))
             {
-                EllipseDrawer ellipseDrawer = new EllipseDrawer();
+                var ellipseDrawer = new EllipseDrawer();
                 ellipseDrawer.DrawSelection(figure, canvas);
             }
             else if (figure.GetType() == typeof(Polygon))
             {
-                PolygonDrawer polygonDrawer = new PolygonDrawer();
+                var polygonDrawer = new PolygonDrawer();
                 polygonDrawer.DrawSelection(figure, canvas);
             }
         }
