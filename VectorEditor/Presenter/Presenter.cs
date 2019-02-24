@@ -219,7 +219,12 @@ namespace VectorEditor.Presenter
             }
             else
             {
-                _currentHandler.FigureParameters = e;
+                var handler = _currentHandler as FigureCreatingHandler;
+                if (handler != null)
+                {
+                    handler.FigureParameters = e;
+                }
+                //_currentHandler.FigureParameters = e;
             }
 
             var cmd = new ChangeParametersCommand(_model, beforeState, e);
@@ -238,39 +243,51 @@ namespace VectorEditor.Presenter
             {
                 case ToolType.Line:
                     _currentHandler = new LineHandler(_view.Canvas, _view.FigureParameters);
-                    _currentHandler.FigureCreated += _currentHandler_FigureCreated;
-                    _view.CurrentHandler = (LineHandler)_currentHandler;
+                    SetFigureCreatedHandler(_currentHandler);
+                    _view.CurrentHandler = _currentHandler;
                     break;
                 case ToolType.Polyline:
                     _currentHandler = new PolylineHandler(_view.Canvas, _view.FigureParameters);
-                    _currentHandler.FigureCreated += _currentHandler_FigureCreated;
-                    _view.CurrentHandler = (PolylineHandler)_currentHandler;
+                    SetFigureCreatedHandler(_currentHandler);
+                    _view.CurrentHandler = _currentHandler;
                     break;
                 case ToolType.Circle:
                     _currentHandler = new CircleHandler(_view.Canvas, _view.FigureParameters);
-                    _currentHandler.FigureCreated += _currentHandler_FigureCreated;
-                    _view.CurrentHandler = (CircleHandler)_currentHandler;
+                    SetFigureCreatedHandler(_currentHandler);
+                    _view.CurrentHandler = _currentHandler;
                     break;
                 case ToolType.Ellipse:
                     _currentHandler = new EllipseHandler(_view.Canvas, _view.FigureParameters);
-                    _currentHandler.FigureCreated += _currentHandler_FigureCreated;
-                    _view.CurrentHandler = (EllipseHandler)_currentHandler;
+                    SetFigureCreatedHandler(_currentHandler);
+                    _view.CurrentHandler = _currentHandler;
                     break;
                 case ToolType.Polygon:
                     _currentHandler = new PolygonHandler(_view.Canvas, _view.FigureParameters);
-                    _currentHandler.FigureCreated += _currentHandler_FigureCreated;
-                    _view.CurrentHandler = (PolygonHandler)_currentHandler;
+                    SetFigureCreatedHandler(_currentHandler);
+                    _view.CurrentHandler = _currentHandler;
                     break;
                 case ToolType.Cursor:
-                    var cursorHandler = new CursorHandler(_view.Canvas, 
-                        _view.FigureParameters, this);
+                    var cursorHandler = new CursorHandler(_view.Canvas,  this);
                     cursorHandler.FiguresMoved += CursorHandler_FiguresMoved;
                     cursorHandler.PointMoved += CursorHandler_PointMoved;
                     _currentHandler = cursorHandler;
-                    _view.CurrentHandler = (CursorHandler)_currentHandler;
+                    _view.CurrentHandler = _currentHandler;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(e), e, null);
+            }
+        }
+
+        /// <summary>
+        /// Подписка обработчика события создания фигуры
+        /// </summary>
+        /// <param name="currentHandler"></param>
+        private void SetFigureCreatedHandler(IBaseHandler currentHandler)
+        {
+            var handler = currentHandler as FigureCreatingHandler;
+            if (handler != null)
+            {
+                handler.FigureCreated += _currentHandler_FigureCreated;
             }
         }
 

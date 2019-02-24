@@ -26,14 +26,6 @@ namespace VectorEditor.Presenter
         /// </summary>
         private readonly Presenter _presenter;
 
-        /// <inheritdoc />
-        /// <summary>
-        /// Параметры фигуры
-        /// </summary>
-        public FigureParameters FigureParameters
-        {
-            set { }
-        }
 
         /// <inheritdoc />
         /// <summary>
@@ -77,10 +69,8 @@ namespace VectorEditor.Presenter
         /// <param name="figureParameters">Параметры фигуры</param>
         /// <param name="presenter">Презентер</param>
         public CursorHandler(PictureBox canvas,
-            FigureParameters figureParameters,
             Presenter presenter)
         {
-            FigureParameters = figureParameters;
             Canvas = canvas;
             _presenter = presenter;
 
@@ -93,11 +83,6 @@ namespace VectorEditor.Presenter
             MouseUpDelegate += MouseUp;
             MouseMoveDelegate += MouseMoveSelecting;
         }
-
-        /// <summary>
-        /// События создания фигуры
-        /// </summary>
-        public event EventHandler<BaseFigure> FigureCreated;
 
         /// <summary>
         /// Событие изменения параметров фигуры
@@ -396,14 +381,12 @@ namespace VectorEditor.Presenter
             }
             else
             {
-                float dx;
-                float dy;
 
                 CountDelta(e.X, e.Y,
                            _offsetX, _offsetY,
                           _selectedFigure.Points.GetPoints()[0],
-                          out dx, out dy);
-                
+                          out float dx, out float dy);
+
                 MoveFigurePoints(_selectedFigure, e.X, e.Y, _offsetX, _offsetY);
 
                 foreach (var figure in SelectedFigures)
@@ -433,14 +416,12 @@ namespace VectorEditor.Presenter
         private static void MoveFigurePoints(BaseFigure figure, 
             int eX, int eY, 
             float offsetX, float offsetY)
-        {            
-            float dx;
-            float dy;
+        {
 
-            CountDelta(eX, eY, 
-                       offsetX, offsetY, 
-                       figure.Points.GetPoints()[0], 
-                       out dx, out dy);
+            CountDelta(eX, eY,
+                       offsetX, offsetY,
+                       figure.Points.GetPoints()[0],
+                       out float dx, out float dy);
 
             if (Math.Abs(dx) < 0.000000001 && Math.Abs(dy) < 0.000000001) return;
 
