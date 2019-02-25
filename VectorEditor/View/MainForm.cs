@@ -464,13 +464,13 @@ namespace VectorEditor.View
             var pictureBox = new PictureBox {Size = Canvas.Size};
             var bitmap = new Bitmap(pictureBox.Width, pictureBox.Height);
             var bitmapGraphics = Graphics.FromImage(bitmap);
-
+            
             foreach (var figure in _figures)
             {
                 FigureDrawer.DrawFigure(figure.Value, bitmapGraphics);
             }
-
-            pictureBox.Image = bitmap;
+            pictureBox.BackColor = Color.White;
+            pictureBox.Image = bitmap;            
             if (_saveToPNGDialog.ShowDialog() != DialogResult.OK) return;
             try
             {
