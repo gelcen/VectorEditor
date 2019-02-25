@@ -1,92 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Newtonsoft.Json;
 
 namespace VectorEditor.Figures
 {
+    /// <inheritdoc />
     /// <summary>
     /// Класс для окружности
     /// </summary>
-    class Circle : ILineProperty, IFillable
+    [JsonObject(MemberSerialization.Fields)]
+    public class Circle:FillableFigure
     {
-
-        private MPoint _centerPoint;
-
-        private float _radius;
-
-
-        public Color LineColor
-        {
-            get;
-            set;
-        }
-
-        public int LineThickness
-        {
-            get;
-            set;
-        }
-
-        public LineType LineType
-        {
-            get;
-            set;
-        }
-
         /// <summary>
-        /// Color of filling
+        /// Конструктор класса окружности
         /// </summary>
-        public Color FillColor
+        public Circle()
         {
-            get;
-            set;
-        }
-
-        public MPoint CenterPoint
-        {
-            get
-            {
-                return _centerPoint;
-            }
-
-            set
-            {
-                _centerPoint = value;
-            }
-        }
-
-        public float Radius
-        {
-            get
-            {
-                return _radius;
-            }
-
-            set
-            {
-                _radius = value;
-            }
-        }
-
-        /// <summary>
-        /// Конструктор
-        /// </summary>
-        public Circle(int x, int y, 
-                     float radius,
-                     Color lineColor,
-                     int lineThickness,
-                     Color fillColor,
-                     LineType lineType)
-        {
-            CenterPoint = new MPoint(x, y);
-            Radius = radius;
-            LineColor = lineColor;
-            FillColor = fillColor;
-            LineThickness = lineThickness;
-            LineType = lineType;
+            _lineProperties = new LineProperties();
+            _points = new Points(2);
+            _fillProperty = new FillProperty();
         }
     }
 }

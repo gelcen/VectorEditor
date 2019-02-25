@@ -1,13 +1,14 @@
 ﻿using System.Drawing;
+using System.Linq;
 using VectorEditor.Figures;
 
 namespace VectorEditor.Drawers
 {
     /// <inheritdoc />
     /// <summary>
-    /// Класс-рисовальщик для линии
+    /// Класс для рисовки полилинии
     /// </summary>
-    public class LineDrawer : BaseDrawer
+    public class PolylineDrawer : BaseDrawer
     {
         /// <inheritdoc />
         /// <summary>
@@ -17,13 +18,14 @@ namespace VectorEditor.Drawers
         /// <param name="canvas">Канва</param>
         public override void DrawFigure(BaseFigure figure, Graphics canvas)
         {
-            if (figure.Points.GetPoints().Count != 2) return;
+            var points = figure.Points.GetPoints();
+            if (points.Count < 2) return;
+
             var pen = new Pen(figure.LineProperties.Color,
                               figure.LineProperties.Thickness)
                 { DashStyle = figure.LineProperties.Style};
 
-            canvas.DrawLine(pen, figure.Points.GetPoints()[0],
-                            figure.Points.GetPoints()[1]);
+            canvas.DrawLines(pen, points.ToArray());
             pen.Dispose();
         }
 
@@ -35,18 +37,7 @@ namespace VectorEditor.Drawers
         /// <param name="canvas">Канва</param>
         public override void DrawSelection(BaseFigure figure, Graphics canvas)
         {
-            DrawLineSelection(figure, canvas);
-        }
-
-        /// <summary>
-        /// Рисовка маркеров для линии, полилинии, полигона
-        /// </summary>
-        /// <param name="figure">Рисуемая фигура</param>
-        /// <param name="canvas">Канва</param>
-        public static void DrawLineSelection(BaseFigure figure, Graphics canvas)
-        {
-            var points = figure.Points.GetPoints();
-            CircleDrawer.DrawSelectionRoundShapes(points, canvas);
+            LineDrawer.DrawLineSelection(figure, canvas);
         }
     }
 }

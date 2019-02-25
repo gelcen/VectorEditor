@@ -33,8 +33,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Messaging" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -46,30 +51,61 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Drawers\CanvasDrawer.cs" />
+    <Compile Include="Drawers\BaseDrawer.cs" />
     <Compile Include="Drawers\CircleDrawer.cs" />
     <Compile Include="Drawers\EllipseDrawer.cs" />
+    <Compile Include="Drawers\FigureDrawer.cs" />
+    <Compile Include="Drawers\LineDrawer.cs" />
+    <Compile Include="Drawers\PolygonDrawer.cs" />
+    <Compile Include="Drawers\PolylineDrawer.cs" />
+    <Compile Include="Figures\BaseFigure.cs" />
     <Compile Include="Figures\Circle.cs" />
     <Compile Include="Figures\Ellipse.cs" />
-    <Compile Include="Figures\IFillable.cs" />
-    <Compile Include="Figures\ILineProperty.cs" />
-    <Compile Include="Figures\Polygone.cs" />
-    <Compile Include="Item.cs" />
+    <Compile Include="Figures\FigureFactory.cs" />
+    <Compile Include="Figures\FillableFigure.cs" />
+    <Compile Include="Figures\FillProperty.cs" />
     <Compile Include="Figures\Line.cs" />
-    <Compile Include="Drawers\LineDrawer.cs" />
-    <Compile Include="LineType.cs" />
-    <Compile Include="MainForm.cs">
+    <Compile Include="Figures\LineProperties.cs" />
+    <Compile Include="Figures\Points.cs" />
+    <Compile Include="Figures\Polygon.cs" />
+    <Compile Include="Figures\Polyline.cs" />
+    <Compile Include="Presenter\FigureCreatingHandler.cs" />
+    <Compile Include="ToolType.cs" />
+    <Compile Include="Presenter\CircleHandler.cs" />
+    <Compile Include="Presenter\CursorHandler.cs" />
+    <Compile Include="Presenter\EllipseHandler.cs" />
+    <Compile Include="Presenter\IBaseHandler.cs" />
+    <Compile Include="Presenter\LineHandler.cs" />
+    <Compile Include="Presenter\PolygonHandler.cs" />
+    <Compile Include="Presenter\PolylineHandler.cs" />
+    <Compile Include="RoundShapeType.cs" />
+    <Compile Include="SaveState.cs" />
+    <Compile Include="UndoRedo\AddFigureCommand.cs" />
+    <Compile Include="UndoRedo\CommandFactory.cs" />
+    <Compile Include="UndoRedo\DeleteFigureCommand.cs" />
+    <Compile Include="UndoRedo\ICommand.cs" />
+    <Compile Include="UndoRedo\MoveFigureCommand.cs" />
+    <Compile Include="UndoRedo\ChangeParametersCommand.cs" />
+    <Compile Include="UndoRedo\MovePointCommand.cs" />
+    <Compile Include="UndoRedo\UndoRedoStack.cs" />
+    <Compile Include="View\FigureParameters.cs" />
+    <Compile Include="View\FileLoadedEventArgs.cs" />
+    <Compile Include="View\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MainForm.Designer.cs">
+    <Compile Include="View\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Figures\MPoint.cs" />
-    <Compile Include="Figures\PolyLine.cs" />
-    <Compile Include="Drawers\PolyLineDrawer.cs" />
+    <Compile Include="Model\IModel.cs" />
+    <Compile Include="Model\FigureModel.cs" />
+    <Compile Include="View\IView.cs" />
+    <Compile Include="Presenter\Presenter.cs" />
+    <Compile Include="Observer\IObserver.cs" />
+    <Compile Include="Observer\ISubject.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="MainForm.resx">
+    <Compile Include="View\Saver.cs" />
+    <EmbeddedResource Include="View\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -81,6 +117,7 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

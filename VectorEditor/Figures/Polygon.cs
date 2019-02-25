@@ -4,19 +4,19 @@ namespace VectorEditor.Figures
 {
     /// <inheritdoc />
     /// <summary>
-    /// Класс полилинии 
+    /// Класс Полигон
     /// </summary>
     [JsonObject(MemberSerialization.Fields)]
-    public class Polyline: BaseFigure
+    public class Polygon:FillableFigure
     {
         /// <summary>
-        /// Конструктор класса полилинии 
+        /// Конструктор класса полигона
         /// </summary>
-        public Polyline()
+        public Polygon()
         {
             _lineProperties = new LineProperties();
             _points = new Points();
-        }        
-
+            _fillProperty = new FillProperty();
+        }
     }
 }

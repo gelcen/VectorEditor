@@ -1,4 +1,4 @@
-﻿namespace VectorEditor
+﻿namespace VectorEditor.View
 {
     partial class MainForm
     {
@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.pbCanvas = new System.Windows.Forms.PictureBox();
             this.gpFigures = new System.Windows.Forms.GroupBox();
             this.buttonClearCanvas = new System.Windows.Forms.Button();
             this.buttonEllipse = new System.Windows.Forms.Button();
@@ -47,36 +46,34 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.colorDialogLineColor = new System.Windows.Forms.ColorDialog();
-            ((System.ComponentModel.ISupportInitialize)(this.pbCanvas)).BeginInit();
+            this.btnHeightResize = new System.Windows.Forms.Button();
+            this.btnDiagonalResize = new System.Windows.Forms.Button();
+            this.btnWidthResize = new System.Windows.Forms.Button();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.файлToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.newFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportToPngToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.правкаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.DeleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.CopyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.UndoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.RedoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this._saveToPNGDialog = new System.Windows.Forms.SaveFileDialog();
+            this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
+            this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.pbCanvas = new System.Windows.Forms.PictureBox();
             this.gpFigures.SuspendLayout();
             this.gpProps.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudLineThickness)).BeginInit();
+            this.menuStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbCanvas)).BeginInit();
             this.SuspendLayout();
-            // 
-            // pbCanvas
-            // 
-            this.pbCanvas.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.pbCanvas.BackColor = System.Drawing.SystemColors.ButtonHighlight;
-            this.pbCanvas.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pbCanvas.Cursor = System.Windows.Forms.Cursors.Default;
-            this.pbCanvas.Location = new System.Drawing.Point(3, 11);
-            this.pbCanvas.Margin = new System.Windows.Forms.Padding(2);
-            this.pbCanvas.Name = "pbCanvas";
-            this.pbCanvas.Size = new System.Drawing.Size(648, 521);
-            this.pbCanvas.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pbCanvas.TabIndex = 0;
-            this.pbCanvas.TabStop = false;
-            this.pbCanvas.Click += new System.EventHandler(this.pbCanvas_Click);
-            this.pbCanvas.MouseClick += new System.Windows.Forms.MouseEventHandler(this.pbCanvas_MouseClick);
-            this.pbCanvas.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pbCanvas_MouseDown);
-            this.pbCanvas.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pbCanvas_MouseMove);
-            this.pbCanvas.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pbCanvas_MouseUp);
             // 
             // gpFigures
             // 
-            this.gpFigures.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.gpFigures.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.gpFigures.Controls.Add(this.buttonClearCanvas);
             this.gpFigures.Controls.Add(this.buttonEllipse);
             this.gpFigures.Controls.Add(this.buttonCircle);
@@ -84,18 +81,18 @@
             this.gpFigures.Controls.Add(this.buttonLine);
             this.gpFigures.Controls.Add(this.buttonPolyLine);
             this.gpFigures.Controls.Add(this.buttonCursor);
-            this.gpFigures.Location = new System.Drawing.Point(668, 11);
+            this.gpFigures.Location = new System.Drawing.Point(619, 29);
             this.gpFigures.Margin = new System.Windows.Forms.Padding(2);
             this.gpFigures.Name = "gpFigures";
             this.gpFigures.Padding = new System.Windows.Forms.Padding(2);
-            this.gpFigures.Size = new System.Drawing.Size(227, 180);
+            this.gpFigures.Size = new System.Drawing.Size(227, 154);
             this.gpFigures.TabIndex = 1;
             this.gpFigures.TabStop = false;
             this.gpFigures.Text = "Инструменты";
             // 
             // buttonClearCanvas
             // 
-            this.buttonClearCanvas.Location = new System.Drawing.Point(117, 85);
+            this.buttonClearCanvas.Location = new System.Drawing.Point(5, 121);
             this.buttonClearCanvas.Name = "buttonClearCanvas";
             this.buttonClearCanvas.Size = new System.Drawing.Size(107, 31);
             this.buttonClearCanvas.TabIndex = 6;
@@ -112,7 +109,7 @@
             this.buttonEllipse.TabIndex = 5;
             this.buttonEllipse.Text = "Эллипс";
             this.buttonEllipse.UseVisualStyleBackColor = true;
-            this.buttonEllipse.Click += new System.EventHandler(this.buttonEllipse_Click);
+            this.buttonEllipse.Click += new System.EventHandler(this.toolButton_Click);
             // 
             // buttonCircle
             // 
@@ -123,17 +120,18 @@
             this.buttonCircle.TabIndex = 4;
             this.buttonCircle.Text = "Окружность";
             this.buttonCircle.UseVisualStyleBackColor = true;
-            this.buttonCircle.Click += new System.EventHandler(this.buttonCircle_Click);
+            this.buttonCircle.Click += new System.EventHandler(this.toolButton_Click);
             // 
             // buttonPolygone
             // 
-            this.buttonPolygone.Location = new System.Drawing.Point(4, 120);
+            this.buttonPolygone.Location = new System.Drawing.Point(115, 85);
             this.buttonPolygone.Margin = new System.Windows.Forms.Padding(2);
             this.buttonPolygone.Name = "buttonPolygone";
             this.buttonPolygone.Size = new System.Drawing.Size(107, 31);
             this.buttonPolygone.TabIndex = 3;
             this.buttonPolygone.Text = "Многоугольник";
             this.buttonPolygone.UseVisualStyleBackColor = true;
+            this.buttonPolygone.Click += new System.EventHandler(this.toolButton_Click);
             // 
             // buttonLine
             // 
@@ -144,7 +142,7 @@
             this.buttonLine.TabIndex = 2;
             this.buttonLine.Text = "Линия";
             this.buttonLine.UseVisualStyleBackColor = true;
-            this.buttonLine.Click += new System.EventHandler(this.buttonLine_Click);
+            this.buttonLine.Click += new System.EventHandler(this.toolButton_Click);
             // 
             // buttonPolyLine
             // 
@@ -155,7 +153,7 @@
             this.buttonPolyLine.TabIndex = 1;
             this.buttonPolyLine.Text = "Полилиния";
             this.buttonPolyLine.UseVisualStyleBackColor = true;
-            this.buttonPolyLine.Click += new System.EventHandler(this.buttonPolyLine_Click);
+            this.buttonPolyLine.Click += new System.EventHandler(this.toolButton_Click);
             // 
             // buttonCursor
             // 
@@ -166,11 +164,11 @@
             this.buttonCursor.TabIndex = 0;
             this.buttonCursor.Text = "Указатель";
             this.buttonCursor.UseVisualStyleBackColor = true;
-            this.buttonCursor.Click += new System.EventHandler(this.buttonCursor_Click);
+            this.buttonCursor.Click += new System.EventHandler(this.toolButton_Click);
             // 
             // gpProps
             // 
-            this.gpProps.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.gpProps.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.gpProps.Controls.Add(this.cbLineType);
             this.gpProps.Controls.Add(this.buttonFillColor);
             this.gpProps.Controls.Add(this.buttonLineColor);
@@ -179,7 +177,7 @@
             this.gpProps.Controls.Add(this.label3);
             this.gpProps.Controls.Add(this.label2);
             this.gpProps.Controls.Add(this.label1);
-            this.gpProps.Location = new System.Drawing.Point(668, 195);
+            this.gpProps.Location = new System.Drawing.Point(619, 187);
             this.gpProps.Margin = new System.Windows.Forms.Padding(2);
             this.gpProps.Name = "gpProps";
             this.gpProps.Padding = new System.Windows.Forms.Padding(2);
@@ -192,14 +190,16 @@
             // 
             this.cbLineType.FormattingEnabled = true;
             this.cbLineType.Items.AddRange(new object[] {
-            "Пунктир",
-            "Сплошная"});
+            "Solid",
+            "Dash",
+            "Dot",
+            "DashDot",
+            "DashDotDot"});
             this.cbLineType.Location = new System.Drawing.Point(95, 111);
             this.cbLineType.Margin = new System.Windows.Forms.Padding(2);
             this.cbLineType.Name = "cbLineType";
             this.cbLineType.Size = new System.Drawing.Size(79, 21);
             this.cbLineType.TabIndex = 7;
-            this.cbLineType.Text = "Выбрать";
             this.cbLineType.SelectedIndexChanged += new System.EventHandler(this.cbLineType_SelectedIndexChanged);
             // 
             // buttonFillColor
@@ -246,6 +246,7 @@
             0,
             0,
             0});
+            this.nudLineThickness.ValueChanged += new System.EventHandler(this.nudLineThickness_ValueChanged);
             // 
             // label4
             // 
@@ -287,29 +288,189 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Толщина линии:";
             // 
+            // btnHeightResize
+            // 
+            this.btnHeightResize.Location = new System.Drawing.Point(290, 540);
+            this.btnHeightResize.Name = "btnHeightResize";
+            this.btnHeightResize.Size = new System.Drawing.Size(12, 12);
+            this.btnHeightResize.TabIndex = 3;
+            this.btnHeightResize.UseVisualStyleBackColor = true;
+            this.btnHeightResize.MouseMove += new System.Windows.Forms.MouseEventHandler(this.btnHeightResize_MouseMove);
+            // 
+            // btnDiagonalResize
+            // 
+            this.btnDiagonalResize.Location = new System.Drawing.Point(584, 540);
+            this.btnDiagonalResize.Name = "btnDiagonalResize";
+            this.btnDiagonalResize.Size = new System.Drawing.Size(12, 12);
+            this.btnDiagonalResize.TabIndex = 4;
+            this.btnDiagonalResize.UseVisualStyleBackColor = true;
+            this.btnDiagonalResize.MouseMove += new System.Windows.Forms.MouseEventHandler(this.btnDiagonalResize_MouseMove);
+            // 
+            // btnWidthResize
+            // 
+            this.btnWidthResize.Location = new System.Drawing.Point(593, 266);
+            this.btnWidthResize.Name = "btnWidthResize";
+            this.btnWidthResize.Size = new System.Drawing.Size(12, 12);
+            this.btnWidthResize.TabIndex = 5;
+            this.btnWidthResize.UseVisualStyleBackColor = true;
+            this.btnWidthResize.MouseMove += new System.Windows.Forms.MouseEventHandler(this.btnWidthResize_MouseMove);
+            // 
+            // menuStrip1
+            // 
+            this.menuStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.файлToolStripMenuItem,
+            this.правкаToolStripMenuItem});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Padding = new System.Windows.Forms.Padding(4, 1, 0, 1);
+            this.menuStrip1.Size = new System.Drawing.Size(857, 24);
+            this.menuStrip1.TabIndex = 7;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // файлToolStripMenuItem
+            // 
+            this.файлToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.newFileToolStripMenuItem,
+            this.openFileToolStripMenuItem,
+            this.saveToolStripMenuItem1,
+            this.exportToPngToolStripMenuItem});
+            this.файлToolStripMenuItem.Name = "файлToolStripMenuItem";
+            this.файлToolStripMenuItem.Size = new System.Drawing.Size(48, 22);
+            this.файлToolStripMenuItem.Text = "Файл";
+            // 
+            // newFileToolStripMenuItem
+            // 
+            this.newFileToolStripMenuItem.Name = "newFileToolStripMenuItem";
+            this.newFileToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
+            this.newFileToolStripMenuItem.Text = "Создать";
+            this.newFileToolStripMenuItem.Click += new System.EventHandler(this.newFileToolStripMenuItem_Click);
+            // 
+            // openFileToolStripMenuItem
+            // 
+            this.openFileToolStripMenuItem.Name = "openFileToolStripMenuItem";
+            this.openFileToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
+            this.openFileToolStripMenuItem.Text = "Открыть...";
+            this.openFileToolStripMenuItem.Click += new System.EventHandler(this.openFileToolStripMenuItem_Click);
+            // 
+            // saveToolStripMenuItem1
+            // 
+            this.saveToolStripMenuItem1.Name = "saveToolStripMenuItem1";
+            this.saveToolStripMenuItem1.Size = new System.Drawing.Size(189, 22);
+            this.saveToolStripMenuItem1.Text = "Сохранить...";
+            this.saveToolStripMenuItem1.Click += new System.EventHandler(this.saveToolStripMenuItem1_Click);
+            // 
+            // exportToPngToolStripMenuItem
+            // 
+            this.exportToPngToolStripMenuItem.Name = "exportToPngToolStripMenuItem";
+            this.exportToPngToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
+            this.exportToPngToolStripMenuItem.Text = "Сохранить как PNG...";
+            this.exportToPngToolStripMenuItem.Click += new System.EventHandler(this.exportToPngToolStripMenuItem_Click);
+            // 
+            // правкаToolStripMenuItem
+            // 
+            this.правкаToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.DeleteToolStripMenuItem,
+            this.CopyToolStripMenuItem,
+            this.UndoToolStripMenuItem,
+            this.RedoToolStripMenuItem});
+            this.правкаToolStripMenuItem.Name = "правкаToolStripMenuItem";
+            this.правкаToolStripMenuItem.Size = new System.Drawing.Size(59, 22);
+            this.правкаToolStripMenuItem.Text = "Правка";
+            // 
+            // DeleteToolStripMenuItem
+            // 
+            this.DeleteToolStripMenuItem.Name = "DeleteToolStripMenuItem";
+            this.DeleteToolStripMenuItem.Size = new System.Drawing.Size(139, 22);
+            this.DeleteToolStripMenuItem.Text = "Удалить";
+            this.DeleteToolStripMenuItem.Click += new System.EventHandler(this.DeleteToolStripMenuItem_Click);
+            // 
+            // CopyToolStripMenuItem
+            // 
+            this.CopyToolStripMenuItem.Name = "CopyToolStripMenuItem";
+            this.CopyToolStripMenuItem.Size = new System.Drawing.Size(139, 22);
+            this.CopyToolStripMenuItem.Text = "Копировать";
+            this.CopyToolStripMenuItem.Click += new System.EventHandler(this.CopyToolStripMenuItem_Click);
+            // 
+            // UndoToolStripMenuItem
+            // 
+            this.UndoToolStripMenuItem.Name = "UndoToolStripMenuItem";
+            this.UndoToolStripMenuItem.Size = new System.Drawing.Size(139, 22);
+            this.UndoToolStripMenuItem.Text = "Отменить";
+            this.UndoToolStripMenuItem.Click += new System.EventHandler(this.UndoToolStripMenuItem_Click);
+            // 
+            // RedoToolStripMenuItem
+            // 
+            this.RedoToolStripMenuItem.Name = "RedoToolStripMenuItem";
+            this.RedoToolStripMenuItem.Size = new System.Drawing.Size(139, 22);
+            this.RedoToolStripMenuItem.Text = "Вернуть";
+            this.RedoToolStripMenuItem.Click += new System.EventHandler(this.RedoToolStripMenuItem_Click);
+            // 
+            // _saveToPNGDialog
+            // 
+            this._saveToPNGDialog.Filter = "Image Files(*.PNG)|*.PNG";
+            this._saveToPNGDialog.ShowHelp = true;
+            this._saveToPNGDialog.Title = "Сохранить в PNG";
+            // 
+            // saveFileDialog
+            // 
+            this.saveFileDialog.Filter = "Векторный файл (*.vec)|*.vec|Все файлы (*.*)|*.*";
+            this.saveFileDialog.ShowHelp = true;
+            this.saveFileDialog.Title = "Сохранить проект";
+            // 
+            // openFileDialog
+            // 
+            this.openFileDialog.DefaultExt = "vec";
+            this.openFileDialog.Filter = "Векторный файл (*.vec)|*.vec|Все файлы (*.*)|*.*";
+            // 
+            // pbCanvas
+            // 
+            this.pbCanvas.BackColor = System.Drawing.Color.White;
+            this.pbCanvas.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pbCanvas.Location = new System.Drawing.Point(14, 28);
+            this.pbCanvas.Name = "pbCanvas";
+            this.pbCanvas.Size = new System.Drawing.Size(579, 512);
+            this.pbCanvas.TabIndex = 8;
+            this.pbCanvas.TabStop = false;
+            this.pbCanvas.Paint += new System.Windows.Forms.PaintEventHandler(this.pbCanvas_Paint);
+            this.pbCanvas.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pbCanvas_MouseDown);
+            this.pbCanvas.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pbCanvas_MouseMove);
+            this.pbCanvas.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pbCanvas_MouseUp);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(906, 543);
+            this.BackColor = System.Drawing.Color.White;
+            this.ClientSize = new System.Drawing.Size(857, 573);
+            this.Controls.Add(this.pbCanvas);
+            this.Controls.Add(this.btnWidthResize);
+            this.Controls.Add(this.btnDiagonalResize);
+            this.Controls.Add(this.btnHeightResize);
             this.Controls.Add(this.gpProps);
             this.Controls.Add(this.gpFigures);
-            this.Controls.Add(this.pbCanvas);
+            this.Controls.Add(this.menuStrip1);
+            this.MainMenuStrip = this.menuStrip1;
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "MainForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "VectorEditor";
-            ((System.ComponentModel.ISupportInitialize)(this.pbCanvas)).EndInit();
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
+            this.Load += new System.EventHandler(this.MainForm_Load);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainForm_KeyDown);
             this.gpFigures.ResumeLayout(false);
             this.gpProps.ResumeLayout(false);
             this.gpProps.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudLineThickness)).EndInit();
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbCanvas)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.PictureBox pbCanvas;
         private System.Windows.Forms.GroupBox gpFigures;
         private System.Windows.Forms.Button buttonEllipse;
         private System.Windows.Forms.Button buttonCircle;
@@ -328,6 +489,24 @@
         private System.Windows.Forms.Button buttonLineColor;
         private System.Windows.Forms.ColorDialog colorDialogLineColor;
         private System.Windows.Forms.Button buttonClearCanvas;
+        private System.Windows.Forms.Button btnHeightResize;
+        private System.Windows.Forms.Button btnDiagonalResize;
+        private System.Windows.Forms.Button btnWidthResize;
+        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem файлToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem newFileToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem openFileToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem exportToPngToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem правкаToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem DeleteToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem CopyToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem UndoToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem RedoToolStripMenuItem;
+        private System.Windows.Forms.SaveFileDialog _saveToPNGDialog;
+        private System.Windows.Forms.SaveFileDialog saveFileDialog;
+        private System.Windows.Forms.OpenFileDialog openFileDialog;
+        private System.Windows.Forms.PictureBox pbCanvas;
     }
 }
 

@@ -1,47 +1,84 @@
-﻿using System.Drawing;
-using System.Windows.Forms;
+﻿using System.Collections.Generic;
+using System.Drawing;
 using VectorEditor.Figures;
 
 namespace VectorEditor.Drawers
 {
+    /// <inheritdoc />
     /// <summary>
-    /// Класс для рисовки эллипса
+    /// Класс-рисовальщик для эллипса
     /// </summary>
-    class EllipseDrawer:CanvasDrawer
+    public class EllipseDrawer : BaseDrawer
     {
+        /// <inheritdoc />
         /// <summary>
-        /// Эллипс
+        /// Нарисовать фигуру
         /// </summary>
-        public Ellipse ellipse;
-
-        /// <summary>
-        /// Конструктор класса EllipseDrawer
-        /// </summary>
-        /// <param name="ellipse">Класс, содержащий параметры эллипса</param>
-        /// <param name="canvas">Канва для рисования</param>
-        public EllipseDrawer(Ellipse ellipse, PictureBox canvas)
+        /// <param name="figure">Рисуемая фигура</param>
+        /// <param name="canvas">Канва</param>
+        public override void DrawFigure(BaseFigure figure, Graphics canvas)
         {
-            this.ellipse = ellipse;
-            SetCanvas(canvas);
+            FillableFigure ellipse;
+
+            IReadOnlyList<PointF> points;
+
+            if (!CircleDrawer.GetFillableFigure(figure,
+                out ellipse,
+                out points))
+            {
+                return;
+            }
+
+            var ellipseRectangle= CircleDrawer.MakeRectangle(
+                points[0], points[1],
+                RoundShapeType.Ellipse);
+
+            Brush brush = new SolidBrush(ellipse.FillProperty.FillColor);
+
+            canvas.FillEllipse(brush, ellipseRectangle);
+
+            brush.Dispose();
+
+            var pen = new Pen(ellipse.LineProperties.Color,
+                               ellipse.LineProperties.Thickness)
+                { DashStyle = ellipse.LineProperties.Style};
+
+            canvas.DrawEllipse(pen, ellipseRectangle);
+
+            pen.Dispose();
         }
 
+        /// <inheritdoc />
         /// <summary>
-        /// Функция для рисовки эллипса
+        /// Нарисовать маркеры
         /// </summary>
-        public override void Draw()
+        /// <param name="figure">Рисуемая фигура</param>
+        /// <param name="canvas">Канва</param>
+        public override void DrawSelection(BaseFigure figure, Graphics canvas)
         {
-            Graphics g = Canvas.CreateGraphics();
-            Pen pen = new Pen(ellipse.LineColor, ellipse.LineThickness);
-            PickLineType(ellipse.LineType, pen);
-            g.DrawEllipse(pen, ellipse.A.X, ellipse.A.Y, 
-                          ellipse.Width, ellipse.Height);
-            if (ellipse.FillColor != Color.White)
+            FillableFigure ellipse;
+
+            IReadOnlyList<PointF> points;
+
+            if (!CircleDrawer.GetFillableFigure(figure, 
+                                            out ellipse, 
+                                            out points))
             {
-                SolidBrush brush = new SolidBrush(ellipse.FillColor);
-                g.FillEllipse(brush, ellipse.A.X, ellipse.A.Y,
-                          ellipse.Width, ellipse.Height);
+                return;
             }
-            g.Dispose();
+            
+            CircleDrawer.DrawSelectionRoundShapes(points, canvas);
+
+            var rectangle = CircleDrawer.MakeRectangle(
+                points[0], points[1], 
+                RoundShapeType.Ellipse);
+
+            var pen = new Pen(Color.Black, 1)
+                          { DashStyle = System.Drawing.Drawing2D.DashStyle.Dash};
+
+            canvas.DrawRectangle(pen, rectangle);
+
+            pen.Dispose();
         }
     }
 }
