@@ -12,7 +12,7 @@ namespace VectorEditor.Presenter
     /// <summary>
     /// Класс обработчика для инструмента полигона
     /// </summary>
-    public class PolygonHandler : IBaseHandler
+    public class PolygonHandler : FigureCreatingHandler
     {
         /// <summary>
         /// Параметры полигона
@@ -28,7 +28,7 @@ namespace VectorEditor.Presenter
         /// <summary>
         /// Свойство для параметров
         /// </summary>
-        public FigureParameters FigureParameters
+        public override FigureParameters FigureParameters
         {
             set
             {
@@ -40,13 +40,13 @@ namespace VectorEditor.Presenter
         /// <summary>
         /// Свойство для канвы
         /// </summary>
-        public PictureBox Canvas { get; set; }
+        public override PictureBox Canvas { get; set; }
 
         /// <inheritdoc />
         /// <summary>
         /// Свойство для делегата нажатия на мышку
         /// </summary>
-        public MouseOperation MouseDownDelegate
+        public override MouseOperation MouseDownDelegate
         {
             set;
             get;
@@ -56,7 +56,7 @@ namespace VectorEditor.Presenter
         /// <summary>
         /// Свойство для делегата отпускания мышки
         /// </summary>
-        public MouseOperation MouseUpDelegate
+        public override MouseOperation MouseUpDelegate
         {
             set;
             get;
@@ -66,7 +66,7 @@ namespace VectorEditor.Presenter
         /// <summary>
         /// Свойство для делегата движения мышкой
         /// </summary>
-        public MouseOperation MouseMoveDelegate
+        public override MouseOperation MouseMoveDelegate
         {
             set;
             get;
@@ -93,7 +93,7 @@ namespace VectorEditor.Presenter
         /// <summary>
         /// Событие создания фигуры-полигона
         /// </summary>
-        public event EventHandler<BaseFigure> FigureCreated;
+        public override event EventHandler<BaseFigure> FigureCreated;
 
         /// <summary>
         ///  Вызов события создания фигуры
@@ -111,7 +111,7 @@ namespace VectorEditor.Presenter
         /// Рисовка создаваемой фигуры
         /// </summary>
         /// <param name="g"></param>
-        public void Draw(Graphics g)
+        public override void Draw(Graphics g)
         {
             if (_polygon != null)
             {

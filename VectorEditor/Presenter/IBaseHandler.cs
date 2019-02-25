@@ -19,14 +19,6 @@ namespace VectorEditor.Presenter
     public interface IBaseHandler
     {
         /// <summary>
-        /// Параметры фигуры
-        /// </summary>
-        FigureParameters FigureParameters
-        {
-            set;
-        }
-
-        /// <summary>
         /// Канва
         /// </summary>
         PictureBox Canvas
@@ -34,11 +26,6 @@ namespace VectorEditor.Presenter
             get;
             set;
         }
-
-        /// <summary>
-        /// Событие создания фигуры
-        /// </summary>
-        event EventHandler<BaseFigure> FigureCreated;
 
         /// <summary>
         /// Делегат для нажатия мышки
