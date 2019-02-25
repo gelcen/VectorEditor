@@ -561,6 +561,7 @@ namespace VectorEditor.Presenter
                 }
             }
             Cursor newCursor;
+
             if (IsPointOnFigure(e.Location))
             {
                 newCursor = Cursors.Hand;
@@ -713,7 +714,7 @@ namespace VectorEditor.Presenter
         }
 
         /// <summary>
-        /// Определят:находится ли мышка над фигурой
+        /// Определяет:находится ли мышка над фигурой
         /// </summary>
         /// <param name="point">Точка мышки</param>
         /// <returns></returns>
@@ -729,7 +730,15 @@ namespace VectorEditor.Presenter
 
                 AddFigureToGraphicsPath(path, figure.Value);
 
-                result = path.IsOutlineVisible(point, pickPen);
+                if (figure.Value.GetType() == typeof(Line) ||
+                    figure.Value.GetType() == typeof(Polyline))
+                {
+                    result = path.IsOutlineVisible(point, pickPen);
+                }
+                else
+                {
+                    result = path.IsVisible(point);
+                }                                
                 path.Reset();
                 if (result) break;
             }
@@ -754,8 +763,14 @@ namespace VectorEditor.Presenter
 
                     AddFigureToGraphicsPath(path, figure.Value);
 
-
-                    if (path.IsOutlineVisible(point, pickPen))
+                    if (figure.Value.GetType() == typeof(Line))
+                    {
+                        if (path.IsOutlineVisible(point, pickPen))
+                        {
+                            return figure.Key;
+                        }
+                    }
+                    else if (path.IsVisible(point))
                     {
                         return figure.Key;
                     }
@@ -840,7 +855,8 @@ namespace VectorEditor.Presenter
 
             if (figure.GetType() == typeof(Line))
             {
-                path.AddLine(points[0], points[1]);
+                path.AddLines(points.ToArray());
+                //path.AddLine(points[0], points[1]);
             }
             else if (figure.GetType() == typeof(Circle))
             {
