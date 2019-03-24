@@ -89,7 +89,7 @@ namespace VectorEditor.View
         event EventHandler FigureCopied;
 
         /// <summary>
-        /// События нажатия на отмену команды
+        /// События нажатия на кнопку отмену команды
         /// </summary>
         event EventHandler UndoPressed;
 
