@@ -217,7 +217,7 @@ namespace VectorEditor.View
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void toolButton_Click(object sender, EventArgs e)
+        private void ToolButton_Click(object sender, EventArgs e)
         {
             OnToolPicked(_toolsDictionary[(Control)sender]);
         }
@@ -227,7 +227,7 @@ namespace VectorEditor.View
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void buttonClearCanvas_Click(object sender, EventArgs e)
+        private void ButtonClearCanvas_Click(object sender, EventArgs e)
         {
             CanvasCleared?.Invoke(this, e);
         }
@@ -238,7 +238,7 @@ namespace VectorEditor.View
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void btnHeightResize_MouseMove(object sender, MouseEventArgs e)
+        private void BtnHeightResize_MouseMove(object sender, MouseEventArgs e)
         {
             if (e.Button != MouseButtons.Left) return;
             btnHeightResize.Location = new Point(btnHeightResize.Location.X,
@@ -257,7 +257,7 @@ namespace VectorEditor.View
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void btnWidthResize_MouseMove(object sender, MouseEventArgs e)
+        private void BtnWidthResize_MouseMove(object sender, MouseEventArgs e)
         {
             if (e.Button != MouseButtons.Left) return;
             btnWidthResize.Location = new Point(PointToClient(Cursor.Position).X,
@@ -276,7 +276,7 @@ namespace VectorEditor.View
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void btnDiagonalResize_MouseMove(object sender, MouseEventArgs e)
+        private void BtnDiagonalResize_MouseMove(object sender, MouseEventArgs e)
         {
             if (e.Button != MouseButtons.Left) return;
             btnDiagonalResize.Location = PointToClient(Cursor.Position);
@@ -297,7 +297,7 @@ namespace VectorEditor.View
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void nudLineThickness_ValueChanged(object sender, EventArgs e)
+        private void NudLineThickness_ValueChanged(object sender, EventArgs e)
         {
             _figureParameters.LineThickness = Convert.ToInt32(nudLineThickness.Value);
             ParametersChanged?.Invoke(this, _figureParameters);
@@ -308,7 +308,7 @@ namespace VectorEditor.View
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void cbLineType_SelectedIndexChanged(object sender, EventArgs e)
+        private void CbLineType_SelectedIndexChanged(object sender, EventArgs e)
         {
             _figureParameters.LineStyle = cbLineType.SelectedIndex;
             ParametersChanged?.Invoke(this, _figureParameters);
@@ -319,7 +319,7 @@ namespace VectorEditor.View
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void buttonLineColor_Click(object sender, EventArgs e)
+        private void ButtonLineColor_Click(object sender, EventArgs e)
         {
             if (colorDialogLineColor.ShowDialog() != DialogResult.OK) return;
             buttonLineColor.BackColor = colorDialogLineColor.Color;
@@ -332,7 +332,7 @@ namespace VectorEditor.View
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void buttonFillColor_Click(object sender, EventArgs e)
+        private void ButtonFillColor_Click(object sender, EventArgs e)
         {
             if (colorDialogLineColor.ShowDialog() != DialogResult.OK) return;
             buttonFillColor.BackColor = colorDialogLineColor.Color;
@@ -348,7 +348,7 @@ namespace VectorEditor.View
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void pbCanvas_MouseDown(object sender, MouseEventArgs e)
+        private void PbCanvas_MouseDown(object sender, MouseEventArgs e)
         {
             OnMouseDown(e);
             CurrentHandler?.MouseDownDelegate(sender, e);
@@ -359,7 +359,7 @@ namespace VectorEditor.View
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void pbCanvas_MouseMove(object sender, MouseEventArgs e)
+        private void PbCanvas_MouseMove(object sender, MouseEventArgs e)
         {
             OnMouseMove(e);
             CurrentHandler?.MouseMoveDelegate(sender, e);
@@ -370,7 +370,7 @@ namespace VectorEditor.View
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void pbCanvas_MouseUp(object sender, MouseEventArgs e)
+        private void PbCanvas_MouseUp(object sender, MouseEventArgs e)
         {
             OnMouseUp(e);
             CurrentHandler?.MouseUpDelegate(sender, e);
@@ -381,7 +381,7 @@ namespace VectorEditor.View
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void pbCanvas_Paint(object sender, PaintEventArgs e)
+        private void PbCanvas_Paint(object sender, PaintEventArgs e)
         {
             var g = e.Graphics;
             g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
@@ -459,27 +459,13 @@ namespace VectorEditor.View
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void exportToPngToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            var pictureBox = new PictureBox {Size = Canvas.Size};
-            var bitmap = new Bitmap(pictureBox.Width, pictureBox.Height);
-            var bitmapGraphics = Graphics.FromImage(bitmap);
-            
-            foreach (var figure in _figures)
-            {
-                FigureDrawer.DrawFigure(figure.Value, bitmapGraphics);
-            }
-            pictureBox.BackColor = Color.White;
-            pictureBox.Image = bitmap;            
-            if (_saveToPNGDialog.ShowDialog() != DialogResult.OK) return;
-            try
-            {
-                pictureBox.Image.Save(_saveToPNGDialog.FileName);
-            }
-            catch (Exception)
-            {
-                throw new Exception();
-            }
+        private void ExportToPngToolStripMenuItem_Click(object sender, EventArgs e)
+        {            
+            if (_figures.Count == 0) return;
+
+            BitmapSaver bitmapSaver = new BitmapSaver();
+
+            bitmapSaver.SaveImage(Canvas.Size, _figures);
         }
 
         /// <summary>
@@ -506,7 +492,7 @@ namespace VectorEditor.View
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void saveToolStripMenuItem1_Click(object sender, EventArgs e)
+        private void SaveToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             SaveToFile();
         }
@@ -516,7 +502,7 @@ namespace VectorEditor.View
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void openFileToolStripMenuItem_Click(object sender, EventArgs e)
+        private void OpenFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var saver = new Saver();
             if (openFileDialog.ShowDialog() != DialogResult.OK) return;
@@ -562,7 +548,7 @@ namespace VectorEditor.View
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void newFileToolStripMenuItem_Click(object sender, EventArgs e)
+        private void NewFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
             NewProjectCreated?.Invoke(this, e);
         }

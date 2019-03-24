@@ -88,6 +88,7 @@
     <Compile Include="UndoRedo\ChangeParametersCommand.cs" />
     <Compile Include="UndoRedo\MovePointCommand.cs" />
     <Compile Include="UndoRedo\UndoRedoStack.cs" />
+    <Compile Include="View\BitmapSaver.cs" />
     <Compile Include="View\FigureParameters.cs" />
     <Compile Include="View\FileLoadedEventArgs.cs" />
     <Compile Include="View\MainForm.cs">
