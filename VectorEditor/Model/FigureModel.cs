@@ -3,7 +3,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using VectorEditor.Figures;
 using VectorEditor.Observer;
-using VectorEditor.View;
+using VectorEditor.FileManager;
 
 namespace VectorEditor.Model
 {

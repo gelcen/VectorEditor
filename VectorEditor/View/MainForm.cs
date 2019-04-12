@@ -7,7 +7,7 @@ using VectorEditor.Figures;
 using VectorEditor.Presenter;
 using VectorEditor.UndoRedo;
 
-namespace VectorEditor.View
+namespace VectorEditor.FileManager
 {
     /// <inheritdoc cref="MainForm" />
     /// <summary>

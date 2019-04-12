@@ -5,7 +5,7 @@ using VectorEditor.Figures;
 using VectorEditor.Presenter;
 using VectorEditor.UndoRedo;
 
-namespace VectorEditor.View
+namespace VectorEditor.FileManager
 {
     /// <summary>
     /// Интерфейс для Представления

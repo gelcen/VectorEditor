@@ -3,7 +3,7 @@
 namespace VectorEditor.UndoRedo
 {
     /// <summary>
-    /// Фабрика для фигур
+    /// Фабрика для команд
     /// </summary>
     public static class CommandFactory
     {

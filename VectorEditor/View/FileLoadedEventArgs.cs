@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using VectorEditor.UndoRedo;
 using VectorEditor.Figures;
 
-namespace VectorEditor.View
+namespace VectorEditor.FileManager
 {
     /// <inheritdoc />
     /// <summary>

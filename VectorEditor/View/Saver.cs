@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using VectorEditor.UndoRedo;
 
-namespace VectorEditor.View
+namespace VectorEditor.FileManager
 {
     /// <summary>
     /// Класс для сохранения и открытия данных

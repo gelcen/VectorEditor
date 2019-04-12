@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using VectorEditor.Model;
-using VectorEditor.View;
+using VectorEditor.FileManager;
 
 namespace VectorEditor
 {

@@ -4,7 +4,7 @@ using VectorEditor.Figures;
 using VectorEditor.Model;
 using VectorEditor.Observer;
 using VectorEditor.UndoRedo;
-using VectorEditor.View;
+using VectorEditor.FileManager;
 
 namespace VectorEditor.Presenter
 {
@@ -219,7 +219,7 @@ namespace VectorEditor.Presenter
             }
             else
             {
-                var handler = _currentHandler as FigureCreatingHandler;
+                var handler = _currentHandler as BaseFigureCreatingHandler;
                 if (handler != null)
                 {
                     handler.FigureParameters = e;
@@ -284,7 +284,7 @@ namespace VectorEditor.Presenter
         /// <param name="currentHandler"></param>
         private void SetFigureCreatedHandler(IBaseHandler currentHandler)
         {
-            var handler = currentHandler as FigureCreatingHandler;
+            var handler = currentHandler as BaseFigureCreatingHandler;
             if (handler != null)
             {
                 handler.FigureCreated += _currentHandler_FigureCreated;
