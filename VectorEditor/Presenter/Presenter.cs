@@ -76,7 +76,6 @@ namespace VectorEditor.Presenter
             _view.FigureCopied += _view_FigureCopied;
             _view.UndoPressed += _view_UndoPressed;
             _view.RedoPressed += _view_RedoPressed;
-            _view.CommandStack = _undoRedoStack;
             _view.FileSaved += ViewFileSaved;
             _view.FileOpened += ViewFileOpened;
             _view.NewProjectCreated += _view_NewProjectCreated;                
@@ -187,8 +186,7 @@ namespace VectorEditor.Presenter
         private void _view_FigureCopied(object sender, EventArgs e)
         {
             if (_currentHandler.GetType() != typeof(CursorHandler)) return;
-            var handler = _currentHandler as CursorHandler;
-            if (handler == null) return;
+            if (!(_currentHandler is CursorHandler handler)) return;
             foreach (var figure in handler.SelectedFigures)
             {
                 if (_model.GetFigureList().ContainsKey(figure.Key))
@@ -206,9 +204,8 @@ namespace VectorEditor.Presenter
         private void _view_FiguresDeleted(object sender, EventArgs e)
         {
             if (_currentHandler.GetType() != typeof(CursorHandler)) return;
-            var handler = _currentHandler as CursorHandler;
             var beforeState = new Dictionary<int, BaseFigure>();
-            if (handler == null) return;
+            if (!(_currentHandler is CursorHandler handler)) return;
             foreach (var figure in handler.SelectedFigures)
             {
                 if (!_model.GetFigureList().ContainsKey(figure.Key)) continue;
@@ -253,8 +250,7 @@ namespace VectorEditor.Presenter
 
             if (_currentHandler.GetType() == typeof(CursorHandler))
             {
-                var handler = _currentHandler as CursorHandler;
-                if (handler != null)                   
+                if (_currentHandler is CursorHandler handler)
                     foreach (var figure in handler.SelectedFigures)
                     {
                         if (!_model.GetFigureList().ContainsKey(figure.Key)) continue;
@@ -264,12 +260,10 @@ namespace VectorEditor.Presenter
             }
             else
             {
-                var handler = _currentHandler as BaseFigureCreatingHandler;
-                if (handler != null)
+                if (_currentHandler is BaseFigureCreatingHandler handler)
                 {
                     handler.FigureParameters = e;
                 }
-                //_currentHandler.FigureParameters = e;
             }
 
             var cmd = new ChangeParametersCommand(_model, beforeState, e);
@@ -343,8 +337,7 @@ namespace VectorEditor.Presenter
         private void CursorHandler_PointMoved(object sender, Dictionary<int, BaseFigure> e)
         {
             if (_currentHandler.GetType() != typeof(CursorHandler)) return;
-            var handler = _currentHandler as CursorHandler;
-            if (handler == null) return;
+            if (!(_currentHandler is CursorHandler handler)) return;
             var cmd = new MovePointCommand(_model, handler.BeforePointState, e);
             _undoRedoStack.Do(cmd);
         }
@@ -357,8 +350,7 @@ namespace VectorEditor.Presenter
         private void CursorHandler_FiguresMoved(object sender, Dictionary<int, BaseFigure> e)
         {
             if (_currentHandler.GetType() != typeof(CursorHandler)) return;
-            var handler = _currentHandler as CursorHandler;
-            if (handler == null) return;
+            if (!(_currentHandler is CursorHandler handler)) return;
             var cmd = new MoveFigureCommand(_model, handler.BeforeState, e);
             _undoRedoStack.Do(cmd);
         }

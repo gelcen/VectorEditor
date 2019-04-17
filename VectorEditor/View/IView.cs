@@ -29,14 +29,6 @@ namespace VectorEditor.FileManager
         }
 
         /// <summary>
-        /// Стек команд
-        /// </summary>
-        UndoRedoStack CommandStack
-        {
-            set;
-        }
-
-        /// <summary>
         /// Параметры
         /// </summary>
         FigureParameters FigureParameters

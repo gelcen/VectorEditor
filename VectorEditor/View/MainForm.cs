@@ -93,23 +93,6 @@ namespace VectorEditor.FileManager
         /// </summary>
         public IBaseHandler CurrentHandler { get; set; }
 
-        /// <summary>
-        /// Стек команд
-        /// </summary>
-        private UndoRedoStack _undoRedoStack;
-
-        /// <inheritdoc />
-        /// <summary>
-        /// Свойство для стека команд
-        /// </summary>
-        public UndoRedoStack CommandStack
-        {
-            set
-            {
-                _undoRedoStack = value;
-            }
-        }
-
         /// <inheritdoc />
         /// <summary>
         /// Событие выбора инструмента

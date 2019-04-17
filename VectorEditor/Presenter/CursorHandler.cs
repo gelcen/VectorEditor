@@ -279,7 +279,6 @@ namespace VectorEditor.Presenter
                     _isMouseDown = true;
                 }
                 _originalMouseDownPoint = e.Location;
-
             }
         }
 
