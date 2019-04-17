@@ -4,7 +4,7 @@ using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 using VectorEditor.Drawers;
 using VectorEditor.Figures;
-using VectorEditor.View;
+using VectorEditor.FileManager;
 
 namespace VectorEditor.Presenter
 {
@@ -12,7 +12,7 @@ namespace VectorEditor.Presenter
     /// <summary>
     /// Класс для обработки инструмента полилиния
     /// </summary>
-    public class PolylineHandler : FigureCreatingHandler
+    public class PolylineHandler : BaseFigureCreatingHandler
     {
         /// <summary>
         /// Параметры полилинии

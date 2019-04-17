@@ -5,7 +5,7 @@ using System.Windows.Forms;
 using VectorEditor.Drawers;
 using VectorEditor.Figures;
 
-namespace VectorEditor.View
+namespace VectorEditor.FileManager
 {
     /// <summary>
     /// Класс для сохранения проекта в растровом формате

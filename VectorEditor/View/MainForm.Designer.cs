@@ -1,4 +1,4 @@
-﻿namespace VectorEditor.View
+﻿namespace VectorEditor.FileManager
 {
     partial class MainForm
     {

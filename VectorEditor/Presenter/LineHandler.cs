@@ -4,7 +4,7 @@ using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 using VectorEditor.Drawers;
 using VectorEditor.Figures;
-using VectorEditor.View;
+using VectorEditor.FileManager;
 
 namespace VectorEditor.Presenter
 {
@@ -12,7 +12,7 @@ namespace VectorEditor.Presenter
     /// <summary>
     /// Класс для обработчика инструмента линии
     /// </summary>
-    public class LineHandler : FigureCreatingHandler
+    public class LineHandler : BaseFigureCreatingHandler
     {
         /// <summary>
         /// Параметры линии

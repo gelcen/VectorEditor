@@ -2,14 +2,14 @@
 using System.Drawing;
 using System.Windows.Forms;
 using VectorEditor.Figures;
-using VectorEditor.View;
+using VectorEditor.FileManager;
 
 namespace VectorEditor.Presenter
 {
     /// <summary>
     /// Базовый класс для инструментов, создающих фигуры
     /// </summary>
-    public abstract class FigureCreatingHandler:IBaseHandler
+    public abstract class BaseFigureCreatingHandler:IBaseHandler
     {
         /// <summary>
         /// Канва

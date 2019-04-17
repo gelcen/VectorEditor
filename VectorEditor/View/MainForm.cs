@@ -7,7 +7,7 @@ using VectorEditor.Figures;
 using VectorEditor.Presenter;
 using VectorEditor.UndoRedo;
 
-namespace VectorEditor.View
+namespace VectorEditor.FileManager
 {
     /// <inheritdoc cref="MainForm" />
     /// <summary>
@@ -152,11 +152,15 @@ namespace VectorEditor.View
         /// </summary>
         public event EventHandler RedoPressed;
 
-        /// <inheritdoc />
         /// <summary>
-        /// Событие загрузки проекта
+        /// Событие открытия файла
         /// </summary>
-        public event EventHandler<FileLoadedEventArgs> FileLoaded;
+        public event EventHandler<string> FileOpened;
+
+        /// <summary>
+        /// Событие сохранения проекта
+        /// </summary>
+        public event EventHandler<string> FileSaved;
 
         /// <inheritdoc />
         /// <summary>
@@ -473,18 +477,16 @@ namespace VectorEditor.View
         /// </summary>
         private void SaveToFile()
         {
-            var saver = new Saver();
             if (saveFileDialog.ShowDialog() != DialogResult.OK) return;
             try
             {
-                saver.SaveToFile(_undoRedoStack,
-                    saveFileDialog.FileName);
-                Canvas.Refresh();
+                FileSaved?.Invoke(this, saveFileDialog.FileName);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw new Exception();
-            }
+
+                throw new Exception(ex.Message);
+            }            
         }
 
         /// <summary>
@@ -504,12 +506,10 @@ namespace VectorEditor.View
         /// <param name="e"></param>
         private void OpenFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var saver = new Saver();
             if (openFileDialog.ShowDialog() != DialogResult.OK) return;
             try
             {
-                var fileLoadedEventArgs = saver.OpenFromFile(openFileDialog.FileName);
-                FileLoaded?.Invoke(this, fileLoadedEventArgs);
+                FileOpened?.Invoke(this, openFileDialog.FileName);
             }
             catch (Exception ex)
             {

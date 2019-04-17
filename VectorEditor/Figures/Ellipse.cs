@@ -14,10 +14,9 @@ namespace VectorEditor.Figures
         /// </summary>
         public Ellipse()
         {
-            _lineProperties = new LineProperties();
-            _points = new Points(2);
-            _fillProperty = new FillProperty();
+            LineProperties = new LineProperties();
+            Points = new Points(2);
+            FillProperty = new FillProperty();
         }
-
     }
 }

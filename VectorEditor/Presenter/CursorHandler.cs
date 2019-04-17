@@ -6,7 +6,7 @@ using System.Linq;
 using System.Windows.Forms;
 using VectorEditor.Drawers;
 using VectorEditor.Figures;
-using VectorEditor.View;
+using VectorEditor.FileManager;
 
 namespace VectorEditor.Presenter
 {
@@ -83,11 +83,6 @@ namespace VectorEditor.Presenter
             MouseUpDelegate += MouseUp;
             MouseMoveDelegate += MouseMoveSelecting;
         }
-
-        /// <summary>
-        /// Событие изменения параметров фигуры
-        /// </summary>
-        public event EventHandler<FigureParameters> ParametersChanged;
         
         /// <inheritdoc />
         /// <summary>

@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 
-namespace VectorEditor.View
+namespace VectorEditor.FileManager
 {
     /// <summary>
     /// Структура для параметров фигуры

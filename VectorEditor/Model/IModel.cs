@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using VectorEditor.Figures;
 using VectorEditor.Observer;
-using VectorEditor.View;
+using VectorEditor.FileManager;
 
 namespace VectorEditor.Model
 {

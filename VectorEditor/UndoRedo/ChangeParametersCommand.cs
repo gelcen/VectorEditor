@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using VectorEditor.Figures;
 using VectorEditor.Model;
-using VectorEditor.View;
+using VectorEditor.FileManager;
 
 namespace VectorEditor.UndoRedo
 {

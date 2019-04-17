@@ -4,7 +4,7 @@ using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 using VectorEditor.Drawers;
 using VectorEditor.Figures;
-using VectorEditor.View;
+using VectorEditor.FileManager;
 
 namespace VectorEditor.Presenter
 {
@@ -12,7 +12,7 @@ namespace VectorEditor.Presenter
     /// <summary>
     /// Класс обработчика для инструмента полигона
     /// </summary>
-    public class PolygonHandler : FigureCreatingHandler
+    public class PolygonHandler : BaseFigureCreatingHandler
     {
         /// <summary>
         /// Параметры полигона
