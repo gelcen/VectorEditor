@@ -83,11 +83,6 @@ namespace VectorEditor.Presenter
             MouseUpDelegate += MouseUp;
             MouseMoveDelegate += MouseMoveSelecting;
         }
-
-        /// <summary>
-        /// Событие изменения параметров фигуры
-        /// </summary>
-        public event EventHandler<FigureParameters> ParametersChanged;
         
         /// <inheritdoc />
         /// <summary>

@@ -26,11 +26,13 @@ namespace VectorEditor.FileManager
         /// <summary>
         /// Сохранение
         /// </summary>
-        /// <param name="filename"></param>
-        /// <param name="figures"></param>
-        /// <param name="commands"></param>
-        /// <param name="redoCount"></param>
-        public void SaveToFile(string filename, List<BaseFigure> figures, List<ICommand> commands, int redoCount)
+        /// <param name="filename">Имя файла</param>
+        /// <param name="figures">Фигуры</param>
+        /// <param name="commands">Команды</param>
+        /// <param name="redoCount">Количество Redo команд</param>
+        public void SaveToFile(string filename, 
+                               Dictionary<int, BaseFigure> figures, 
+                               List<ICommand> commands, int redoCount)
         {
             var file = new StreamWriter(filename);
 
@@ -43,8 +45,9 @@ namespace VectorEditor.FileManager
 
             foreach (var figure in figures)
             {
-                WriteItem(file, figure);
-            }
+                WriteItem(file, 
+                          new DictionaryItem(figure.Key, figure.Value));
+            }            
 
             file.Close();
         }
@@ -66,13 +69,15 @@ namespace VectorEditor.FileManager
         /// <summary>
         /// Открытие
         /// </summary>
-        /// <param name="filename"></param>
-        /// <param name="commands"></param>
-        /// <param name="redoCount"></param>
-        /// <returns></returns>
-        public List<BaseFigure> OpenFromFile(string filename, out List<ICommand> commands, out int redoCount)
+        /// <param name="filename">Имя файла</param>
+        /// <param name="commands">Список команд</param>
+        /// <param name="redoCount">Количество Redo команд</param>
+        /// <returns>Словарь фигур</returns>
+        public Dictionary<int, BaseFigure> OpenFromFile(string filename, 
+                                                        out List<ICommand> commands, 
+                                                        out int redoCount)
         {
-            var figureList = new List<BaseFigure>();
+            var figureList = new Dictionary<int, BaseFigure>();
             var commandsList = new List<ICommand>();
 
             var file = new StreamReader(filename);
@@ -92,8 +97,8 @@ namespace VectorEditor.FileManager
                     case ICommand command:
                         commandsList.Add(command);
                         break;
-                    case BaseFigure figure:
-                        figureList.Add(figure);
+                    case DictionaryItem figure:
+                        figureList.Add(figure.Key, figure.Value);
                         break;
                     default:
                         throw new ArgumentException(

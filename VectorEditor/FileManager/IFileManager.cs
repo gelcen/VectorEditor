@@ -8,7 +8,7 @@ namespace VectorEditor.FileManager
     /// Интерфейс для сохранения 
     /// и открытия проектов. 
     /// </summary>
-    interface IFileManager
+    public interface IFileManager
     {
         /// <summary>
         /// Сохранение фигур и истории
@@ -18,7 +18,7 @@ namespace VectorEditor.FileManager
         /// <param name="commands">Команды</param>
         /// <param name="redoCount">Количество Redo команд</param>
         void SaveToFile(string filename,
-                        List<BaseFigure> figures, 
+                        Dictionary<int, BaseFigure> figures, 
                         List<ICommand> commands,
                         int redoCount);
 
@@ -28,8 +28,8 @@ namespace VectorEditor.FileManager
         /// <param name="filename">Имя файла</param>
         /// <param name="commands">Команды</param>
         /// <param name="redoCount">Количество Redo команд</param>
-        /// <returns></returns>
-        List<BaseFigure> OpenFromFile(string filename,
+        /// <returns>Список прочитанных фигур</returns>
+        Dictionary<int, BaseFigure> OpenFromFile(string filename,
                                       out List<ICommand> commands,
                                       out int redoCount);
     }

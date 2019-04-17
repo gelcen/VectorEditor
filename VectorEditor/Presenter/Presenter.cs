@@ -5,6 +5,7 @@ using VectorEditor.Model;
 using VectorEditor.Observer;
 using VectorEditor.UndoRedo;
 using VectorEditor.FileManager;
+using System.Linq;
 
 namespace VectorEditor.Presenter
 {
@@ -23,6 +24,11 @@ namespace VectorEditor.Presenter
         /// Ссылка на модель
         /// </summary>
         private readonly IModel _model;
+
+        /// <summary>
+        /// Файловый менеджер
+        /// </summary>
+        private readonly IFileManager _fileManager;
 
         /// <summary>
         /// Текущий обработчик инструмента
@@ -49,13 +55,15 @@ namespace VectorEditor.Presenter
         /// </summary>
         /// <param name="view">Представление</param>
         /// <param name="model">Модель</param>
-        public Presenter(IView view, IModel model)
+        /// <param name="fileManager">File Manager</param>
+        public Presenter(IView view, IModel model, IFileManager fileManager)
         {
             _currentHandler = null;
             _undoRedoStack = new UndoRedoStack();
 
             _view = view;
             _model = model;
+            _fileManager = fileManager;            
 
             _model.NewProject();
             _saveState = SaveState.NewFile;
@@ -69,10 +77,65 @@ namespace VectorEditor.Presenter
             _view.UndoPressed += _view_UndoPressed;
             _view.RedoPressed += _view_RedoPressed;
             _view.CommandStack = _undoRedoStack;
-            _view.FileLoaded += _view_FileLoaded;
+            _view.FileSaved += ViewFileSaved;
+            _view.FileOpened += ViewFileOpened;
             _view.NewProjectCreated += _view_NewProjectCreated;                
 
             _model.RegisterObserver(this);
+        }
+
+        /// <summary>
+        /// Обработчик события сохранения проекта
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="filename"></param>
+        private void ViewFileSaved(object sender, string filename)
+        {
+
+            var redoList = _undoRedoStack.RedoStack.ToList();
+            var undoList = _undoRedoStack.UndoStack.ToList();
+            redoList.AddRange(undoList);
+
+            _fileManager.SaveToFile(filename,
+                                    _model.GetFigureList(),
+                                    redoList,
+                                    _undoRedoStack.RedoCount);
+        }
+
+        /// <summary>
+        /// Обработчик открытия проекта
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="filename"></param>
+        private void ViewFileOpened(object sender, string filename)
+        {
+            _model.NewProject();
+            Dictionary<int, BaseFigure> figures =
+                _fileManager.OpenFromFile(filename,
+                                          out List<ICommand> commands,
+                                          out int redoCount);
+            foreach (var figure in figures)
+            {
+                _model.AddFigure(figure.Key, figure.Value);
+            }
+            foreach (var command in commands)
+            {
+                CommandFactory.RestorePointersToModel(command, _model);
+            }
+            commands.Reverse();
+            _undoRedoStack.Reset();
+            for (int i=0; i < commands.Count; i++)
+            {
+                if (i < commands.Count - redoCount)
+                {
+                    _undoRedoStack.UndoStack.Push(commands[i]);
+                }
+                else
+                {
+                    _undoRedoStack.RedoStack.Push(commands[i]);
+                }                
+            }
+            _view.Canvas.Refresh();
         }
 
         /// <summary>
@@ -84,24 +147,6 @@ namespace VectorEditor.Presenter
         {
             _model.ClearCanvas();
             _undoRedoStack.Reset();
-        }
-
-        /// <summary>
-        /// Обработчик события загрузки проекта
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void _view_FileLoaded(object sender, FileLoadedEventArgs e)
-        {
-            _model.ClearCanvas();
-            foreach (var command in e.RedoList)
-            {
-                CommandFactory.RestorePointersToModel(command, _model);
-            }
-            _undoRedoStack.Reset();
-            _saveState = SaveState.OpenedFile;
-            FixCommands(e.UndoCount, e.RedoList);
-            _view.Canvas.Refresh();
         }
 
         /// <summary>
@@ -284,8 +329,7 @@ namespace VectorEditor.Presenter
         /// <param name="currentHandler"></param>
         private void SetFigureCreatedHandler(IBaseHandler currentHandler)
         {
-            var handler = currentHandler as BaseFigureCreatingHandler;
-            if (handler != null)
+            if (currentHandler is BaseFigureCreatingHandler handler)
             {
                 handler.FigureCreated += _currentHandler_FigureCreated;
             }
@@ -317,21 +361,6 @@ namespace VectorEditor.Presenter
             if (handler == null) return;
             var cmd = new MoveFigureCommand(_model, handler.BeforeState, e);
             _undoRedoStack.Do(cmd);
-        }
-
-        /// <summary>
-        /// Позволяет исправить команды после чтения. 
-        /// </summary>
-        private void FixCommands(int undoCount, List<ICommand> redoList)
-        {
-            foreach (var command in redoList)
-            {
-                _undoRedoStack.Do(command);
-            }
-            for (int i = 0; i < undoCount; i++)
-            {
-                _undoRedoStack.Undo();
-            }
         }
 
         /// <summary>

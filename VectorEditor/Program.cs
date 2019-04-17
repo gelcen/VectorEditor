@@ -18,8 +18,9 @@ namespace VectorEditor
 
             var mainForm = new MainForm();
             var figureModel = new FigureModel();
+            var fileManager = new JsonFileManager();
 
-            var presenter = new Presenter.Presenter(mainForm, figureModel);
+            var presenter = new Presenter.Presenter(mainForm, figureModel, fileManager);
 
             Application.Run(mainForm);
         }

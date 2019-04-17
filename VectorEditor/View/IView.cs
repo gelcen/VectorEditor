@@ -64,11 +64,6 @@ namespace VectorEditor.FileManager
         }
 
         /// <summary>
-        /// Событие загрузки файла
-        /// </summary>
-        event EventHandler<FileLoadedEventArgs> FileLoaded;
-
-        /// <summary>
         /// Событие изменения параметров фигуры
         /// </summary>
         event EventHandler<FigureParameters> ParametersChanged;
@@ -102,6 +97,16 @@ namespace VectorEditor.FileManager
         /// События выбора инструмента
         /// </summary>
         event EventHandler<ToolType> ToolPicked;
+
+        /// <summary>
+        /// Событие открытия файла проекта
+        /// </summary>
+        event EventHandler<string> FileOpened;
+
+        /// <summary>
+        /// Событие сохранения проекта
+        /// </summary>
+        event EventHandler<string> FileSaved;
 
         /// <summary>
         /// События создания нового файла
