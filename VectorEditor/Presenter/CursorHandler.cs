@@ -6,7 +6,6 @@ using System.Linq;
 using System.Windows.Forms;
 using VectorEditor.Drawers;
 using VectorEditor.Figures;
-using VectorEditor.FileManager;
 
 namespace VectorEditor.Presenter
 {
@@ -355,7 +354,7 @@ namespace VectorEditor.Presenter
             return distance >= DragTreshold;
         }
 
-        //Двигание фигурой
+        //Движение фигурой
         /// <summary>
         /// Обработчик движения фигур
         /// </summary>

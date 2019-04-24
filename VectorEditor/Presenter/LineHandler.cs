@@ -131,7 +131,7 @@ namespace VectorEditor.Presenter
             _line.LineProperties.Color = _figureParameters.LineColor;
             _line.LineProperties.Style = (DashStyle)_figureParameters.LineStyle;
             _line.LineProperties.Thickness = _figureParameters.LineThickness;
-
+            
             _line.Points.AddPoint(new PointF(e.X, e.Y));
             _line.Points.AddPoint(new PointF(e.X, e.Y));
 

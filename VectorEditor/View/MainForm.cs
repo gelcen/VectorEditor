@@ -523,7 +523,6 @@ namespace VectorEditor.FileManager
             {
                 FiguresDeleted?.Invoke(this, e);
             }
-
         }
 
         /// <summary>
