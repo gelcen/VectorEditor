@@ -16,17 +16,23 @@ namespace VectorEditor.Figures
         private readonly List<PointF> _points = new List<PointF>();
 
         /// <summary>
-        /// Количество точек
+        /// Максимальное количество точек
         /// </summary>
-        private readonly int _count;
+        private readonly int _maxCount;
+
+        /// <summary>
+        /// Минимальное количество точек
+        /// </summary>
+        private readonly int _minCount;
 
         /// <summary>
         /// Конструктор класса для точек
         /// </summary>
         /// <param name="count"></param>
-        public Points(int count = 0)
+        public Points(int maxCount = 0, int minCount = 0)
         {
-            _count = count;
+            _maxCount = maxCount;
+            _minCount = minCount;
         }
 
         /// <summary>
@@ -72,19 +78,38 @@ namespace VectorEditor.Figures
         /// Проверят вхождение в лимит
         /// </summary>
         /// <returns></returns>
-        private bool IsInRange()
+        public bool IsInRange()
         {
-            if (_count == 0)
+            if (_maxCount == 0)
             {
                 return true;
             }
 
-            if (_points.Count < _count)
+            if (_points.Count < _maxCount)
             {
                 return true;
             }
 
             return false;
+        }
+
+        /// <summary>
+        /// Проверят достаточно ли точек
+        /// </summary>
+        /// <returns></returns>
+        public bool IsEnough()
+        {
+            if (_minCount == 0)
+            {
+                return true;
+            }
+
+            if (_points.Count < _minCount)
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }

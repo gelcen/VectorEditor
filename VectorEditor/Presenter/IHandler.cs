@@ -1,24 +1,18 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace VectorEditor.Presenter
 {
     /// <summary>
-    /// Делегат для операций с мышкой
-    /// </summary>
-    /// <param name="obj"></param>
-    /// <param name="e"></param>
-    public delegate void MouseOperation(object obj, MouseEventArgs e);
-
-    /// <summary>
     /// Базовый интерфейс для инструментов
     /// </summary>
-    public interface IBaseHandler
+    public interface IHandler
     {
         /// <summary>
-        /// Канва
+        /// Обновление канвы
         /// </summary>
-        PictureBox Canvas
+        Action CanvasRefresh
         {
             get;
             set;
@@ -27,34 +21,37 @@ namespace VectorEditor.Presenter
         /// <summary>
         /// Делегат для нажатия мышки
         /// </summary>
-        MouseOperation MouseDownDelegate
+        Action<object, MouseEventArgs> MouseDown
         {
-            set;
             get;
+            set;
         }
 
         /// <summary>
         /// Делегат для отпускания мышки
         /// </summary>
-        MouseOperation MouseUpDelegate
+        Action<object, MouseEventArgs> MouseUp
         {
-            set;
             get;
+            set;
         }
 
         /// <summary>
         /// Делегат для движения мышкой
         /// </summary>
-        MouseOperation MouseMoveDelegate
+        Action<object, MouseEventArgs> MouseMove
         {
-            set;
             get;
-        }
+            set;
+        }        
 
         /// <summary>
-        /// Рисование
+        /// Делегат для рисовки
         /// </summary>
-        /// <param name="g"></param>
-        void Draw(Graphics g);
+        Action<Graphics> Draw
+        {
+            get;
+            set;
+        }
     }
 }
