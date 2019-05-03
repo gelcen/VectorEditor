@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using VectorEditor.Figures;
 using VectorEditor.Presenter;
-using VectorEditor.UndoRedo;
 
 namespace VectorEditor.FileManager
 {
@@ -13,9 +12,9 @@ namespace VectorEditor.FileManager
     public interface IView
     {
         /// <summary>
-        /// Канва
+        /// Обновление канвы
         /// </summary>
-        PictureBox Canvas
+        Action CanvasRefresh
         {
             get;
         }
@@ -108,7 +107,7 @@ namespace VectorEditor.FileManager
         /// <summary>
         /// Свойство для текущего инструмента
         /// </summary>
-        IBaseHandler CurrentHandler
+        IHandler CurrentHandler
         {
             get;
             set;

@@ -9,11 +9,11 @@ using VectorEditor.Figures;
 
 namespace VectorEditor.Presenter
 {
-    /// <inheritdoc cref="IBaseHandler" />
+    /// <inheritdoc cref="IHandler" />
     /// <summary>
     /// Класс для инструмента "Указатель"
     /// </summary>
-    public class CursorHandler : IBaseHandler
+    public class CursorHandler : IHandler
     {
         /// <summary>
         /// Выбранная фигура
@@ -25,41 +25,9 @@ namespace VectorEditor.Presenter
         /// </summary>
         private readonly Presenter _presenter;
 
-
-        /// <inheritdoc />
-        /// <summary>
-        /// Свойство для канвы
-        /// </summary>
-        public PictureBox Canvas { get; set; }
-
-        /// <inheritdoc />
-        /// <summary>
-        /// Свойство для делегата нажатия мышки
-        /// </summary>
-        public MouseOperation MouseDownDelegate
-        {
-            set;
-            get;
-        }
-
-        /// <inheritdoc />
-        /// <summary>
-        /// Свойство для делегата отпускания мышки
-        /// </summary>
-        public MouseOperation MouseUpDelegate
-        {
-            set;
-            get;
-        }
-
-        /// <summary>
-        /// Свойство для делегата двигания мышкой
-        /// </summary>
-        public MouseOperation MouseMoveDelegate
-        {
-            set;
-            get;
-        }
+        public Action<object, MouseEventArgs> MouseDown { get; set; }
+        public Action<object, MouseEventArgs> MouseUp { get; set; }
+        public Action<object, MouseEventArgs> MouseMove { get; set; }
 
         /// <summary>
         /// Конструктор класса инструмента "Указатель"
@@ -67,10 +35,10 @@ namespace VectorEditor.Presenter
         /// <param name="canvas">Канва</param>
         /// <param name="figureParameters">Параметры фигуры</param>
         /// <param name="presenter">Презентер</param>
-        public CursorHandler(PictureBox canvas,
+        public CursorHandler(Action canvasRefresh,
             Presenter presenter)
         {
-            Canvas = canvas;
+            CanvasRefresh = canvasRefresh;
             _presenter = presenter;
 
             _selectedFigure = null;
@@ -78,9 +46,9 @@ namespace VectorEditor.Presenter
             BeforeState = new Dictionary<int, BaseFigure>();
             BeforePointState = new Dictionary<int, BaseFigure>();
 
-            MouseDownDelegate += MouseDown;
-            MouseUpDelegate += MouseUp;
-            MouseMoveDelegate += MouseMoveSelecting;
+            MouseDown += MouseDownHandler;
+            MouseUp += MouseUpHandler;
+            MouseMove += MouseMoveSelecting;
         }
         
         /// <inheritdoc />
@@ -216,7 +184,7 @@ namespace VectorEditor.Presenter
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        public void MouseDown(object sender, MouseEventArgs e)
+        public void MouseDownHandler(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
             {
@@ -241,9 +209,9 @@ namespace VectorEditor.Presenter
                                 BeforeState?.Add(index, FigureFactory.CreateCopy(figure.Value));
                             }
 
-                            MouseMoveDelegate -= MouseMoveSelecting;
-                            MouseMoveDelegate += MouseMoveFigure;
-                            MouseUpDelegate += MouseUpFigure;
+                            MouseMove -= MouseMoveSelecting;
+                            MouseMove += MouseMoveFigure;
+                            MouseUp += MouseUpFigure;
 
                             _offsetX = _selectedFigure.Points.GetPoints()[0].X - e.X;
                             _offsetY = _selectedFigure.Points.GetPoints()[0].Y - e.Y;
@@ -251,9 +219,9 @@ namespace VectorEditor.Presenter
                     }
                     else if (IsPointOnMarker(e.Location, out _pickedPoint))
                     {
-                        MouseMoveDelegate -= MouseMoveSelecting;
-                        MouseMoveDelegate += MouseMoveMarker;
-                        MouseUpDelegate += MouseUpMarker;
+                        MouseMove -= MouseMoveSelecting;
+                        MouseMove += MouseMoveMarker;
+                        MouseUp += MouseUpMarker;
 
                         BeforePointState?.Clear();
 
@@ -305,9 +273,9 @@ namespace VectorEditor.Presenter
         /// <param name="e"></param>
         private void MouseUpFigure(object obj, MouseEventArgs e)
         {
-            MouseMoveDelegate += MouseMoveSelecting;
-            MouseMoveDelegate -= MouseMoveFigure;
-            MouseUpDelegate -= MouseUpFigure;
+            MouseMove+= MouseMoveSelecting;
+            MouseMove -= MouseMoveFigure;
+            MouseUp -= MouseUpFigure;
 
             if (_reallyMoved)
             {
@@ -323,7 +291,7 @@ namespace VectorEditor.Presenter
                 _reallyMoved = false;
             }
 
-            Canvas.Refresh();
+            CanvasRefresh?.Invoke();
         }
 
         /// <summary>
@@ -395,7 +363,7 @@ namespace VectorEditor.Presenter
                 }
             }
 
-            Canvas.Refresh();
+            CanvasRefresh?.Invoke();
         }
 
         /// <summary>
@@ -474,9 +442,9 @@ namespace VectorEditor.Presenter
         /// <param name="e"></param>
         private void MouseUpMarker(object obj, MouseEventArgs e)
         {
-            MouseMoveDelegate += MouseMoveSelecting;
-            MouseMoveDelegate -= MouseMoveMarker;
-            MouseUpDelegate -= MouseUpMarker;
+            MouseMove += MouseMoveSelecting;
+            MouseMove-= MouseMoveMarker;
+            MouseUp -= MouseUpMarker;
 
             var newPointState = new Dictionary<int, BaseFigure>();
             if (_isPointMoved)
@@ -490,7 +458,7 @@ namespace VectorEditor.Presenter
                 _isPointMoved = false;
             }            
 
-            Canvas.Refresh();
+            CanvasRefresh?.Invoke();
         }
 
         /// <summary>
@@ -508,7 +476,7 @@ namespace VectorEditor.Presenter
                              _pickedPointIndex,
                              new PointF(e.X + _offsetX, e.Y + _offsetY));
 
-            Canvas.Refresh();
+            CanvasRefresh?.Invoke();
         }
 
         /// <summary>
@@ -549,13 +517,15 @@ namespace VectorEditor.Presenter
                 newCursor = Cursors.Default;
             }
 
-            if (Canvas.Cursor != newCursor)
+            if (sender is PictureBox form)
             {
-                Canvas.Cursor = newCursor;
-            }
+                if (form.Cursor != newCursor)
+                {
+                    form.Cursor = newCursor;
+                }
+            }            
 
-
-            Canvas.Refresh();
+            CanvasRefresh?.Invoke();
         }
 
         /// <summary>
@@ -563,7 +533,7 @@ namespace VectorEditor.Presenter
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        public void MouseUp(object sender, MouseEventArgs e)
+        public void MouseUpHandler(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
             {
@@ -605,7 +575,8 @@ namespace VectorEditor.Presenter
                     _isMouseDown = false;
                 }
             }
-            Canvas.Refresh();
+
+            CanvasRefresh?.Invoke();
         }
 
         /// <summary>
@@ -720,7 +691,7 @@ namespace VectorEditor.Presenter
         }
 
         /// <summary>
-        /// Получить фигуру, на которую указывает мышка
+        /// Получить фигуру, на которую указывает курсор
         /// </summary>
         /// <param name="point">Точка мышки</param>
         /// <returns>Фигура</returns>
@@ -817,6 +788,7 @@ namespace VectorEditor.Presenter
         /// Свойство для получения выбранных фигур
         /// </summary>
         public Dictionary<int, BaseFigure> SelectedFigures { get; private set; }
+        public Action CanvasRefresh { get; set; }
 
         /// <summary>
         /// Добавить фигуру в GraphicsPath

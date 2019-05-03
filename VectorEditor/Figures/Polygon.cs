@@ -15,7 +15,7 @@ namespace VectorEditor.Figures
         public Polygon()
         {
             _lineProperties = new LineProperties();
-            _points = new Points();
+            _points = new Points(0, 3);
             _fillProperty = new FillProperty();
         }
     }

@@ -33,7 +33,7 @@ namespace VectorEditor.Presenter
         /// <summary>
         /// Текущий обработчик инструмента
         /// </summary>
-        private IBaseHandler _currentHandler;
+        private IHandler _currentHandler;
         
         /// <summary>
         /// Список фигур
@@ -134,7 +134,7 @@ namespace VectorEditor.Presenter
                     _undoRedoStack.RedoStack.Push(commands[i]);
                 }                
             }
-            _view.Canvas.Refresh();
+            _view.CanvasRefresh();
         }
 
         /// <summary>
@@ -156,7 +156,7 @@ namespace VectorEditor.Presenter
         private void _view_RedoPressed(object sender, EventArgs e)
         {
             _undoRedoStack.Redo();
-            _view.Canvas.Refresh();
+            _view.CanvasRefresh();
         }
 
         /// <summary>
@@ -175,7 +175,7 @@ namespace VectorEditor.Presenter
                     handler?.ClearSelectedFigures();
                 }
             }
-            _view.Canvas.Refresh();
+            _view.CanvasRefresh();
         }
 
         /// <summary>
@@ -216,7 +216,7 @@ namespace VectorEditor.Presenter
             var cmd = new DeleteFigureCommand(_model, beforeState);
             _undoRedoStack.Do(cmd);
             handler.ClearSelectedFigures();
-            _view.Canvas.Refresh();
+            _view.CanvasRefresh();
         }
 
         /// <summary>
@@ -236,7 +236,7 @@ namespace VectorEditor.Presenter
 
             var cmd = new DeleteFigureCommand(_model, beforeState);
             _undoRedoStack.Do(cmd);
-            _view.Canvas.Refresh();
+            _view.CanvasRefresh();
         }
 
         /// <summary>
@@ -260,7 +260,7 @@ namespace VectorEditor.Presenter
             }
             else
             {
-                if (_currentHandler is BaseFigureCreatingHandler handler)
+                if (_currentHandler is Handler handler)
                 {
                     handler.FigureParameters = e;
                 }
@@ -268,7 +268,7 @@ namespace VectorEditor.Presenter
 
             var cmd = new ChangeParametersCommand(_model, beforeState, e);
             _undoRedoStack.Do(cmd);
-            _view.Canvas.Invalidate();
+            _view.CanvasRefresh();
         }
 
         /// <summary>
@@ -278,52 +278,35 @@ namespace VectorEditor.Presenter
         /// <param name="e"></param>
         private void _view_ToolPicked(object sender, ToolType e)
         {
-            switch (e)
+            if (e == ToolType.Cursor)
             {
-                case ToolType.Line:
-                    _currentHandler = new LineHandler(_view.Canvas, _view.FigureParameters);
-                    SetFigureCreatedHandler(_currentHandler);
-                    _view.CurrentHandler = _currentHandler;
-                    break;
-                case ToolType.Polyline:
-                    _currentHandler = new PolylineHandler(_view.Canvas, _view.FigureParameters);
-                    SetFigureCreatedHandler(_currentHandler);
-                    _view.CurrentHandler = _currentHandler;
-                    break;
-                case ToolType.Circle:
-                    _currentHandler = new CircleHandler(_view.Canvas, _view.FigureParameters);
-                    SetFigureCreatedHandler(_currentHandler);
-                    _view.CurrentHandler = _currentHandler;
-                    break;
-                case ToolType.Ellipse:
-                    _currentHandler = new EllipseHandler(_view.Canvas, _view.FigureParameters);
-                    SetFigureCreatedHandler(_currentHandler);
-                    _view.CurrentHandler = _currentHandler;
-                    break;
-                case ToolType.Polygon:
-                    _currentHandler = new PolygonHandler(_view.Canvas, _view.FigureParameters);
-                    SetFigureCreatedHandler(_currentHandler);
-                    _view.CurrentHandler = _currentHandler;
-                    break;
-                case ToolType.Cursor:
-                    var cursorHandler = new CursorHandler(_view.Canvas,  this);
-                    cursorHandler.FiguresMoved += CursorHandler_FiguresMoved;
-                    cursorHandler.PointMoved += CursorHandler_PointMoved;
-                    _currentHandler = cursorHandler;
-                    _view.CurrentHandler = _currentHandler;
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(e), e, null);
+                var cursorHandler = new CursorHandler(_view.CanvasRefresh, this);
+                cursorHandler.FiguresMoved += CursorHandler_FiguresMoved;
+                cursorHandler.PointMoved += CursorHandler_PointMoved;
+                _currentHandler = cursorHandler;
+                _view.CurrentHandler = _currentHandler;
             }
+            else SetHandler(e);            
+        }
+
+        private void SetHandler(ToolType tool)
+        {
+            var handler = new Handler(_view.CanvasRefresh, _view.FigureParameters)
+            {
+                CurrentTool = tool
+            };
+            handler.FigureCreated += _currentHandler_FigureCreated;
+            _currentHandler = handler;
+            _view.CurrentHandler = _currentHandler;
         }
 
         /// <summary>
         /// Подписка обработчика события создания фигуры
         /// </summary>
         /// <param name="currentHandler"></param>
-        private void SetFigureCreatedHandler(IBaseHandler currentHandler)
+        private void SetFigureCreatedHandler(IHandler currentHandler)
         {
-            if (currentHandler is BaseFigureCreatingHandler handler)
+            if (currentHandler is Handler handler)
             {
                 handler.FigureCreated += _currentHandler_FigureCreated;
             }

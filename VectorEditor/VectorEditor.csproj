@@ -71,15 +71,10 @@
     <Compile Include="Figures\Polyline.cs" />
     <Compile Include="FileManager\DictionaryItem.cs" />
     <Compile Include="FileManager\JsonFileManager.cs" />
-    <Compile Include="Presenter\BaseFigureCreatingHandler.cs" />
+    <Compile Include="Presenter\Handler.cs" />
     <Compile Include="ToolType.cs" />
-    <Compile Include="Presenter\CircleHandler.cs" />
     <Compile Include="Presenter\CursorHandler.cs" />
-    <Compile Include="Presenter\EllipseHandler.cs" />
-    <Compile Include="Presenter\IBaseHandler.cs" />
-    <Compile Include="Presenter\LineHandler.cs" />
-    <Compile Include="Presenter\PolygonHandler.cs" />
-    <Compile Include="Presenter\PolylineHandler.cs" />
+    <Compile Include="Presenter\IHandler.cs" />
     <Compile Include="RoundShapeType.cs" />
     <Compile Include="SaveState.cs" />
     <Compile Include="UndoRedo\AddFigureCommand.cs" />

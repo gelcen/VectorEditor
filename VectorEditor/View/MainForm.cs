@@ -5,7 +5,6 @@ using System.Windows.Forms;
 using VectorEditor.Drawers;
 using VectorEditor.Figures;
 using VectorEditor.Presenter;
-using VectorEditor.UndoRedo;
 
 namespace VectorEditor.FileManager
 {
@@ -24,6 +23,11 @@ namespace VectorEditor.FileManager
         /// Словарь для кнопок инструментов
         /// </summary>
         private readonly Dictionary<Control, ToolType> _toolsDictionary;
+
+        public PictureBox Canvas
+        {
+            get => pbCanvas;            
+        }
 
         /// <summary>
         /// Текущие параметры
@@ -48,15 +52,6 @@ namespace VectorEditor.FileManager
         {
             get;
             set;
-        }
-
-        /// <inheritdoc />
-        /// <summary>
-        /// Свойство для канвы
-        /// </summary>
-        public PictureBox Canvas
-        {
-            get { return pbCanvas; }
         }
 
         /// <inheritdoc />
@@ -91,7 +86,12 @@ namespace VectorEditor.FileManager
         /// <summary>
         /// Текущий инструмент
         /// </summary>
-        public IBaseHandler CurrentHandler { get; set; }
+        public IHandler CurrentHandler { get; set; }
+
+        /// <summary>
+        /// Обновление канвы
+        /// </summary>
+        public Action CanvasRefresh => pbCanvas.Refresh;
 
         /// <inheritdoc />
         /// <summary>
@@ -150,6 +150,7 @@ namespace VectorEditor.FileManager
         /// События создания нового файла
         /// </summary>
         public event EventHandler NewProjectCreated;
+
 
         #endregion
 
@@ -338,7 +339,8 @@ namespace VectorEditor.FileManager
         private void PbCanvas_MouseDown(object sender, MouseEventArgs e)
         {
             OnMouseDown(e);
-            CurrentHandler?.MouseDownDelegate(sender, e);
+            CurrentHandler?.MouseDown(sender, e);
+          
         }
 
         /// <summary>
@@ -349,7 +351,7 @@ namespace VectorEditor.FileManager
         private void PbCanvas_MouseMove(object sender, MouseEventArgs e)
         {
             OnMouseMove(e);
-            CurrentHandler?.MouseMoveDelegate(sender, e);
+            CurrentHandler?.MouseMove(sender, e);
         }
 
         /// <summary>
@@ -360,7 +362,7 @@ namespace VectorEditor.FileManager
         private void PbCanvas_MouseUp(object sender, MouseEventArgs e)
         {
             OnMouseUp(e);
-            CurrentHandler?.MouseUpDelegate(sender, e);
+            CurrentHandler?.MouseUp(sender, e);
         }
 
         /// <summary>
@@ -452,7 +454,7 @@ namespace VectorEditor.FileManager
 
             BitmapSaver bitmapSaver = new BitmapSaver();
 
-            bitmapSaver.SaveImage(Canvas.Size, _figures);
+            bitmapSaver.SaveImage(pbCanvas.Size, _figures);
         }
 
         /// <summary>
