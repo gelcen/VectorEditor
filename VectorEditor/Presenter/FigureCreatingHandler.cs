@@ -8,37 +8,62 @@ using VectorEditor.FileManager;
 
 namespace VectorEditor.Presenter
 {
-    public class Handler:IHandler
+    /// <summary>
+    /// Класс-обработчик создания фигур
+    /// </summary>
+    public class FigureCreatingHandler
     {
+        /// <summary>
+        /// Созданная фигура
+        /// </summary>
         private BaseFigure _createdFigure;
 
+        /// <summary>
+        /// Поле для хранения обработчика
+        /// </summary>
+        private IHandler _handler;        
+
+        /// <summary>
+        /// Параметры фигуры
+        /// </summary>
         public FigureParameters FigureParameters
         {
             get;
             set;
         }
 
+        /// <summary>
+        /// Текущий инструмент(фигура)
+        /// </summary>
         public ToolType CurrentTool { get; set; }
 
-        public Action CanvasRefresh { get; set; }
-        
-        public Action<object, MouseEventArgs> MouseDown { get; set; }
-        public Action<object, MouseEventArgs> MouseUp { get; set; }
-        public Action<object, MouseEventArgs> MouseMove { get; set; }
-
-        public Handler(Action canvasRefresh, FigureParameters figureParameters)
+        /// <summary>
+        /// Конструктор класса 
+        /// </summary>
+        /// <param name="canvasRefresh">Ссылка на делегат обновления канвы</param>
+        /// <param name="figureParameters">Параметры фигуры</param>
+        /// <param name="handler">Ссылка на обработчик</param>
+        public FigureCreatingHandler(Action canvasRefresh, FigureParameters figureParameters, 
+                      IHandler handler)
         {
-            CanvasRefresh = canvasRefresh;
-            FigureParameters = figureParameters;
+            _handler = handler;
+            _handler.CanvasRefresh = canvasRefresh;
+            FigureParameters = figureParameters;            
 
             _createdFigure = null;
             CurrentTool = ToolType.Cursor;
 
-            MouseDown += MouseDownHandler;
-            MouseUp += MouseUpHandler;
-            MouseMove += MouseMoveHandler;
+            _handler.MouseDown += MouseDownHandler;
+            _handler.MouseUp += MouseUpHandler;
+            _handler.MouseMove += MouseMoveHandler;
+            _handler.Draw += DrawHandler;
         }
 
+        /// <summary>
+        /// Обработчик события Mouse Down
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void MouseDownHandler(object sender, MouseEventArgs e)
         {
             if (_createdFigure == null)
@@ -54,11 +79,19 @@ namespace VectorEditor.Presenter
                     SetLineProperties(_createdFigure);
                 }
             }
-            CanvasRefresh();
+
+            _handler.CanvasRefresh?.Invoke();
         }
 
+        /// <summary>
+        /// Событие создания фигуры
+        /// </summary>
         public event EventHandler<BaseFigure> FigureCreated;
 
+        /// <summary>
+        /// Вызов обработчика события создания фигуры
+        /// </summary>
+        /// <param name="createdFigure"></param>
         private void OnFigureCreated(BaseFigure createdFigure)
         {
             var handler = FigureCreated;
@@ -66,6 +99,11 @@ namespace VectorEditor.Presenter
             handler?.Invoke(null, createdFigure);
         }
 
+        /// <summary>
+        /// Установить для фигуры 
+        /// параметры линии
+        /// </summary>
+        /// <param name="figure">Фигура</param>
         private void SetLineProperties(BaseFigure figure)
         {
             figure.LineProperties.Color = FigureParameters.LineColor;
@@ -73,6 +111,11 @@ namespace VectorEditor.Presenter
             figure.LineProperties.Style = (DashStyle)FigureParameters.LineStyle;
         }
 
+        /// <summary>
+        /// Обработчик события Mouse Up
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void MouseUpHandler(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
@@ -105,9 +148,15 @@ namespace VectorEditor.Presenter
                     _createdFigure = null;
                 }                                
             }
-            CanvasRefresh();
+
+            _handler.CanvasRefresh?.Invoke();
         }
 
+        /// <summary>
+        /// Обработчик события Mouse Move
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void MouseMoveHandler(object sender, MouseEventArgs e)
         {
             if (_createdFigure == null || 
@@ -117,15 +166,20 @@ namespace VectorEditor.Presenter
             _createdFigure.Points.RemoveLast();
             _createdFigure.Points.AddPoint(temp);
 
-            CanvasRefresh();
+            _handler.CanvasRefresh?.Invoke();
         }
 
-        public void Draw(Graphics g)
+        /// <summary>
+        /// Обработчик рисовки
+        /// </summary>
+        /// <param name="g"></param>
+        public void DrawHandler(Graphics g)
         {
             if (_createdFigure != null)
             {
                 FigureDrawer.DrawFigure(_createdFigure, g);
             }
         }
+
     }
 }

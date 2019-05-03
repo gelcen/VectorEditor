@@ -14,6 +14,7 @@ namespace VectorEditor.Presenter
         /// </summary>
         Action CanvasRefresh
         {
+            get;
             set;
         }
 
@@ -42,12 +43,15 @@ namespace VectorEditor.Presenter
         {
             get;
             set;
-        }
+        }        
 
         /// <summary>
-        /// Рисование
+        /// Делегат для рисовки
         /// </summary>
-        /// <param name="g"></param>
-        void Draw(Graphics g);
+        Action<Graphics> Draw
+        {
+            get;
+            set;
+        }
     }
 }

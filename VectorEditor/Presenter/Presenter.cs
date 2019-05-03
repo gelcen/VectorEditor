@@ -260,7 +260,7 @@ namespace VectorEditor.Presenter
             }
             else
             {
-                if (_currentHandler is Handler handler)
+                if (_currentHandler is FigureCreatingHandler handler)
                 {
                     handler.FigureParameters = e;
                 }
@@ -278,6 +278,7 @@ namespace VectorEditor.Presenter
         /// <param name="e"></param>
         private void _view_ToolPicked(object sender, ToolType e)
         {
+            _view.CurrentHandler = new BaseHandler();
             if (e == ToolType.Cursor)
             {
                 var cursorHandler = new CursorHandler(_view.CanvasRefresh, this);
@@ -291,13 +292,13 @@ namespace VectorEditor.Presenter
 
         private void SetHandler(ToolType tool)
         {
-            var handler = new Handler(_view.CanvasRefresh, _view.FigureParameters)
+            var handler = new FigureCreatingHandler(_view.CanvasRefresh, 
+                                                    _view.FigureParameters, 
+                                                    _view.CurrentHandler)
             {
                 CurrentTool = tool
             };
             handler.FigureCreated += _currentHandler_FigureCreated;
-            _currentHandler = handler;
-            _view.CurrentHandler = _currentHandler;
         }
 
         /// <summary>
@@ -306,7 +307,7 @@ namespace VectorEditor.Presenter
         /// <param name="currentHandler"></param>
         private void SetFigureCreatedHandler(IHandler currentHandler)
         {
-            if (currentHandler is Handler handler)
+            if (currentHandler is FigureCreatingHandler handler)
             {
                 handler.FigureCreated += _currentHandler_FigureCreated;
             }

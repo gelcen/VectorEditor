@@ -49,6 +49,7 @@ namespace VectorEditor.Presenter
             MouseDown += MouseDownHandler;
             MouseUp += MouseUpHandler;
             MouseMove += MouseMoveSelecting;
+            Draw += DrawHandler;
         }
         
         /// <inheritdoc />
@@ -56,7 +57,7 @@ namespace VectorEditor.Presenter
         /// Рисование выбранных фигур
         /// </summary>
         /// <param name="g">Graphics</param>
-        public void Draw(Graphics g)
+        public void DrawHandler(Graphics g)
         {
             var pen = new Pen(Color.FromArgb(0, 120, 215), 1) {DashStyle = DashStyle.Solid};
 
@@ -789,6 +790,7 @@ namespace VectorEditor.Presenter
         /// </summary>
         public Dictionary<int, BaseFigure> SelectedFigures { get; private set; }
         public Action CanvasRefresh { get; set; }
+        public Action<Graphics> Draw { get; set; }
 
         /// <summary>
         /// Добавить фигуру в GraphicsPath
