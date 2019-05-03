@@ -13,7 +13,7 @@ namespace VectorEditor.Presenter
     /// <summary>
     /// Класс для инструмента "Указатель"
     /// </summary>
-    public class CursorHandler : IHandler
+    public class CursorHandler
     {
         /// <summary>
         /// Выбранная фигура
@@ -25,9 +25,10 @@ namespace VectorEditor.Presenter
         /// </summary>
         private readonly Presenter _presenter;
 
-        public Action<object, MouseEventArgs> MouseDown { get; set; }
-        public Action<object, MouseEventArgs> MouseUp { get; set; }
-        public Action<object, MouseEventArgs> MouseMove { get; set; }
+        /// <summary>
+        /// Ссылка на обработчик
+        /// </summary>
+        private IHandler _handler;
 
         /// <summary>
         /// Конструктор класса инструмента "Указатель"
@@ -36,20 +37,23 @@ namespace VectorEditor.Presenter
         /// <param name="figureParameters">Параметры фигуры</param>
         /// <param name="presenter">Презентер</param>
         public CursorHandler(Action canvasRefresh,
-            Presenter presenter)
+                             Presenter presenter,
+                             IHandler handler)
         {
-            CanvasRefresh = canvasRefresh;
+            _handler = handler;
+            _handler.CanvasRefresh = canvasRefresh;
             _presenter = presenter;
+            
 
             _selectedFigure = null;
             SelectedFigures = new Dictionary<int, BaseFigure>();
-            BeforeState = new Dictionary<int, BaseFigure>();
-            BeforePointState = new Dictionary<int, BaseFigure>();
+            _oldFiguresState = new Dictionary<int, BaseFigure>();
+            _oldMarkerState = new Dictionary<int, BaseFigure>();
 
-            MouseDown += MouseDownHandler;
-            MouseUp += MouseUpHandler;
-            MouseMove += MouseMoveSelecting;
-            Draw += DrawHandler;
+            _handler.MouseDown += MouseDownHandler;
+            _handler.MouseUp += MouseUpHandler;
+            _handler.MouseMove += MouseMoveSelecting;
+            _handler.Draw += DrawHandler;
         }
         
         /// <inheritdoc />
@@ -165,14 +169,14 @@ namespace VectorEditor.Presenter
         private bool _isSelectionEmpty;
 
         /// <summary>
-        /// Свойство для состояния до передвигания фигур
+        /// Поле для состояния до передвижения фигур
         /// </summary>
-        public Dictionary<int, BaseFigure> BeforeState { get; }
+        private Dictionary<int, BaseFigure> _oldFiguresState;
 
         /// <summary>
         /// Свойство для состояния до передвигания маркера 
-        /// </summary>
-        public Dictionary<int, BaseFigure> BeforePointState { get; set; }
+        /// </summary>        
+        private Dictionary<int, BaseFigure> _oldMarkerState;
 
         /// <summary>
         /// Индекс фигуры, у которой двигают маркером
@@ -201,18 +205,18 @@ namespace VectorEditor.Presenter
                                 [GetFigurePointOn(e.Location)];
 
                             //Сохраняем предыдущее состояние
-                            BeforeState?.Clear();
+                            _oldFiguresState?.Clear();
 
                             foreach (var figure in SelectedFigures)
                             {
                                 if (!_presenter.GetFigures().Contains(figure)) continue;
                                 var index = figure.Key;
-                                BeforeState?.Add(index, FigureFactory.CreateCopy(figure.Value));
+                                _oldFiguresState?.Add(index, FigureFactory.CreateCopy(figure.Value));
                             }
 
-                            MouseMove -= MouseMoveSelecting;
-                            MouseMove += MouseMoveFigure;
-                            MouseUp += MouseUpFigure;
+                            _handler.MouseMove -= MouseMoveSelecting;
+                            _handler.MouseMove += MouseMoveFigure;
+                            _handler.MouseUp += MouseUpFigure;
 
                             _offsetX = _selectedFigure.Points.GetPoints()[0].X - e.X;
                             _offsetY = _selectedFigure.Points.GetPoints()[0].Y - e.Y;
@@ -220,17 +224,17 @@ namespace VectorEditor.Presenter
                     }
                     else if (IsPointOnMarker(e.Location, out _pickedPoint))
                     {
-                        MouseMove -= MouseMoveSelecting;
-                        MouseMove += MouseMoveMarker;
-                        MouseUp += MouseUpMarker;
+                        _handler.MouseMove -= MouseMoveSelecting;
+                        _handler.MouseMove += MouseMoveMarker;
+                        _handler.MouseUp += MouseUpMarker;
 
-                        BeforePointState?.Clear();
+                        _oldMarkerState?.Clear();
 
                         foreach (var figure in _presenter.GetFigures())
                         {
                             if (figure.Key != _pickedFigureIndex) continue;
                             _oldFigureIndex=figure.Key;
-                            BeforePointState?.Add(_oldFigureIndex,
+                            _oldMarkerState?.Add(_oldFigureIndex,
                                 FigureFactory.CreateCopy(figure.Value));
                         }
 
@@ -251,20 +255,9 @@ namespace VectorEditor.Presenter
         }
 
         /// <summary>
-        /// События передвигания фигур
+        /// События передвижения фигур
         /// </summary>
-        public event EventHandler<Dictionary<int, BaseFigure>> FiguresMoved;
-
-        /// <summary>
-        /// Вызов обработчика события движения фигур
-        /// </summary>
-        /// <param name="newState"></param>
-        private void OnFiguresMoved(Dictionary<int, BaseFigure> newState)
-        {
-            var handler = FiguresMoved;
-
-            handler?.Invoke(this, newState);
-        }
+        public Action<Dictionary<int, BaseFigure>, Dictionary<int, BaseFigure>> FiguresMoved;
 
         //Отпускание фигуры
         /// <summary>
@@ -274,9 +267,9 @@ namespace VectorEditor.Presenter
         /// <param name="e"></param>
         private void MouseUpFigure(object obj, MouseEventArgs e)
         {
-            MouseMove+= MouseMoveSelecting;
-            MouseMove -= MouseMoveFigure;
-            MouseUp -= MouseUpFigure;
+            _handler.MouseMove += MouseMoveSelecting;
+            _handler.MouseMove -= MouseMoveFigure;
+            _handler.MouseUp -= MouseUpFigure;
 
             if (_reallyMoved)
             {
@@ -287,12 +280,13 @@ namespace VectorEditor.Presenter
                     var index = figure.Key;
                     newState.Add(index, FigureFactory.CreateCopy(figure.Value));
                 }
+                                
+                FiguresMoved?.Invoke(_oldFiguresState, newState);
 
-                OnFiguresMoved(newState);
                 _reallyMoved = false;
             }
 
-            CanvasRefresh?.Invoke();
+            _handler.CanvasRefresh?.Invoke();
         }
 
         /// <summary>
@@ -364,7 +358,7 @@ namespace VectorEditor.Presenter
                 }
             }
 
-            CanvasRefresh?.Invoke();
+            _handler.CanvasRefresh?.Invoke();
         }
 
         /// <summary>
@@ -423,18 +417,7 @@ namespace VectorEditor.Presenter
         /// <summary>
         /// Событие движения маркером
         /// </summary>
-        public event EventHandler<Dictionary<int, BaseFigure>> PointMoved;
-
-        /// <summary>
-        /// Вызов обработчика события движения маркера
-        /// </summary>
-        /// <param name="newPointState"></param>
-        private void OnPointMoved(Dictionary<int, BaseFigure> newPointState)
-        {
-            var handler = PointMoved;
-
-            handler?.Invoke(this, newPointState);
-        }
+        public Action<Dictionary<int, BaseFigure>, Dictionary<int, BaseFigure>> MarkerMoved;
 
         /// <summary>
         /// Обработчик отпускания маркера
@@ -443,9 +426,9 @@ namespace VectorEditor.Presenter
         /// <param name="e"></param>
         private void MouseUpMarker(object obj, MouseEventArgs e)
         {
-            MouseMove += MouseMoveSelecting;
-            MouseMove-= MouseMoveMarker;
-            MouseUp -= MouseUpMarker;
+            _handler.MouseMove += MouseMoveSelecting;
+            _handler.MouseMove -= MouseMoveMarker;
+            _handler.MouseUp -= MouseUpMarker;
 
             var newPointState = new Dictionary<int, BaseFigure>();
             if (_isPointMoved)
@@ -454,12 +437,12 @@ namespace VectorEditor.Presenter
                                     FigureFactory.CreateCopy(
                                         SelectedFigures[_pickedFigureIndex]));
 
-                OnPointMoved(newPointState);
+                MarkerMoved?.Invoke(_oldMarkerState, newPointState);
 
                 _isPointMoved = false;
-            }            
+            }
 
-            CanvasRefresh?.Invoke();
+            _handler.CanvasRefresh?.Invoke();
         }
 
         /// <summary>
@@ -477,7 +460,7 @@ namespace VectorEditor.Presenter
                              _pickedPointIndex,
                              new PointF(e.X + _offsetX, e.Y + _offsetY));
 
-            CanvasRefresh?.Invoke();
+            _handler.CanvasRefresh?.Invoke();
         }
 
         /// <summary>
@@ -524,9 +507,9 @@ namespace VectorEditor.Presenter
                 {
                     form.Cursor = newCursor;
                 }
-            }            
+            }
 
-            CanvasRefresh?.Invoke();
+            _handler.CanvasRefresh?.Invoke();
         }
 
         /// <summary>
@@ -577,7 +560,7 @@ namespace VectorEditor.Presenter
                 }
             }
 
-            CanvasRefresh?.Invoke();
+            _handler.CanvasRefresh?.Invoke();
         }
 
         /// <summary>
@@ -789,8 +772,6 @@ namespace VectorEditor.Presenter
         /// Свойство для получения выбранных фигур
         /// </summary>
         public Dictionary<int, BaseFigure> SelectedFigures { get; private set; }
-        public Action CanvasRefresh { get; set; }
-        public Action<Graphics> Draw { get; set; }
 
         /// <summary>
         /// Добавить фигуру в GraphicsPath

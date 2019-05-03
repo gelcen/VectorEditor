@@ -169,11 +169,7 @@ namespace VectorEditor.Presenter
             _undoRedoStack.Undo();
             if (_model.GetFigureList().Count == 0)
             {
-                if (_currentHandler.GetType() == typeof(CursorHandler))
-                {
-                    var handler = _currentHandler as CursorHandler;
-                    handler?.ClearSelectedFigures();
-                }
+                _cursorHandler?.ClearSelectedFigures();
             }
             _view.CanvasRefresh();
         }
@@ -271,6 +267,8 @@ namespace VectorEditor.Presenter
             _view.CanvasRefresh();
         }
 
+        private CursorHandler _cursorHandler;
+
         /// <summary>
         /// Обработчик события выбора инструмента
         /// </summary>
@@ -279,13 +277,14 @@ namespace VectorEditor.Presenter
         private void _view_ToolPicked(object sender, ToolType e)
         {
             _view.CurrentHandler = new BaseHandler();
+
             if (e == ToolType.Cursor)
             {
-                var cursorHandler = new CursorHandler(_view.CanvasRefresh, this);
-                cursorHandler.FiguresMoved += CursorHandler_FiguresMoved;
-                cursorHandler.PointMoved += CursorHandler_PointMoved;
-                _currentHandler = cursorHandler;
-                _view.CurrentHandler = _currentHandler;
+                _cursorHandler = new CursorHandler(_view.CanvasRefresh, 
+                                                      this, 
+                                                      _view.CurrentHandler);
+                _cursorHandler.FiguresMoved += CursorHandlerFiguresMoved;
+                _cursorHandler.MarkerMoved += CursorHandlerMarkerMoved;                
             }
             else SetHandler(e);            
         }
@@ -318,24 +317,22 @@ namespace VectorEditor.Presenter
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void CursorHandler_PointMoved(object sender, Dictionary<int, BaseFigure> e)
+        private void CursorHandlerMarkerMoved(Dictionary<int, BaseFigure> oldState,
+                                               Dictionary<int, BaseFigure> newState)
         {
-            if (_currentHandler.GetType() != typeof(CursorHandler)) return;
-            if (!(_currentHandler is CursorHandler handler)) return;
-            var cmd = new MovePointCommand(_model, handler.BeforePointState, e);
+            var cmd = new MovePointCommand(_model, oldState, newState);
             _undoRedoStack.Do(cmd);
         }
 
         /// <summary>
         /// Обработчик события движения фигур(ой)
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void CursorHandler_FiguresMoved(object sender, Dictionary<int, BaseFigure> e)
+        /// <param name="oldState">Состояние до</param>
+        /// <param name="newState">Состояние после</param>
+        private void CursorHandlerFiguresMoved(Dictionary<int, BaseFigure> oldState,
+                                               Dictionary<int, BaseFigure> newState)
         {
-            if (_currentHandler.GetType() != typeof(CursorHandler)) return;
-            if (!(_currentHandler is CursorHandler handler)) return;
-            var cmd = new MoveFigureCommand(_model, handler.BeforeState, e);
+            var cmd = new MoveFigureCommand(_model, oldState, newState);
             _undoRedoStack.Do(cmd);
         }
 
