@@ -72,7 +72,11 @@
     <Compile Include="FileManager\DictionaryItem.cs" />
     <Compile Include="FileManager\JsonFileManager.cs" />
     <Compile Include="Presenter\BaseHandler.cs" />
+    <Compile Include="Presenter\EditingHandler.cs" />
     <Compile Include="Presenter\FigureCreatingHandler.cs" />
+    <Compile Include="Presenter\NewCursorHandler.cs" />
+    <Compile Include="Presenter\SelectionHandler.cs" />
+    <Compile Include="Presenter\Selector.cs" />
     <Compile Include="ToolType.cs" />
     <Compile Include="Presenter\CursorHandler.cs" />
     <Compile Include="Presenter\IHandler.cs" />

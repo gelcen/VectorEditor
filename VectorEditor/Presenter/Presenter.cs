@@ -265,11 +265,13 @@ namespace VectorEditor.Presenter
 
             if (e == ToolType.Cursor)
             {
-                _cursorHandler = new CursorHandler(_view.CanvasRefresh, 
-                                                      this, 
+                //_cursorHandler = new CursorHandler(_view.CanvasRefresh,
+                //                                      this,
+                //                                      _view.CurrentHandler);
+                //_cursorHandler.FiguresMoved += CursorHandlerFiguresMoved;
+                //_cursorHandler.MarkerMoved += CursorHandlerMarkerMoved;
+                var newCursorHandler = new NewCursorHandler(_view.CanvasRefresh, this,
                                                       _view.CurrentHandler);
-                _cursorHandler.FiguresMoved += CursorHandlerFiguresMoved;
-                _cursorHandler.MarkerMoved += CursorHandlerMarkerMoved;                
             }
             else SetHandler(e);            
         }

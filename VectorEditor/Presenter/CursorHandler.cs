@@ -751,7 +751,7 @@ namespace VectorEditor.Presenter
         {
             var dx = pt1.X - pt2.X;
             var dy = pt1.Y - pt2.Y;
-            return dx * dx + dy * dy;
+            return dx * dx + dy * dy;            
         }
 
         /// <summary>
