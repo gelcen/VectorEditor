@@ -85,6 +85,8 @@ namespace VectorEditor.Presenter
             _handler = handler;
             _cursorHandler = cursorHandler;
 
+            _selectedFigures = _cursorHandler.SelectedFigures;
+
             _handler.Draw += DrawHandler;
             _handler.MouseDown += MouseDownSelecting;
             _handler.MouseUp += MouseUpSelecting;

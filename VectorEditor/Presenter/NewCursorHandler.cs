@@ -79,6 +79,7 @@ namespace VectorEditor.Presenter
         /// <param name="state"></param>
         public void SetState(HandlingState state)
         {
+            _state = state;
             switch (state)
             {
                 case HandlingState.Selecting:
@@ -94,6 +95,21 @@ namespace VectorEditor.Presenter
                 default:
                     break;
             }
-        } 
+        }
+
+        public Action<Dictionary<int, BaseFigure>,
+                      Dictionary<int, BaseFigure>> FiguresMoved;
+
+        public Action<Dictionary<int, BaseFigure>,
+                      Dictionary<int, BaseFigure>> MarkerMoved;
+
+        /// <summary>
+        /// Очистить выборку фигур
+        /// </summary>
+        public void ClearSelectedFigures()
+        {
+            SelectedFigures.Clear();
+            //_selectedFigure = null;
+        }
     }
 }

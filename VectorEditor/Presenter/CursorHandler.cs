@@ -209,7 +209,7 @@ namespace VectorEditor.Presenter
 
                             foreach (var figure in SelectedFigures)
                             {
-                                if (!_presenter.GetFigures().Contains(figure)) continue;
+                                //if (!_presenter.GetFigures().Contains(figure)) continue;
                                 var index = figure.Key;
                                 _oldFiguresState?.Add(index, FigureFactory.CreateCopy(figure.Value));
                             }
@@ -230,13 +230,15 @@ namespace VectorEditor.Presenter
 
                         _oldMarkerState?.Clear();
 
-                        foreach (var figure in _presenter.GetFigures())
-                        {
-                            if (figure.Key != _pickedFigureIndex) continue;
-                            _oldFigureIndex=figure.Key;
-                            _oldMarkerState?.Add(_oldFigureIndex,
-                                FigureFactory.CreateCopy(figure.Value));
-                        }
+                        //foreach (var figure in _presenter.GetFigures())
+                        //{
+                        //    if (figure.Key != _pickedFigureIndex) continue;
+                        //    _oldFigureIndex=figure.Key;
+                        //    _oldMarkerState?.Add(_oldFigureIndex,
+                        //        FigureFactory.CreateCopy(figure.Value));
+                        //}
+                        _oldMarkerState.Add(_pickedFigureIndex,
+                          FigureFactory.CreateCopy(_presenter.GetFigures()[_pickedFigureIndex]));
 
                         _offsetX = _pickedPoint.X - e.X;
                         _offsetY = _pickedPoint.Y - e.Y;
@@ -281,7 +283,7 @@ namespace VectorEditor.Presenter
                     newState.Add(index, FigureFactory.CreateCopy(figure.Value));
                 }
                                 
-                FiguresMoved?.Invoke(_oldFiguresState, newState);
+                FiguresMoved?.Invoke(_oldFiguresState, newState);               
 
                 _reallyMoved = false;
             }
@@ -422,8 +424,8 @@ namespace VectorEditor.Presenter
         /// <summary>
         /// Обработчик отпускания маркера
         /// </summary>
-        /// <param name="obj"></param>
         /// <param name="e"></param>
+        /// <param name="obj"></param>
         private void MouseUpMarker(object obj, MouseEventArgs e)
         {
             _handler.MouseMove += MouseMoveSelecting;

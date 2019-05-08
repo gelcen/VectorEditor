@@ -60,6 +60,52 @@ namespace VectorEditor.Presenter
             return result;
         }
 
+        ///// <summary>
+        ///// Определяет находится ли точка на маркере
+        ///// </summary>
+        ///// <param name="mousePoint">Точка</param>
+        ///// <param name="pickedPoint">Маркер, на котором точка</param>
+
+
+        /// <summary>
+        /// Определяет находится ли точка на маркере
+        /// </summary>
+        /// <param name="selectedFigures">Фигуры</param>
+        /// <param name="mousePoint">Точка нажатия</param>
+        /// <param name="pickedPoint">Точка (маркер)</param>
+        /// <param name="pickedFigureIndex">Индекс фигуры</param>
+        /// <returns>Индекс маркера (точки)</returns>
+        public int IsPointOnMarker(Dictionary<int, BaseFigure> selectedFigures,
+                                     PointF mousePoint,
+                                     out PointF pickedPoint,
+                                     out int pickedFigureIndex)
+        {
+            int pickedMarkerIndex;
+
+            foreach (var figure in selectedFigures)
+            {
+                var count = figure.Value.Points.GetPoints().Count;
+
+                for (var j = 0; j < count; j++)
+                {
+                    var distance = Points.FindDistanceBetween(mousePoint,
+                                   figure.Value.Points.GetPoints()[j]);
+
+                    if (distance >= 9) continue;
+
+                    pickedPoint = figure.Value.Points.GetPoints()[j];
+                    pickedMarkerIndex = j;
+                    pickedFigureIndex = figure.Key;
+                    return pickedMarkerIndex;
+                }
+            }
+
+            pickedMarkerIndex = -1;
+            pickedFigureIndex = -1;
+            pickedPoint = new PointF(-1, -1);
+            return pickedMarkerIndex;
+        }
+
         /// <summary>
         /// Добавить фигуру в GraphicsPath
         /// </summary>
@@ -111,5 +157,6 @@ namespace VectorEditor.Presenter
 
             return selectedFigures;
         }
+
     }
 }
