@@ -11,7 +11,7 @@ namespace VectorEditor.Presenter
     /// Класс-обработчик для 
     /// обработки выбора фигур
     /// </summary>
-    public class SelectionHandler
+    public class CursorSelectingHandler
     {
         /// <summary>
         /// Ссылка на обработчик
@@ -22,6 +22,11 @@ namespace VectorEditor.Presenter
         /// Ссылка на Презентер
         /// </summary>
         private Presenter _presenter;
+
+        /// <summary>
+        /// Селектор
+        /// </summary>
+        private IFigureSelector _selector;
 
         /// <summary>
         /// Точка нажатия курсора
@@ -51,7 +56,7 @@ namespace VectorEditor.Presenter
         /// <summary>
         /// Ссылка на обработчик курсора
         /// </summary>
-        private NewCursorHandler _cursorHandler;
+        private CursorHandler _cursorHandler;
 
         /// <summary>
         /// Расстояние для клика
@@ -77,10 +82,12 @@ namespace VectorEditor.Presenter
         /// <param name="presenter">Презентер</param>
         /// <param name="handler">Обработчик</param>
         /// <param name="cursorHandler">Обработчик курсора</param>
-        public SelectionHandler(Presenter presenter,
+        public CursorSelectingHandler(Presenter presenter,
                                 IHandler handler,
-                                NewCursorHandler cursorHandler)
+                                CursorHandler cursorHandler,
+                                IFigureSelector selector)
         {
+            _selector = selector;
             _presenter = presenter;
             _handler = handler;
             _cursorHandler = cursorHandler;
@@ -197,9 +204,7 @@ namespace VectorEditor.Presenter
 
             var figures = _presenter.GetFigures();
 
-            var selector = new Selector();
-
-            int key = selector.GetFigurePointOn(point, figures);
+            int key = _selector.GetFigurePointOn(point, figures);
 
             if (figures.ContainsKey(key))
             {
@@ -218,9 +223,7 @@ namespace VectorEditor.Presenter
                 return;
             }
 
-            var selector = new Selector();
-
-            _selectedFigures = selector.GetFiguresInRect(_presenter.GetFigures(),
+            _selectedFigures = _selector.GetFiguresInRect(_presenter.GetFigures(),
                                                     _selectionRectangle);
 
             _selectionRectangle = new Rectangle();

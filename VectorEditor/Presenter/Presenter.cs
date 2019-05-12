@@ -33,7 +33,7 @@ namespace VectorEditor.Presenter
         /// <summary>
         /// Обработчик курсора
         /// </summary>
-        private NewCursorHandler _cursorHandler;
+        private CursorHandler _cursorHandler;
 
         /// <summary>
         /// Список фигур
@@ -270,7 +270,7 @@ namespace VectorEditor.Presenter
                 //                                      _view.CurrentHandler);
                 //_cursorHandler.FiguresMoved += CursorHandlerFiguresMoved;
                 //_cursorHandler.MarkerMoved += CursorHandlerMarkerMoved;
-                _cursorHandler = new NewCursorHandler(_view.CanvasRefresh, this,
+                _cursorHandler = new CursorHandler(_view.CanvasRefresh, this,
                                                       _view.CurrentHandler);
                 _cursorHandler.FiguresMoved += CursorHandlerFiguresMoved;
                 _cursorHandler.MarkerMoved += CursorHandlerMarkerMoved;

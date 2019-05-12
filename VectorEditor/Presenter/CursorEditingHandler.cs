@@ -1,20 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using VectorEditor.Figures;
 
 namespace VectorEditor.Presenter
 {
-    public class EditingHandler
+    public class CursorEditingHandler
     {
         private Presenter _presenter;
         private IHandler _handler;
-        private NewCursorHandler _cursorHandler;
-        private Selector _selector;
+        private CursorHandler _cursorHandler;
+        private IFigureSelector _selector;
 
         /// <summary>
         /// Точка нажатия курсора
@@ -75,11 +72,12 @@ namespace VectorEditor.Presenter
 
         private bool _isMouseDown;
 
-        public EditingHandler(Presenter presenter,
+        public CursorEditingHandler(Presenter presenter,
                                 IHandler handler,
-                                NewCursorHandler cursorHandler)
+                                CursorHandler cursorHandler,
+                                IFigureSelector selector)
         {
-            _selector = new Selector();
+            _selector = selector;
             _oldFiguresState = new Dictionary<int, BaseFigure>();
             _oldMarkerState = new Dictionary<int, BaseFigure>();
 

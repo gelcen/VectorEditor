@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using VectorEditor.Figures;
 
 namespace VectorEditor.Presenter
@@ -14,8 +11,11 @@ namespace VectorEditor.Presenter
     /// выборки фигур.
     /// Использует GraphicsPath
     /// </summary>
-    public class Selector
+    public class Selector : IFigureSelector
     {
+        /// <summary>
+        /// GraphicsPath
+        /// </summary>
         public GraphicsPath Path
         {
             private set;
@@ -59,12 +59,6 @@ namespace VectorEditor.Presenter
 
             return result;
         }
-
-        ///// <summary>
-        ///// Определяет находится ли точка на маркере
-        ///// </summary>
-        ///// <param name="mousePoint">Точка</param>
-        ///// <param name="pickedPoint">Маркер, на котором точка</param>
 
 
         /// <summary>
