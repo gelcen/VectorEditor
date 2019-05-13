@@ -43,7 +43,7 @@ namespace VectorEditor.Presenter
         /// <summary>
         /// Менеджер Undo Redo
         /// </summary>
-        private readonly UndoRedoStack _undoRedoStack;
+        private readonly UndoRedoManager _undoRedoManager;
 
         /// <summary>
         /// Тип сохранения 
@@ -58,7 +58,7 @@ namespace VectorEditor.Presenter
         /// <param name="fileManager">File Manager</param>
         public Presenter(IView view, IModel model, IFileManager fileManager)
         {
-            _undoRedoStack = new UndoRedoStack();
+            _undoRedoManager = new UndoRedoManager();
 
             _view = view;
             _model = model;
@@ -90,14 +90,14 @@ namespace VectorEditor.Presenter
         private void ViewFileSaved(object sender, string filename)
         {
 
-            var redoList = _undoRedoStack.RedoStack.ToList();
-            var undoList = _undoRedoStack.UndoStack.ToList();
+            var redoList = _undoRedoManager.RedoStack.ToList();
+            var undoList = _undoRedoManager.UndoStack.ToList();
             redoList.AddRange(undoList);
 
             _fileManager.SaveToFile(filename,
                                     _model.GetFigureList(),
                                     redoList,
-                                    _undoRedoStack.RedoCount);
+                                    _undoRedoManager.RedoCount);
         }
 
         /// <summary>
@@ -121,16 +121,16 @@ namespace VectorEditor.Presenter
                 CommandFactory.RestorePointersToModel(command, _model);
             }
             commands.Reverse();
-            _undoRedoStack.Reset();
+            _undoRedoManager.Reset();
             for (int i=0; i < commands.Count; i++)
             {
                 if (i < commands.Count - redoCount)
                 {
-                    _undoRedoStack.UndoStack.Push(commands[i]);
+                    _undoRedoManager.UndoStack.Push(commands[i]);
                 }
                 else
                 {
-                    _undoRedoStack.RedoStack.Push(commands[i]);
+                    _undoRedoManager.RedoStack.Push(commands[i]);
                 }                
             }
             _view.CanvasRefresh();
@@ -144,7 +144,7 @@ namespace VectorEditor.Presenter
         private void _view_NewProjectCreated(object sender, EventArgs e)
         {
             _model.ClearCanvas();
-            _undoRedoStack.Reset();
+            _undoRedoManager.Reset();
         }
 
         /// <summary>
@@ -154,7 +154,7 @@ namespace VectorEditor.Presenter
         /// <param name="e"></param>
         private void _view_RedoPressed(object sender, EventArgs e)
         {
-            _undoRedoStack.Redo();
+            _undoRedoManager.Redo();
             _view.CanvasRefresh();
         }
 
@@ -165,7 +165,7 @@ namespace VectorEditor.Presenter
         /// <param name="e"></param>
         private void _view_UndoPressed(object sender, EventArgs e)
         {
-            _undoRedoStack.Undo();
+            _undoRedoManager.Undo();
             if (_model.GetFigureList().Count == 0)
             {
                 _cursorHandler?.ClearSelectedFigures();
@@ -206,7 +206,7 @@ namespace VectorEditor.Presenter
             }
 
             var cmd = new DeleteFigureCommand(_model, beforeState);
-            _undoRedoStack.Do(cmd);
+            _undoRedoManager.Do(cmd);
             _cursorHandler.ClearSelectedFigures();
             _view.CanvasRefresh();
         }
@@ -227,7 +227,7 @@ namespace VectorEditor.Presenter
             }
 
             var cmd = new DeleteFigureCommand(_model, beforeState);
-            _undoRedoStack.Do(cmd);
+            _undoRedoManager.Do(cmd);
             _view.CanvasRefresh?.Invoke();
         }
 
@@ -250,7 +250,7 @@ namespace VectorEditor.Presenter
             }
 
             var cmd = new ChangeParametersCommand(_model, beforeState, e);
-            _undoRedoStack.Do(cmd);
+            _undoRedoManager.Do(cmd);
             _view.CanvasRefresh?.Invoke();
         }        
 
@@ -265,11 +265,10 @@ namespace VectorEditor.Presenter
 
             if (e == ToolType.Cursor)
             {
-                _cursorHandler = new CursorHandler(_view.CanvasRefresh, 
-                                                      this, 
+                _cursorHandler = new CursorHandler(_view.CanvasRefresh, this,
                                                       _view.CurrentHandler);
                 _cursorHandler.FiguresMoved += CursorHandlerFiguresMoved;
-                _cursorHandler.MarkerMoved += CursorHandlerMarkerMoved;                
+                _cursorHandler.MarkerMoved += CursorHandlerMarkerMoved;
             }
             else SetHandler(e);            
         }
@@ -281,7 +280,7 @@ namespace VectorEditor.Presenter
                                                     _view.CurrentHandler)
             {
                 CurrentTool = tool
-            };
+            };           
             handler.FigureCreated += _currentHandler_FigureCreated;
         }
 
@@ -295,7 +294,7 @@ namespace VectorEditor.Presenter
                                                Dictionary<int, BaseFigure> newState)
         {
             var cmd = new MovePointCommand(_model, oldState, newState);
-            _undoRedoStack.Do(cmd);
+            _undoRedoManager.Do(cmd);
         }
 
         /// <summary>
@@ -307,7 +306,7 @@ namespace VectorEditor.Presenter
                                                Dictionary<int, BaseFigure> newState)
         {
             var cmd = new MoveFigureCommand(_model, oldState, newState);
-            _undoRedoStack.Do(cmd);
+            _undoRedoManager.Do(cmd);
         }
 
         /// <summary>
@@ -320,7 +319,7 @@ namespace VectorEditor.Presenter
             _model.CurrentIndex += 1;
             var index = _model.CurrentIndex;
             var cmd = new AddFigureCommand(_model, e, index);
-            _undoRedoStack.Do(cmd);
+            _undoRedoManager.Do(cmd);
         }
         
         /// <inheritdoc />

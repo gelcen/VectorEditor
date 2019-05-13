@@ -1,6 +1,8 @@
 ﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 
 namespace VectorEditor.Figures
 {
@@ -110,6 +112,42 @@ namespace VectorEditor.Figures
             }
 
             return true;
+        }
+
+        /// <summary>
+        /// Найти расстояние между точками
+        /// </summary>
+        /// <param name="pt1"></param>
+        /// <param name="pt2"></param>
+        /// <returns></returns>
+        public static double FindDistanceBetween(PointF pt1, PointF pt2)
+        {
+            var dx = pt1.X - pt2.X;
+            var dy = pt1.Y - pt2.Y;
+            return Math.Sqrt(dx * dx + dy * dy);
+        }
+
+        /// <summary>
+        /// Получить прямоугольник вокруг фигуры
+        /// </summary>
+        /// <param name="points">Точки фигуры</param>
+        /// <returns>Прямоугольник</returns>
+        public Rectangle GetRectangle(IReadOnlyCollection<PointF> points)
+        {
+            int minX = (int)points.Min(x => x.X);
+            int minY = (int)points.Min(y => y.Y);
+            int maxX = (int)points.Max(x => x.X);
+            int maxY = (int)points.Max(y => y.Y);
+            return new Rectangle(minX, minY, Math.Abs(maxX - minX), Math.Abs(maxY - minY));
+        }
+
+        /// <summary>
+        /// Получить прямоугольник вокруг фигуры
+        /// </summary>
+        /// <returns></returns>
+        public Rectangle GetRectangle()
+        {
+            return GetRectangle(_points);
         }
     }
 }

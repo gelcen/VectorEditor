@@ -5,12 +5,12 @@ namespace VectorEditor.UndoRedo
     /// <summary>
     /// Класс для стека команд
     /// </summary>
-    public class UndoRedoStack
+    public class UndoRedoManager
     {
         /// <summary>
         /// Конструктор класса стека команд
         /// </summary>
-        public UndoRedoStack()
+        public UndoRedoManager()
         {
             Reset();
         }

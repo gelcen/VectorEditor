@@ -72,9 +72,13 @@
     <Compile Include="FileManager\DictionaryItem.cs" />
     <Compile Include="FileManager\JsonFileManager.cs" />
     <Compile Include="Presenter\BaseHandler.cs" />
+    <Compile Include="Presenter\CursorEditingHandler.cs" />
     <Compile Include="Presenter\FigureCreatingHandler.cs" />
-    <Compile Include="ToolType.cs" />
     <Compile Include="Presenter\CursorHandler.cs" />
+    <Compile Include="Presenter\CursorSelectingHandler.cs" />
+    <Compile Include="Presenter\IFigureSelector.cs" />
+    <Compile Include="Presenter\Selector.cs" />
+    <Compile Include="ToolType.cs" />
     <Compile Include="Presenter\IHandler.cs" />
     <Compile Include="RoundShapeType.cs" />
     <Compile Include="SaveState.cs" />
@@ -85,7 +89,7 @@
     <Compile Include="UndoRedo\MoveFigureCommand.cs" />
     <Compile Include="UndoRedo\ChangeParametersCommand.cs" />
     <Compile Include="UndoRedo\MovePointCommand.cs" />
-    <Compile Include="UndoRedo\UndoRedoStack.cs" />
+    <Compile Include="UndoRedo\UndoRedoManager.cs" />
     <Compile Include="View\BitmapSaver.cs" />
     <Compile Include="View\FigureParameters.cs" />
     <Compile Include="FileManager\IFileManager.cs" />
