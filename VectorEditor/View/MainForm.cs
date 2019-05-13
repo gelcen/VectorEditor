@@ -197,7 +197,7 @@ namespace VectorEditor.FileManager
             _toolsDictionary.Add(buttonPolyLine, ToolType.Polyline);
             _toolsDictionary.Add(buttonCircle, ToolType.Circle);
             _toolsDictionary.Add(buttonEllipse, ToolType.Ellipse);
-            _toolsDictionary.Add(buttonPolygone, ToolType.Polygon);
+            _toolsDictionary.Add(buttonPolygone, ToolType.Polygon);            
         }
 
         /// <summary>

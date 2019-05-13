@@ -1,0 +1,22 @@
+﻿using Newtonsoft.Json;
+using SDK;
+
+namespace Line
+{
+    /// <inheritdoc />
+    /// <summary>
+    /// Класс для линии
+    /// </summary>
+    [JsonObject(MemberSerialization.Fields)]
+    public class Line:BaseFigure
+    {
+        /// <summary>
+        /// Конструктор класса для линии
+        /// </summary>
+        public Line()
+        {
+            _lineProperties = new LineProperties();
+            _points = new Points(2);
+        }
+    }
+}

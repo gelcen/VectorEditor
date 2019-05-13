@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VectorEditor", "VectorEdito
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SDK", "SDK\SDK.csproj", "{769AC411-0B8D-456A-93A0-C5AD789D8524}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Figures", "Figures", "{1A6AEA9A-46DE-478C-86C6-7E09F13BD0BC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Line", "Line\Line.csproj", "{C8C94091-1389-4127-8A12-FCDE42E647C6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,9 +25,16 @@ Global
 		{769AC411-0B8D-456A-93A0-C5AD789D8524}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{769AC411-0B8D-456A-93A0-C5AD789D8524}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{769AC411-0B8D-456A-93A0-C5AD789D8524}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C8C94091-1389-4127-8A12-FCDE42E647C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C8C94091-1389-4127-8A12-FCDE42E647C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C8C94091-1389-4127-8A12-FCDE42E647C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C8C94091-1389-4127-8A12-FCDE42E647C6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C8C94091-1389-4127-8A12-FCDE42E647C6} = {1A6AEA9A-46DE-478C-86C6-7E09F13BD0BC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6E64CEDF-055A-45FD-ACE4-A71C4EEF1A5B}
