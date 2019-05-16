@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using SDK;
 using System.Collections.Generic;
 using VectorEditor.Figures;
 using VectorEditor.Model;
@@ -57,7 +58,7 @@ namespace VectorEditor.UndoRedo
             foreach (var entry in fromDictionary)
             {
                 var index = entry.Key;
-                toDictionary.Add(index, FigureFactory.CreateCopy(entry.Value));
+                toDictionary.Add(index, (BaseFigure)entry.Value.Clone());
             }
         }
 

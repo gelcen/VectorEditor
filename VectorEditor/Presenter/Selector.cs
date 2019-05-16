@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using SDK;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
-using VectorEditor.Figures;
 
 namespace VectorEditor.Presenter
 {

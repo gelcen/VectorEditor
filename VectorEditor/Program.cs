@@ -2,6 +2,8 @@
 using System.Windows.Forms;
 using VectorEditor.Model;
 using VectorEditor.FileManager;
+using VectorEditor.Figures;
+using VectorEditor.Drawers;
 
 namespace VectorEditor
 {
@@ -16,11 +18,19 @@ namespace VectorEditor
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            var mainForm = new MainForm();
+            var figureFactory = new GenericFigureFactory();
+            var drawerFactory = new DrawerFactory();
+            var drawerFacade = new FigureDrawerFacade(drawerFactory);
+            var mainForm = new MainForm(figureFactory,
+                                        drawerFacade);
             var figureModel = new FigureModel();
-            var fileManager = new JsonFileManager();
+            var fileManager = new JsonFileManager();            
 
-            var presenter = new Presenter.Presenter(mainForm, figureModel, fileManager);
+            var presenter = new Presenter.Presenter(mainForm, 
+                                                    figureModel, 
+                                                    fileManager,
+                                                    figureFactory,
+                                                    drawerFactory);
 
             Application.Run(mainForm);
         }

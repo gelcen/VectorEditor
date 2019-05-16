@@ -9,9 +9,10 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>VectorEditor</RootNamespace>
     <AssemblyName>VectorEditor</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -33,6 +34,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Autofac, Version=4.9.2.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\packages\Autofac.4.9.2\lib\net45\Autofac.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -50,24 +54,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Drawers\BaseDrawer.cs" />
-    <Compile Include="Drawers\CircleDrawer.cs" />
-    <Compile Include="Drawers\EllipseDrawer.cs" />
-    <Compile Include="Drawers\FigureDrawer.cs" />
-    <Compile Include="Drawers\LineDrawer.cs" />
-    <Compile Include="Drawers\PolygonDrawer.cs" />
-    <Compile Include="Drawers\PolylineDrawer.cs" />
-    <Compile Include="Figures\BaseFigure.cs" />
-    <Compile Include="Figures\Circle.cs" />
-    <Compile Include="Figures\Ellipse.cs" />
-    <Compile Include="Figures\FigureFactory.cs" />
-    <Compile Include="Figures\FillableFigure.cs" />
-    <Compile Include="Figures\FillProperty.cs" />
-    <Compile Include="Figures\Line.cs" />
-    <Compile Include="Figures\LineProperties.cs" />
-    <Compile Include="Figures\Points.cs" />
-    <Compile Include="Figures\Polygon.cs" />
-    <Compile Include="Figures\Polyline.cs" />
+    <Compile Include="ContainerConfig.cs" />
+    <Compile Include="Drawers\DrawerFactory.cs" />
+    <Compile Include="Drawers\FigureDrawerFacade.cs" />
+    <Compile Include="Drawers\IDrawerFacade.cs" />
+    <Compile Include="Figures\GenericFigureFactory.cs" />
+    <Compile Include="Figures\NewFigureFactory.cs" />
     <Compile Include="FileManager\DictionaryItem.cs" />
     <Compile Include="FileManager\JsonFileManager.cs" />
     <Compile Include="Presenter\BaseHandler.cs" />
@@ -117,6 +109,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -131,6 +124,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SDK\SDK.csproj">
+      <Project>{769ac411-0b8d-456a-93a0-c5ad789d8524}</Project>
+      <Name>SDK</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,18 +1,17 @@
-﻿using Newtonsoft.Json;
+﻿using SDK;
 
-namespace VectorEditor.Figures
+namespace PolylineFigure
 {
     /// <inheritdoc />
     /// <summary>
     /// Класс полилинии 
     /// </summary>
-    [JsonObject(MemberSerialization.Fields)]
-    public class Polyline: BaseFigure
+    public class PolylineFigure: BaseFigure
     {
         /// <summary>
         /// Конструктор класса полилинии 
         /// </summary>
-        public Polyline()
+        public PolylineFigure()
         {
             _lineProperties = new LineProperties();
             _points = new Points();

@@ -1,6 +1,6 @@
-﻿using System.Drawing;
-using System.Drawing.Drawing2D;
-using VectorEditor.Figures;
+﻿using SDK;
+using System.Drawing;
+
 
 namespace VectorEditor.Drawers
 {
@@ -36,18 +36,15 @@ namespace VectorEditor.Drawers
         /// <param name="canvas">Канва</param>
         public override void DrawSelection(BaseFigure figure, Graphics canvas)
         {
-            DrawLineSelection(figure, canvas);
-        }
-
-        /// <summary>
-        /// Рисовка маркеров для линии, полилинии, полигона
-        /// </summary>
-        /// <param name="figure">Рисуемая фигура</param>
-        /// <param name="canvas">Канва</param>
-        public static void DrawLineSelection(BaseFigure figure, Graphics canvas)
-        {
             var points = figure.Points.GetPoints();
-            CircleDrawer.DrawSelectionRoundShapes(points, canvas);
+            foreach (var pt in points)
+            {
+                var rect = new Rectangle(
+                    (int)pt.X - ObjectRadius, (int)pt.Y - ObjectRadius,
+                    2 * ObjectRadius + 1, 2 * ObjectRadius + 1);
+                canvas.FillEllipse(Brushes.White, rect);
+                canvas.DrawEllipse(Pens.Black, rect);
+            }
         }
     }
 }

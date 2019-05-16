@@ -26,5 +26,7 @@ namespace VectorEditor.FileManager
         /// Цвет заливки фигур
         /// </summary>
         public Color FillColor { get; set; }
+
+        public bool IsFilled { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System;
 
 namespace SDK
 {
@@ -6,7 +7,7 @@ namespace SDK
     /// Базовая сущность для фигуры
     /// </summary>
     [JsonObject(MemberSerialization.Fields)]
-    public abstract class BaseFigure
+    public abstract class BaseFigure:ICloneable
     {
         /// <summary>
         /// Параметры линии
@@ -47,5 +48,17 @@ namespace SDK
                 _points = value;
             }
         }
+
+        /// <summary>
+        /// Создание копии Фигуры
+        /// </summary>
+        /// <returns>Копия фигуры</returns>
+        public abstract object Clone();
+
+        /// <summary>
+        /// Получить название фигуры
+        /// </summary>
+        /// <returns>Название фигуры</returns>
+        public abstract string GetFigureName();
     }
 }

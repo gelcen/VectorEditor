@@ -6,6 +6,8 @@ using VectorEditor.Observer;
 using VectorEditor.UndoRedo;
 using VectorEditor.FileManager;
 using System.Linq;
+using SDK;
+using VectorEditor.Drawers;
 
 namespace VectorEditor.Presenter
 {
@@ -50,13 +52,20 @@ namespace VectorEditor.Presenter
         /// </summary>
         private SaveState _saveState;
 
+        public IDrawerFacade DrawerFacade
+        {
+            get;
+            set;
+        }
+
         /// <summary>
         /// Конструктор представителя
         /// </summary>
         /// <param name="view">Представление</param>
         /// <param name="model">Модель</param>
         /// <param name="fileManager">File Manager</param>
-        public Presenter(IView view, IModel model, IFileManager fileManager)
+        public Presenter(IView view, IModel model, IFileManager fileManager, 
+                         IFactory<BaseFigure> figureFactory, IFactory<BaseDrawer> drawerFactory)
         {
             _undoRedoManager = new UndoRedoManager();
 
@@ -246,7 +255,7 @@ namespace VectorEditor.Presenter
             {
                 if (!_model.GetFigureList().ContainsKey(figure.Key)) continue;
                 var index = figure.Key;
-                beforeState.Add(index, FigureFactory.CreateCopy(figure.Value));
+                beforeState.Add(index, (BaseFigure)figure.Value.Clone());
             }
 
             var cmd = new ChangeParametersCommand(_model, beforeState, e);
@@ -259,27 +268,30 @@ namespace VectorEditor.Presenter
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void _view_ToolPicked(object sender, ToolType e)
+        private void _view_ToolPicked(object sender, string name)
         {
             _view.CurrentHandler = new BaseHandler();
 
-            if (e == ToolType.Cursor)
+            if (name == "Cursor")
             {
-                _cursorHandler = new CursorHandler(_view.CanvasRefresh, this,
-                                                      _view.CurrentHandler);
+                _cursorHandler = new CursorHandler(_view.CanvasRefresh, 
+                                                   this,
+                                                   _view.CurrentHandler,
+                                                   DrawerFacade);
                 _cursorHandler.FiguresMoved += CursorHandlerFiguresMoved;
                 _cursorHandler.MarkerMoved += CursorHandlerMarkerMoved;
             }
-            else SetHandler(e);            
+            else SetHandler(name);            
         }
 
-        private void SetHandler(ToolType tool)
+        private void SetHandler(string figureName)
         {
             var handler = new FigureCreatingHandler(_view.CanvasRefresh, 
                                                     _view.FigureParameters, 
-                                                    _view.CurrentHandler)
+                                                    _view.CurrentHandler,
+                                                    DrawerFacade)
             {
-                CurrentTool = tool
+                CurrentFigure = figureName
             };           
             handler.FigureCreated += _currentHandler_FigureCreated;
         }

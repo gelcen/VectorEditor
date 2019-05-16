@@ -4,6 +4,7 @@ using System.Drawing.Drawing2D;
 using VectorEditor.Figures;
 using VectorEditor.Observer;
 using VectorEditor.FileManager;
+using SDK;
 
 namespace VectorEditor.Model
 {
@@ -79,7 +80,7 @@ namespace VectorEditor.Model
         /// <param name="figure">Копируемая фигура</param>
         public void CopyFigure(int index, BaseFigure figure)
         {
-            var addingFigure = FigureFactory.CreateCopy(figure, FigureFactory.CopyType.CopyWithOffset);
+            var addingFigure = (BaseFigure)figure.Clone(); 
             CurrentIndex += 1;
             _figures.Add(CurrentIndex, addingFigure);
             NotifyObservers();      
@@ -110,13 +111,12 @@ namespace VectorEditor.Model
             figure.LineProperties.Color = newParameters.LineColor;
             figure.LineProperties.Style = (DashStyle)newParameters.LineStyle;
             figure.LineProperties.Thickness = newParameters.LineThickness;
-            if (figure.GetType() == typeof(Circle) ||
-                figure.GetType() == typeof(Ellipse) ||
-                figure.GetType() == typeof(Polygon))
+
+            if (figure is FillableFigure fillable)
             {
-                var tempFigure = figure as FillableFigure;
-                if (tempFigure != null) tempFigure.FillProperty.FillColor = newParameters.FillColor;
+                fillable.FillProperty.FillColor = newParameters.FillColor;
             }
+            
             HasChanged();
             NotifyObservers();
         }

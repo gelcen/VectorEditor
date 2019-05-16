@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using VectorEditor.Figures;
+﻿using SDK;
+using System.Collections.Generic;
 using VectorEditor.UndoRedo;
 
 namespace VectorEditor.FileManager

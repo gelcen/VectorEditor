@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SDK;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
@@ -35,6 +36,18 @@ namespace VectorEditor.FileManager
         private FigureParameters _figureParameters;
 
         #region Реализация IView
+
+        public IFactory<BaseFigure> FigureFactory
+        {
+            get;
+            set;
+        }
+
+        public IDrawerFacade DrawerFacade
+        {
+            get;
+            set;
+        }
 
         /// <summary>
         /// Флаг изменения
@@ -97,7 +110,7 @@ namespace VectorEditor.FileManager
         /// <summary>
         /// Событие выбора инструмента
         /// </summary>
-        public event EventHandler<ToolType> ToolPicked;
+        public event EventHandler<string> ToolPicked;
         
         /// <inheritdoc />
         /// <summary>
@@ -158,20 +171,25 @@ namespace VectorEditor.FileManager
         /// Вызов события выбора инструмента
         /// </summary>
         /// <param name="pickedToolType"></param>
-        private void OnToolPicked(ToolType pickedToolType)
+        private void OnToolPicked(string type)
         {
             var handler = ToolPicked;
 
-            handler?.Invoke(this, pickedToolType);
+            handler?.Invoke(this, type);
         }
 
         /// <inheritdoc />
         /// <summary>
         /// Конструктор класса формы
         /// </summary>
-        public MainForm()
+        public MainForm(IFactory<BaseFigure> figureFactory,
+                        IDrawerFacade drawerFacade)
         {
             InitializeComponent();
+
+            FigureFactory = figureFactory;
+
+            DrawerFacade = drawerFacade;
 
             _figureParameters = new FigureParameters
             {
@@ -198,6 +216,13 @@ namespace VectorEditor.FileManager
             _toolsDictionary.Add(buttonCircle, ToolType.Circle);
             _toolsDictionary.Add(buttonEllipse, ToolType.Ellipse);
             _toolsDictionary.Add(buttonPolygone, ToolType.Polygon);            
+
+            NewFigureFactory nff = new NewFigureFactory();
+            foreach (var item in nff.GetFigureNames())
+            {
+                Console.WriteLine(item);
+                cbFigures.Items.Add(item);
+            }
         }
 
         /// <summary>
@@ -207,7 +232,7 @@ namespace VectorEditor.FileManager
         /// <param name="e"></param>
         private void ToolButton_Click(object sender, EventArgs e)
         {
-            OnToolPicked(_toolsDictionary[(Control)sender]);
+            //OnToolPicked(_toolsDictionary[(Control)sender]);
         }
 
         /// <summary>
@@ -378,8 +403,8 @@ namespace VectorEditor.FileManager
             if (_figures != null)
             {
                 foreach (var figure in _figures)
-                {
-                    FigureDrawer.DrawFigure(figure.Value, g);
+                {                    
+                    DrawerFacade.DrawFigure(figure.Value, g);
                 }
             }
 
@@ -396,7 +421,7 @@ namespace VectorEditor.FileManager
         private void MainForm_Load(object sender, EventArgs e)
         {
             KeyPreview = true;
-            OnToolPicked(ToolType.Cursor);
+            OnToolPicked("Cursor");
         }
 
         #region Обработчики нажатий по пунктам меню
@@ -452,7 +477,7 @@ namespace VectorEditor.FileManager
         {            
             if (_figures.Count == 0) return;
 
-            BitmapSaver bitmapSaver = new BitmapSaver();
+            BitmapSaver bitmapSaver = new BitmapSaver(DrawerFacade);
 
             bitmapSaver.SaveImage(pbCanvas.Size, _figures);
         }
@@ -560,6 +585,17 @@ namespace VectorEditor.FileManager
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+        }
+
+        private void CursorButtonClicked(object sender, EventArgs e)
+        {
+            OnToolPicked("Cursor");
+        }
+
+        private void cbFigures_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            OnToolPicked((string)
+                cbFigures.Items[cbFigures.SelectedIndex]);
         }
     }
 }

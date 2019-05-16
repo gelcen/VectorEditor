@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using VectorEditor.Figures;
+﻿using SDK;
+using System.Collections.Generic;
 
 namespace VectorEditor.Observer
 {
