@@ -8,6 +8,7 @@ using VectorEditor.FileManager;
 using System.Linq;
 using SDK;
 using VectorEditor.Drawers;
+using System.Windows.Forms;
 
 namespace VectorEditor.Presenter
 {
@@ -363,6 +364,11 @@ namespace VectorEditor.Presenter
         public Dictionary<int, BaseFigure> GetFigures()
         {
             return _figures;
+        }
+
+        public void Run()
+        {
+            Application.Run((Form)_view);
         }
     }
 }

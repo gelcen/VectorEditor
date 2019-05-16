@@ -7,6 +7,10 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using VectorEditor.Drawers;
+using VectorEditor.Figures;
+using VectorEditor.FileManager;
+using VectorEditor.Model;
 
 namespace VectorEditor
 {
@@ -16,23 +20,21 @@ namespace VectorEditor
         {
             var builder = new ContainerBuilder();
 
-            DirectoryInfo figuresFolder =
-                new DirectoryInfo(Directory.GetCurrentDirectory());
+            builder.RegisterType<GenericFigureFactory>().As<IFactory<BaseFigure>>();
 
-            FileInfo[] figuresDlls = figuresFolder.GetFiles("*Figure.dll");
+            builder.RegisterType<DrawerFactory>().As<IFactory<BaseDrawer>>();
 
-            foreach (var figureDll in figuresDlls)
-            {
-            //    builder.RegisterAssemblyTypes(Assembly.Load(figureDll.FullName))
-            //        .Where(t => t.Name.Contains("Figure")).As(BaseFigure);
-            }
+            builder.RegisterType<FigureDrawerFacade>().As<IDrawerFacade>();
 
-            
+            builder.RegisterType<MainForm>().As<IView>();
+
+            builder.RegisterType<JsonFileManager>().As<IFileManager>();
+
+            builder.RegisterType<FigureModel>().As<IModel>();
+
+            builder.RegisterType<Presenter.Presenter>().AsSelf();
 
             return builder.Build();
-
-        }
-
-        
+        }        
     }
 }
