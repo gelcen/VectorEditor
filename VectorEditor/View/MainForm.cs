@@ -597,5 +597,10 @@ namespace VectorEditor.FileManager
             OnToolPicked((string)
                 cbFigures.Items[cbFigures.SelectedIndex]);
         }
+
+        private void checkBoxIsFilled_CheckedChanged(object sender, EventArgs e)
+        {
+            _figureParameters.IsFilled = checkBoxIsFilled.Checked;
+        }
     }
 }

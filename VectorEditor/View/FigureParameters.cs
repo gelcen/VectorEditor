@@ -27,6 +27,9 @@ namespace VectorEditor.FileManager
         /// </summary>
         public Color FillColor { get; set; }
 
+        /// <summary>
+        /// Фигура залита?
+        /// </summary>
         public bool IsFilled { get; set; }
     }
 }

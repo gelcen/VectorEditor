@@ -29,7 +29,9 @@
         private void InitializeComponent()
         {
             this.gpFigures = new System.Windows.Forms.GroupBox();
+            this.label5 = new System.Windows.Forms.Label();
             this.buttonClearCanvas = new System.Windows.Forms.Button();
+            this.cbFigures = new System.Windows.Forms.ComboBox();
             this.buttonEllipse = new System.Windows.Forms.Button();
             this.buttonCircle = new System.Windows.Forms.Button();
             this.buttonPolygone = new System.Windows.Forms.Button();
@@ -64,8 +66,8 @@
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.pbCanvas = new System.Windows.Forms.PictureBox();
-            this.cbFigures = new System.Windows.Forms.ComboBox();
-            this.label5 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.checkBoxIsFilled = new System.Windows.Forms.CheckBox();
             this.gpFigures.SuspendLayout();
             this.gpProps.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudLineThickness)).BeginInit();
@@ -94,6 +96,16 @@
             this.gpFigures.TabStop = false;
             this.gpFigures.Text = "Инструменты";
             // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label5.Location = new System.Drawing.Point(13, 178);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(89, 16);
+            this.label5.TabIndex = 10;
+            this.label5.Text = "Тип фигуры:";
+            // 
             // buttonClearCanvas
             // 
             this.buttonClearCanvas.Location = new System.Drawing.Point(5, 121);
@@ -103,6 +115,15 @@
             this.buttonClearCanvas.Text = "Очистить канву";
             this.buttonClearCanvas.UseVisualStyleBackColor = true;
             this.buttonClearCanvas.Click += new System.EventHandler(this.ButtonClearCanvas_Click);
+            // 
+            // cbFigures
+            // 
+            this.cbFigures.FormattingEnabled = true;
+            this.cbFigures.Location = new System.Drawing.Point(115, 173);
+            this.cbFigures.Name = "cbFigures";
+            this.cbFigures.Size = new System.Drawing.Size(107, 21);
+            this.cbFigures.TabIndex = 9;
+            this.cbFigures.SelectedIndexChanged += new System.EventHandler(this.cbFigures_SelectedIndexChanged);
             // 
             // buttonEllipse
             // 
@@ -173,6 +194,8 @@
             // gpProps
             // 
             this.gpProps.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.gpProps.Controls.Add(this.checkBoxIsFilled);
+            this.gpProps.Controls.Add(this.label6);
             this.gpProps.Controls.Add(this.cbLineType);
             this.gpProps.Controls.Add(this.buttonFillColor);
             this.gpProps.Controls.Add(this.buttonLineColor);
@@ -442,24 +465,24 @@
             this.pbCanvas.MouseMove += new System.Windows.Forms.MouseEventHandler(this.PbCanvas_MouseMove);
             this.pbCanvas.MouseUp += new System.Windows.Forms.MouseEventHandler(this.PbCanvas_MouseUp);
             // 
-            // cbFigures
+            // label6
             // 
-            this.cbFigures.FormattingEnabled = true;
-            this.cbFigures.Location = new System.Drawing.Point(115, 173);
-            this.cbFigures.Name = "cbFigures";
-            this.cbFigures.Size = new System.Drawing.Size(107, 21);
-            this.cbFigures.TabIndex = 9;
-            this.cbFigures.SelectedIndexChanged += new System.EventHandler(this.cbFigures_SelectedIndexChanged);
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(13, 139);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(53, 13);
+            this.label6.TabIndex = 8;
+            this.label6.Text = "Заливка:";
             // 
-            // label5
+            // checkBoxIsFilled
             // 
-            this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label5.Location = new System.Drawing.Point(13, 178);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(89, 16);
-            this.label5.TabIndex = 10;
-            this.label5.Text = "Тип фигуры:";
+            this.checkBoxIsFilled.AutoSize = true;
+            this.checkBoxIsFilled.Location = new System.Drawing.Point(66, 139);
+            this.checkBoxIsFilled.Name = "checkBoxIsFilled";
+            this.checkBoxIsFilled.Size = new System.Drawing.Size(15, 14);
+            this.checkBoxIsFilled.TabIndex = 9;
+            this.checkBoxIsFilled.UseVisualStyleBackColor = true;
+            this.checkBoxIsFilled.CheckedChanged += new System.EventHandler(this.checkBoxIsFilled_CheckedChanged);
             // 
             // MainForm
             // 
@@ -534,6 +557,8 @@
         private System.Windows.Forms.PictureBox pbCanvas;
         private System.Windows.Forms.ComboBox cbFigures;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.CheckBox checkBoxIsFilled;
+        private System.Windows.Forms.Label label6;
     }
 }
 

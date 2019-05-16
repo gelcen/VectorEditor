@@ -82,6 +82,7 @@ namespace VectorEditor.Presenter
                 if (_createdFigure is FillableFigure fillable)
                 {
                     fillable.FillProperty.FillColor = FigureParameters.FillColor;
+                    fillable.FillProperty.IsFilled = FigureParameters.IsFilled;
                     SetLineProperties(fillable);
                 }
                 else
