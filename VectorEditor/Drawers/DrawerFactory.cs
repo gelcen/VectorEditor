@@ -20,22 +20,36 @@ namespace VectorEditor.Drawers
             DirectoryInfo drawersFolder =
                 new DirectoryInfo(Directory.GetCurrentDirectory());
 
-            FileInfo[] drawerDlls = drawersFolder.GetFiles("*Drawer.dll");
+            FileInfo[] drawerDlls = drawersFolder.GetFiles("*Figure.dll");
 
             foreach (var drawerDll in drawerDlls)
             {
                 var assembly = Assembly.LoadFrom(drawerDll.FullName);
 
-                foreach (var type in assembly.DefinedTypes)
+                IEnumerable<Type> types = GetLoadedTypes(assembly);
+
+                foreach (var type in types)
                 {
                     if (type.Name.Contains("Drawer"))
                     {
-                        int len = drawerDll.Name.IndexOf("Drawer.dll");
+                        int len = drawerDll.Name.IndexOf("Figure.dll");
                         _drawerTypes.Add(
                             drawerDll.Name.Substring(0, len),
-                            type.AsType());
+                            type);
                     }
                 }
+            }
+        }
+
+        private static IEnumerable<Type> GetLoadedTypes(Assembly assembly)
+        {
+            try
+            {
+                return assembly.GetTypes();
+            }
+            catch (ReflectionTypeLoadException e)
+            {
+                return e.Types.Where(t => t != null);
             }
         }
 

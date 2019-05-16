@@ -216,9 +216,8 @@ namespace VectorEditor.FileManager
             _toolsDictionary.Add(buttonCircle, ToolType.Circle);
             _toolsDictionary.Add(buttonEllipse, ToolType.Ellipse);
             _toolsDictionary.Add(buttonPolygone, ToolType.Polygon);            
-
-            NewFigureFactory nff = new NewFigureFactory();
-            foreach (var item in nff.GetFigureNames())
+           
+            foreach (var item in FigureFactory.GetNamesList())
             {
                 Console.WriteLine(item);
                 cbFigures.Items.Add(item);

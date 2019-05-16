@@ -34,7 +34,7 @@ namespace VectorEditor.Drawers
             if (figure == null) return;
 
             var drawer = DrawerFactory
-                .CreateInstance(figure.ToString());
+                .CreateInstance(figure.GetFigureName());
 
             drawer?.DrawFigure(figure, canvas);
         }
@@ -49,7 +49,7 @@ namespace VectorEditor.Drawers
             if (figure == null) return;
 
             var drawer = DrawerFactory
-                .CreateInstance(figure.ToString());
+                .CreateInstance(figure.GetFigureName());
 
             drawer?.DrawSelection(figure, canvas);
         }

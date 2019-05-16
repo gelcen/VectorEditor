@@ -44,6 +44,12 @@ namespace VectorEditor.Presenter
             set;
         }
 
+        public IFactory<BaseFigure> FigureFactory
+        {
+            get;
+            set;
+        }
+
         /// <summary>
         /// Конструктор класса 
         /// </summary>
@@ -53,8 +59,10 @@ namespace VectorEditor.Presenter
         public FigureCreatingHandler(Action canvasRefresh, 
                                      FigureParameters figureParameters, 
                                      IHandler handler,
+                                     IFactory<BaseFigure> figureFactory,
                                      IDrawerFacade drawerFacade)
         {
+            FigureFactory = figureFactory;
             DrawerFacade = drawerFacade;
             _handler = handler;
             _handler.CanvasRefresh = canvasRefresh;
@@ -77,8 +85,7 @@ namespace VectorEditor.Presenter
         {
             if (_createdFigure == null)
             {
-                NewFigureFactory factory = new NewFigureFactory();
-                _createdFigure = factory.CreateFigure(CurrentFigure);
+                _createdFigure = FigureFactory.CreateInstance(CurrentFigure);
                 if (_createdFigure is FillableFigure fillable)
                 {
                     fillable.FillProperty.FillColor = FigureParameters.FillColor;

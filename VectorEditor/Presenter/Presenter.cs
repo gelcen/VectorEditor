@@ -58,6 +58,12 @@ namespace VectorEditor.Presenter
             set;
         }
 
+        public IFactory<BaseFigure> FigureFactory
+        {
+            get;
+            set;
+        }
+
         /// <summary>
         /// Конструктор представителя
         /// </summary>
@@ -65,8 +71,11 @@ namespace VectorEditor.Presenter
         /// <param name="model">Модель</param>
         /// <param name="fileManager">File Manager</param>
         public Presenter(IView view, IModel model, IFileManager fileManager, 
-                         IFactory<BaseFigure> figureFactory, IFactory<BaseDrawer> drawerFactory)
+                         IFactory<BaseFigure> figureFactory, IDrawerFacade drawerFacade)
         {
+            FigureFactory = figureFactory;
+            DrawerFacade = drawerFacade;
+
             _undoRedoManager = new UndoRedoManager();
 
             _view = view;
@@ -289,6 +298,7 @@ namespace VectorEditor.Presenter
             var handler = new FigureCreatingHandler(_view.CanvasRefresh, 
                                                     _view.FigureParameters, 
                                                     _view.CurrentHandler,
+                                                    FigureFactory,
                                                     DrawerFacade)
             {
                 CurrentFigure = figureName

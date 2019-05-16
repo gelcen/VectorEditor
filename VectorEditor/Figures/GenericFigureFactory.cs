@@ -27,16 +27,30 @@ namespace VectorEditor.Figures
             {
                 var assembly = Assembly.LoadFrom(figureDll.FullName);
 
-                foreach (var type in assembly.DefinedTypes)
+                IEnumerable<Type> types = GetLoadedTypes(assembly);
+
+                foreach (var type in types)
                 {
                     if (type.Name.Contains("Figure"))
                     {
-                        int len = figureDll.Name.IndexOf("Figure.dll");
+                        int len = figureDll.Name.Length - 10;
                         _figureDictionary.Add(
                             figureDll.Name.Substring(0, len),
-                            type.AsType());
+                            type);                        
                     }
-                }                
+                }
+            }
+        }
+
+        private static IEnumerable<Type> GetLoadedTypes(Assembly assembly)
+        {
+            try
+            {
+                return assembly.GetTypes();
+            }
+            catch (ReflectionTypeLoadException e)
+            {
+                return e.Types.Where(t => t != null);
             }
         }
 

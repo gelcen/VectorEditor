@@ -30,7 +30,7 @@ namespace VectorEditor
                                                     figureModel, 
                                                     fileManager,
                                                     figureFactory,
-                                                    drawerFactory);
+                                                    drawerFacade);
 
             Application.Run(mainForm);
         }
