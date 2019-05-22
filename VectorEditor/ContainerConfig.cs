@@ -1,12 +1,5 @@
 ﻿using Autofac;
 using SDK;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using VectorEditor.Drawers;
 using VectorEditor.Figures;
 using VectorEditor.FileManager;

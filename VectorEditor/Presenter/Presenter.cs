@@ -38,6 +38,8 @@ namespace VectorEditor.Presenter
         /// </summary>
         private CursorHandler _cursorHandler;
 
+        private FigureCreatingHandler _figureCreatingHandler;
+
         /// <summary>
         /// Список фигур
         /// </summary>
@@ -257,7 +259,14 @@ namespace VectorEditor.Presenter
         /// <param name="e"></param>
         private void _view_ParametersChanged(object sender, FigureParameters e)
         {
-            if (_cursorHandler.SelectedFigures.Count == 0) return;
+            if (_cursorHandler.SelectedFigures.Count == 0)
+            {
+                if (_figureCreatingHandler != null)
+                {
+                    _figureCreatingHandler.FigureParameters = e;
+                }               
+                return;
+            }
 
             var beforeState = new Dictionary<int, BaseFigure>();
 
@@ -296,7 +305,7 @@ namespace VectorEditor.Presenter
 
         private void SetHandler(string figureName)
         {
-            var handler = new FigureCreatingHandler(_view.CanvasRefresh, 
+            _figureCreatingHandler = new FigureCreatingHandler(_view.CanvasRefresh, 
                                                     _view.FigureParameters, 
                                                     _view.CurrentHandler,
                                                     FigureFactory,
@@ -304,7 +313,7 @@ namespace VectorEditor.Presenter
             {
                 CurrentFigure = figureName
             };           
-            handler.FigureCreated += _currentHandler_FigureCreated;
+            _figureCreatingHandler.FigureCreated += _currentHandler_FigureCreated;
         }
 
 

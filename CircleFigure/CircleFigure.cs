@@ -2,28 +2,28 @@
 using SDK;
 using System.Drawing;
 
-namespace EllipseFigure
+namespace CircleFigure
 {
     /// <inheritdoc />
     /// <summary>
-    /// Класс для эллипса
+    /// Класс для окружности
     /// </summary>
     [JsonObject(MemberSerialization.Fields)]
-    public class EllipseFigure:FillableFigure
+    public class CircleFigure:FillableFigure
     {
         /// <summary>
-        /// Конструктор класса эллипс
+        /// Конструктор класса окружности
         /// </summary>
-        public EllipseFigure()
+        public CircleFigure()
         {
-            LineProperties = new LineProperties();
-            Points = new Points(2);
-            FillProperty = new FillProperty();
+            _lineProperties = new LineProperties();
+            _points = new Points(2);
+            _fillProperty = new FillProperty();
         }
 
         public override object Clone()
         {
-            EllipseFigure clone = new EllipseFigure();
+            CircleFigure clone = new CircleFigure();
 
             clone.LineProperties.Color = _lineProperties.Color;
             clone.LineProperties.Style = _lineProperties.Style;
@@ -39,12 +39,12 @@ namespace EllipseFigure
                     point.Y));
             }
 
-            return clone; ;
+            return clone; 
         }
 
         public override string GetFigureName()
         {
-            return "Ellipse";
+            return "Circle";
         }
     }
 }

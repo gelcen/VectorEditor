@@ -194,9 +194,10 @@ namespace VectorEditor.FileManager
             _figureParameters = new FigureParameters
             {
                 LineColor = Color.Black,
-                FillColor = Color.Transparent,
+                FillColor = Color.White,
                 LineThickness = 1,
-                LineStyle = 0
+                LineStyle = 0,
+                IsFilled = false
             };
 
             pbCanvas.Parent = this;
@@ -600,6 +601,7 @@ namespace VectorEditor.FileManager
         private void checkBoxIsFilled_CheckedChanged(object sender, EventArgs e)
         {
             _figureParameters.IsFilled = checkBoxIsFilled.Checked;
+            ParametersChanged?.Invoke(this, _figureParameters);
         }
     }
 }
