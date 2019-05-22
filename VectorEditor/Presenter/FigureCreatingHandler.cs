@@ -4,7 +4,6 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 using VectorEditor.Drawers;
-using VectorEditor.Figures;
 using VectorEditor.FileManager;
 
 namespace VectorEditor.Presenter

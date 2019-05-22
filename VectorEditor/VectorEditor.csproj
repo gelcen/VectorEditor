@@ -58,8 +58,7 @@
     <Compile Include="Drawers\DrawerFactory.cs" />
     <Compile Include="Drawers\FigureDrawerFacade.cs" />
     <Compile Include="Drawers\IDrawerFacade.cs" />
-    <Compile Include="Figures\GenericFigureFactory.cs" />
-    <Compile Include="Figures\NewFigureFactory.cs" />
+    <Compile Include="Figures\FigureFactory.cs" />
     <Compile Include="FileManager\DictionaryItem.cs" />
     <Compile Include="FileManager\JsonFileManager.cs" />
     <Compile Include="Presenter\BaseHandler.cs" />
@@ -69,9 +68,7 @@
     <Compile Include="Presenter\CursorSelectingHandler.cs" />
     <Compile Include="Presenter\IFigureSelector.cs" />
     <Compile Include="Presenter\Selector.cs" />
-    <Compile Include="ToolType.cs" />
     <Compile Include="Presenter\IHandler.cs" />
-    <Compile Include="RoundShapeType.cs" />
     <Compile Include="SaveState.cs" />
     <Compile Include="UndoRedo\AddFigureCommand.cs" />
     <Compile Include="UndoRedo\CommandFactory.cs" />

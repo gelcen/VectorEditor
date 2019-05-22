@@ -1,14 +1,13 @@
-﻿using System;
+﻿using SDK;
+using System;
 using System.Collections.Generic;
-using VectorEditor.Figures;
+using System.Linq;
+using System.Windows.Forms;
+using VectorEditor.Drawers;
+using VectorEditor.FileManager;
 using VectorEditor.Model;
 using VectorEditor.Observer;
 using VectorEditor.UndoRedo;
-using VectorEditor.FileManager;
-using System.Linq;
-using SDK;
-using VectorEditor.Drawers;
-using System.Windows.Forms;
 
 namespace VectorEditor.Presenter
 {

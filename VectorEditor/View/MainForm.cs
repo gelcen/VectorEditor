@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using VectorEditor.Drawers;
-using VectorEditor.Figures;
 using VectorEditor.Presenter;
 
 namespace VectorEditor.FileManager
@@ -19,11 +18,6 @@ namespace VectorEditor.FileManager
         /// Список фигур
         /// </summary>
         private Dictionary<int, BaseFigure> _figures;
-
-        /// <summary>
-        /// Словарь для кнопок инструментов
-        /// </summary>
-        private readonly Dictionary<Control, ToolType> _toolsDictionary;
 
         public PictureBox Canvas
         {
@@ -201,8 +195,6 @@ namespace VectorEditor.FileManager
             };
 
             pbCanvas.Parent = this;
-
-            _toolsDictionary = new Dictionary<Control, ToolType>();
             InitTools();            
         }
 
@@ -210,29 +202,12 @@ namespace VectorEditor.FileManager
         /// Инициализация словаря кнопок инструментов
         /// </summary>
         private void InitTools()
-        {
-            _toolsDictionary.Add(buttonCursor, ToolType.Cursor);
-            _toolsDictionary.Add(buttonLine, ToolType.Line);
-            _toolsDictionary.Add(buttonPolyLine, ToolType.Polyline);
-            _toolsDictionary.Add(buttonCircle, ToolType.Circle);
-            _toolsDictionary.Add(buttonEllipse, ToolType.Ellipse);
-            _toolsDictionary.Add(buttonPolygone, ToolType.Polygon);            
-           
+        {                  
             foreach (var item in FigureFactory.GetNamesList())
             {
                 Console.WriteLine(item);
                 cbFigures.Items.Add(item);
             }
-        }
-
-        /// <summary>
-        /// Обработчик нажатия на кнопку инструмента
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void ToolButton_Click(object sender, EventArgs e)
-        {
-            //OnToolPicked(_toolsDictionary[(Control)sender]);
         }
 
         /// <summary>

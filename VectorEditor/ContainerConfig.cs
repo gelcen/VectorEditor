@@ -13,7 +13,7 @@ namespace VectorEditor
         {
             var builder = new ContainerBuilder();
 
-            builder.RegisterType<GenericFigureFactory>().As<IFactory<BaseFigure>>();
+            builder.RegisterType<FigureFactory>().As<IFactory<BaseFigure>>();
 
             builder.RegisterType<DrawerFactory>().As<IFactory<BaseDrawer>>();
 

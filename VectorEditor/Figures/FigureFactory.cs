@@ -10,11 +10,11 @@ namespace VectorEditor.Figures
     /// <summary>
     /// Фабрика для фигур
     /// </summary>
-    public class GenericFigureFactory : IFactory<BaseFigure>
+    public class FigureFactory : IFactory<BaseFigure>
     {
         private Dictionary<string, Type> _figureDictionary;
 
-        public GenericFigureFactory()
+        public FigureFactory()
         {
             _figureDictionary = new Dictionary<string, Type>();
 

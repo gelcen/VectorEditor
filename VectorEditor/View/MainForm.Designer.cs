@@ -32,13 +32,10 @@
             this.label5 = new System.Windows.Forms.Label();
             this.buttonClearCanvas = new System.Windows.Forms.Button();
             this.cbFigures = new System.Windows.Forms.ComboBox();
-            this.buttonEllipse = new System.Windows.Forms.Button();
-            this.buttonCircle = new System.Windows.Forms.Button();
-            this.buttonPolygone = new System.Windows.Forms.Button();
-            this.buttonLine = new System.Windows.Forms.Button();
-            this.buttonPolyLine = new System.Windows.Forms.Button();
             this.buttonCursor = new System.Windows.Forms.Button();
             this.gpProps = new System.Windows.Forms.GroupBox();
+            this.checkBoxIsFilled = new System.Windows.Forms.CheckBox();
+            this.label6 = new System.Windows.Forms.Label();
             this.cbLineType = new System.Windows.Forms.ComboBox();
             this.buttonFillColor = new System.Windows.Forms.Button();
             this.buttonLineColor = new System.Windows.Forms.Button();
@@ -66,8 +63,6 @@
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.pbCanvas = new System.Windows.Forms.PictureBox();
-            this.label6 = new System.Windows.Forms.Label();
-            this.checkBoxIsFilled = new System.Windows.Forms.CheckBox();
             this.gpFigures.SuspendLayout();
             this.gpProps.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudLineThickness)).BeginInit();
@@ -81,17 +76,12 @@
             this.gpFigures.Controls.Add(this.label5);
             this.gpFigures.Controls.Add(this.buttonClearCanvas);
             this.gpFigures.Controls.Add(this.cbFigures);
-            this.gpFigures.Controls.Add(this.buttonEllipse);
-            this.gpFigures.Controls.Add(this.buttonCircle);
-            this.gpFigures.Controls.Add(this.buttonPolygone);
-            this.gpFigures.Controls.Add(this.buttonLine);
-            this.gpFigures.Controls.Add(this.buttonPolyLine);
             this.gpFigures.Controls.Add(this.buttonCursor);
             this.gpFigures.Location = new System.Drawing.Point(619, 29);
             this.gpFigures.Margin = new System.Windows.Forms.Padding(2);
             this.gpFigures.Name = "gpFigures";
             this.gpFigures.Padding = new System.Windows.Forms.Padding(2);
-            this.gpFigures.Size = new System.Drawing.Size(227, 207);
+            this.gpFigures.Size = new System.Drawing.Size(227, 103);
             this.gpFigures.TabIndex = 1;
             this.gpFigures.TabStop = false;
             this.gpFigures.Text = "Инструменты";
@@ -100,7 +90,7 @@
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label5.Location = new System.Drawing.Point(13, 178);
+            this.label5.Location = new System.Drawing.Point(5, 60);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(89, 16);
             this.label5.TabIndex = 10;
@@ -108,7 +98,7 @@
             // 
             // buttonClearCanvas
             // 
-            this.buttonClearCanvas.Location = new System.Drawing.Point(5, 121);
+            this.buttonClearCanvas.Location = new System.Drawing.Point(116, 16);
             this.buttonClearCanvas.Name = "buttonClearCanvas";
             this.buttonClearCanvas.Size = new System.Drawing.Size(106, 31);
             this.buttonClearCanvas.TabIndex = 6;
@@ -119,66 +109,11 @@
             // cbFigures
             // 
             this.cbFigures.FormattingEnabled = true;
-            this.cbFigures.Location = new System.Drawing.Point(115, 173);
+            this.cbFigures.Location = new System.Drawing.Point(115, 60);
             this.cbFigures.Name = "cbFigures";
             this.cbFigures.Size = new System.Drawing.Size(107, 21);
             this.cbFigures.TabIndex = 9;
             this.cbFigures.SelectedIndexChanged += new System.EventHandler(this.cbFigures_SelectedIndexChanged);
-            // 
-            // buttonEllipse
-            // 
-            this.buttonEllipse.Location = new System.Drawing.Point(117, 51);
-            this.buttonEllipse.Margin = new System.Windows.Forms.Padding(2);
-            this.buttonEllipse.Name = "buttonEllipse";
-            this.buttonEllipse.Size = new System.Drawing.Size(107, 31);
-            this.buttonEllipse.TabIndex = 5;
-            this.buttonEllipse.Text = "Эллипс";
-            this.buttonEllipse.UseVisualStyleBackColor = true;
-            this.buttonEllipse.Click += new System.EventHandler(this.ToolButton_Click);
-            // 
-            // buttonCircle
-            // 
-            this.buttonCircle.Location = new System.Drawing.Point(4, 85);
-            this.buttonCircle.Margin = new System.Windows.Forms.Padding(2);
-            this.buttonCircle.Name = "buttonCircle";
-            this.buttonCircle.Size = new System.Drawing.Size(107, 31);
-            this.buttonCircle.TabIndex = 4;
-            this.buttonCircle.Text = "Окружность";
-            this.buttonCircle.UseVisualStyleBackColor = true;
-            this.buttonCircle.Click += new System.EventHandler(this.ToolButton_Click);
-            // 
-            // buttonPolygone
-            // 
-            this.buttonPolygone.Location = new System.Drawing.Point(117, 85);
-            this.buttonPolygone.Margin = new System.Windows.Forms.Padding(2);
-            this.buttonPolygone.Name = "buttonPolygone";
-            this.buttonPolygone.Size = new System.Drawing.Size(105, 31);
-            this.buttonPolygone.TabIndex = 3;
-            this.buttonPolygone.Text = "Многоугольник";
-            this.buttonPolygone.UseVisualStyleBackColor = true;
-            this.buttonPolygone.Click += new System.EventHandler(this.ToolButton_Click);
-            // 
-            // buttonLine
-            // 
-            this.buttonLine.Location = new System.Drawing.Point(117, 16);
-            this.buttonLine.Margin = new System.Windows.Forms.Padding(2);
-            this.buttonLine.Name = "buttonLine";
-            this.buttonLine.Size = new System.Drawing.Size(107, 31);
-            this.buttonLine.TabIndex = 2;
-            this.buttonLine.Text = "Линия";
-            this.buttonLine.UseVisualStyleBackColor = true;
-            this.buttonLine.Click += new System.EventHandler(this.ToolButton_Click);
-            // 
-            // buttonPolyLine
-            // 
-            this.buttonPolyLine.Location = new System.Drawing.Point(4, 51);
-            this.buttonPolyLine.Margin = new System.Windows.Forms.Padding(2);
-            this.buttonPolyLine.Name = "buttonPolyLine";
-            this.buttonPolyLine.Size = new System.Drawing.Size(107, 31);
-            this.buttonPolyLine.TabIndex = 1;
-            this.buttonPolyLine.Text = "Полилиния";
-            this.buttonPolyLine.UseVisualStyleBackColor = true;
-            this.buttonPolyLine.Click += new System.EventHandler(this.ToolButton_Click);
             // 
             // buttonCursor
             // 
@@ -204,7 +139,7 @@
             this.gpProps.Controls.Add(this.label3);
             this.gpProps.Controls.Add(this.label2);
             this.gpProps.Controls.Add(this.label1);
-            this.gpProps.Location = new System.Drawing.Point(619, 240);
+            this.gpProps.Location = new System.Drawing.Point(619, 136);
             this.gpProps.Margin = new System.Windows.Forms.Padding(2);
             this.gpProps.Name = "gpProps";
             this.gpProps.Padding = new System.Windows.Forms.Padding(2);
@@ -212,6 +147,25 @@
             this.gpProps.TabIndex = 2;
             this.gpProps.TabStop = false;
             this.gpProps.Text = "Свойства ";
+            // 
+            // checkBoxIsFilled
+            // 
+            this.checkBoxIsFilled.AutoSize = true;
+            this.checkBoxIsFilled.Location = new System.Drawing.Point(66, 139);
+            this.checkBoxIsFilled.Name = "checkBoxIsFilled";
+            this.checkBoxIsFilled.Size = new System.Drawing.Size(15, 14);
+            this.checkBoxIsFilled.TabIndex = 9;
+            this.checkBoxIsFilled.UseVisualStyleBackColor = true;
+            this.checkBoxIsFilled.CheckedChanged += new System.EventHandler(this.checkBoxIsFilled_CheckedChanged);
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(13, 139);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(53, 13);
+            this.label6.TabIndex = 8;
+            this.label6.Text = "Заливка:";
             // 
             // cbLineType
             // 
@@ -465,25 +419,6 @@
             this.pbCanvas.MouseMove += new System.Windows.Forms.MouseEventHandler(this.PbCanvas_MouseMove);
             this.pbCanvas.MouseUp += new System.Windows.Forms.MouseEventHandler(this.PbCanvas_MouseUp);
             // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(13, 139);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(53, 13);
-            this.label6.TabIndex = 8;
-            this.label6.Text = "Заливка:";
-            // 
-            // checkBoxIsFilled
-            // 
-            this.checkBoxIsFilled.AutoSize = true;
-            this.checkBoxIsFilled.Location = new System.Drawing.Point(66, 139);
-            this.checkBoxIsFilled.Name = "checkBoxIsFilled";
-            this.checkBoxIsFilled.Size = new System.Drawing.Size(15, 14);
-            this.checkBoxIsFilled.TabIndex = 9;
-            this.checkBoxIsFilled.UseVisualStyleBackColor = true;
-            this.checkBoxIsFilled.CheckedChanged += new System.EventHandler(this.checkBoxIsFilled_CheckedChanged);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -520,11 +455,6 @@
 
         #endregion
         private System.Windows.Forms.GroupBox gpFigures;
-        private System.Windows.Forms.Button buttonEllipse;
-        private System.Windows.Forms.Button buttonCircle;
-        private System.Windows.Forms.Button buttonPolygone;
-        private System.Windows.Forms.Button buttonLine;
-        private System.Windows.Forms.Button buttonPolyLine;
         private System.Windows.Forms.Button buttonCursor;
         private System.Windows.Forms.GroupBox gpProps;
         private System.Windows.Forms.NumericUpDown nudLineThickness;
