@@ -1,4 +1,4 @@
-﻿using VectorEditor.Figures;
+﻿using SDK;
 
 namespace VectorEditor.FileManager
 {

@@ -1,11 +1,13 @@
-﻿using System;
+﻿using SDK;
+using System;
 using System.Collections.Generic;
-using VectorEditor.Figures;
+using System.Linq;
+using System.Windows.Forms;
+using VectorEditor.Drawers;
+using VectorEditor.FileManager;
 using VectorEditor.Model;
 using VectorEditor.Observer;
 using VectorEditor.UndoRedo;
-using VectorEditor.FileManager;
-using System.Linq;
 
 namespace VectorEditor.Presenter
 {
@@ -35,6 +37,8 @@ namespace VectorEditor.Presenter
         /// </summary>
         private CursorHandler _cursorHandler;
 
+        private FigureCreatingHandler _figureCreatingHandler;
+
         /// <summary>
         /// Список фигур
         /// </summary>
@@ -50,14 +54,30 @@ namespace VectorEditor.Presenter
         /// </summary>
         private SaveState _saveState;
 
+        public IDrawerFacade DrawerFacade
+        {
+            get;
+            set;
+        }
+
+        public IFactory<BaseFigure> FigureFactory
+        {
+            get;
+            set;
+        }
+
         /// <summary>
         /// Конструктор представителя
         /// </summary>
         /// <param name="view">Представление</param>
         /// <param name="model">Модель</param>
         /// <param name="fileManager">File Manager</param>
-        public Presenter(IView view, IModel model, IFileManager fileManager)
+        public Presenter(IView view, IModel model, IFileManager fileManager, 
+                         IFactory<BaseFigure> figureFactory, IDrawerFacade drawerFacade)
         {
+            FigureFactory = figureFactory;
+            DrawerFacade = drawerFacade;
+
             _undoRedoManager = new UndoRedoManager();
 
             _view = view;
@@ -238,7 +258,14 @@ namespace VectorEditor.Presenter
         /// <param name="e"></param>
         private void _view_ParametersChanged(object sender, FigureParameters e)
         {
-            if (_cursorHandler.SelectedFigures.Count == 0) return;
+            if (_cursorHandler.SelectedFigures.Count == 0)
+            {
+                if (_figureCreatingHandler != null)
+                {
+                    _figureCreatingHandler.FigureParameters = e;
+                }               
+                return;
+            }
 
             var beforeState = new Dictionary<int, BaseFigure>();
 
@@ -246,7 +273,7 @@ namespace VectorEditor.Presenter
             {
                 if (!_model.GetFigureList().ContainsKey(figure.Key)) continue;
                 var index = figure.Key;
-                beforeState.Add(index, FigureFactory.CreateCopy(figure.Value));
+                beforeState.Add(index, (BaseFigure)figure.Value.Clone());
             }
 
             var cmd = new ChangeParametersCommand(_model, beforeState, e);
@@ -259,29 +286,33 @@ namespace VectorEditor.Presenter
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void _view_ToolPicked(object sender, ToolType e)
+        private void _view_ToolPicked(object sender, string name)
         {
             _view.CurrentHandler = new BaseHandler();
 
-            if (e == ToolType.Cursor)
+            if (name == "Cursor")
             {
-                _cursorHandler = new CursorHandler(_view.CanvasRefresh, this,
-                                                      _view.CurrentHandler);
+                _cursorHandler = new CursorHandler(_view.CanvasRefresh, 
+                                                   this,
+                                                   _view.CurrentHandler,
+                                                   DrawerFacade);
                 _cursorHandler.FiguresMoved += CursorHandlerFiguresMoved;
                 _cursorHandler.MarkerMoved += CursorHandlerMarkerMoved;
             }
-            else SetHandler(e);            
+            else SetHandler(name);            
         }
 
-        private void SetHandler(ToolType tool)
+        private void SetHandler(string figureName)
         {
-            var handler = new FigureCreatingHandler(_view.CanvasRefresh, 
+            _figureCreatingHandler = new FigureCreatingHandler(_view.CanvasRefresh, 
                                                     _view.FigureParameters, 
-                                                    _view.CurrentHandler)
+                                                    _view.CurrentHandler,
+                                                    FigureFactory,
+                                                    DrawerFacade)
             {
-                CurrentTool = tool
+                CurrentFigure = figureName
             };           
-            handler.FigureCreated += _currentHandler_FigureCreated;
+            _figureCreatingHandler.FigureCreated += _currentHandler_FigureCreated;
         }
 
 
@@ -341,6 +372,11 @@ namespace VectorEditor.Presenter
         public Dictionary<int, BaseFigure> GetFigures()
         {
             return _figures;
+        }
+
+        public void Run()
+        {
+            Application.Run((Form)_view);
         }
     }
 }

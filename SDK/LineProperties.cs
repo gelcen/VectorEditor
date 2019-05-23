@@ -2,7 +2,7 @@
 using System.Drawing;
 using System.Drawing.Drawing2D;
 
-namespace VectorEditor.Figures
+namespace SDK
 {
     /// <summary>
     /// Класс для хранения параметров линии

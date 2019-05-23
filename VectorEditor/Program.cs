@@ -1,7 +1,6 @@
-﻿using System;
+﻿using Autofac;
+using System;
 using System.Windows.Forms;
-using VectorEditor.Model;
-using VectorEditor.FileManager;
 
 namespace VectorEditor
 {
@@ -16,13 +15,14 @@ namespace VectorEditor
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            var mainForm = new MainForm();
-            var figureModel = new FigureModel();
-            var fileManager = new JsonFileManager();
+            var container = ContainerConfig.Configure();
 
-            var presenter = new Presenter.Presenter(mainForm, figureModel, fileManager);
+            using (var scope = container.BeginLifetimeScope())
+            {
+                var presenter = scope.Resolve<Presenter.Presenter>();
+                presenter.Run();
+            }
 
-            Application.Run(mainForm);
         }
     }
 }

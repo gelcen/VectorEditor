@@ -1,7 +1,7 @@
-﻿using System;
+﻿using SDK;
+using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
-using VectorEditor.Figures;
+using VectorEditor.Drawers;
 using VectorEditor.Presenter;
 
 namespace VectorEditor.FileManager
@@ -11,6 +11,18 @@ namespace VectorEditor.FileManager
     /// </summary>
     public interface IView
     {
+        IFactory<BaseFigure> FigureFactory
+        {
+            set;
+            get;
+        }
+
+        IDrawerFacade DrawerFacade
+        {
+            get;
+            set;
+        }
+
         /// <summary>
         /// Обновление канвы
         /// </summary>
@@ -87,7 +99,7 @@ namespace VectorEditor.FileManager
         /// <summary>
         /// События выбора инструмента
         /// </summary>
-        event EventHandler<ToolType> ToolPicked;
+        event EventHandler<string> ToolPicked;
 
         /// <summary>
         /// Событие открытия файла проекта

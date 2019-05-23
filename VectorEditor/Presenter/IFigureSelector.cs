@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using SDK;
+using System.Collections.Generic;
 using System.Drawing;
-using VectorEditor.Figures;
 
 namespace VectorEditor.Presenter
 {

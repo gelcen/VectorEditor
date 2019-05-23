@@ -1,9 +1,9 @@
-﻿using System;
+﻿using SDK;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using VectorEditor.Drawers;
-using VectorEditor.Figures;
 using VectorEditor.Presenter;
 
 namespace VectorEditor.FileManager
@@ -19,11 +19,6 @@ namespace VectorEditor.FileManager
         /// </summary>
         private Dictionary<int, BaseFigure> _figures;
 
-        /// <summary>
-        /// Словарь для кнопок инструментов
-        /// </summary>
-        private readonly Dictionary<Control, ToolType> _toolsDictionary;
-
         public PictureBox Canvas
         {
             get => pbCanvas;            
@@ -35,6 +30,18 @@ namespace VectorEditor.FileManager
         private FigureParameters _figureParameters;
 
         #region Реализация IView
+
+        public IFactory<BaseFigure> FigureFactory
+        {
+            get;
+            set;
+        }
+
+        public IDrawerFacade DrawerFacade
+        {
+            get;
+            set;
+        }
 
         /// <summary>
         /// Флаг изменения
@@ -97,7 +104,7 @@ namespace VectorEditor.FileManager
         /// <summary>
         /// Событие выбора инструмента
         /// </summary>
-        public event EventHandler<ToolType> ToolPicked;
+        public event EventHandler<string> ToolPicked;
         
         /// <inheritdoc />
         /// <summary>
@@ -158,32 +165,36 @@ namespace VectorEditor.FileManager
         /// Вызов события выбора инструмента
         /// </summary>
         /// <param name="pickedToolType"></param>
-        private void OnToolPicked(ToolType pickedToolType)
+        private void OnToolPicked(string type)
         {
             var handler = ToolPicked;
 
-            handler?.Invoke(this, pickedToolType);
+            handler?.Invoke(this, type);
         }
 
         /// <inheritdoc />
         /// <summary>
         /// Конструктор класса формы
         /// </summary>
-        public MainForm()
+        public MainForm(IFactory<BaseFigure> figureFactory,
+                        IDrawerFacade drawerFacade)
         {
             InitializeComponent();
+
+            FigureFactory = figureFactory;
+
+            DrawerFacade = drawerFacade;
 
             _figureParameters = new FigureParameters
             {
                 LineColor = Color.Black,
-                FillColor = Color.Transparent,
+                FillColor = Color.White,
                 LineThickness = 1,
-                LineStyle = 0
+                LineStyle = 0,
+                IsFilled = false
             };
 
             pbCanvas.Parent = this;
-
-            _toolsDictionary = new Dictionary<Control, ToolType>();
             InitTools();            
         }
 
@@ -191,23 +202,12 @@ namespace VectorEditor.FileManager
         /// Инициализация словаря кнопок инструментов
         /// </summary>
         private void InitTools()
-        {
-            _toolsDictionary.Add(buttonCursor, ToolType.Cursor);
-            _toolsDictionary.Add(buttonLine, ToolType.Line);
-            _toolsDictionary.Add(buttonPolyLine, ToolType.Polyline);
-            _toolsDictionary.Add(buttonCircle, ToolType.Circle);
-            _toolsDictionary.Add(buttonEllipse, ToolType.Ellipse);
-            _toolsDictionary.Add(buttonPolygone, ToolType.Polygon);
-        }
-
-        /// <summary>
-        /// Обработчик нажатия на кнопку инструмента
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void ToolButton_Click(object sender, EventArgs e)
-        {
-            OnToolPicked(_toolsDictionary[(Control)sender]);
+        {                  
+            foreach (var item in FigureFactory.GetNamesList())
+            {
+                Console.WriteLine(item);
+                cbFigures.Items.Add(item);
+            }
         }
 
         /// <summary>
@@ -378,8 +378,8 @@ namespace VectorEditor.FileManager
             if (_figures != null)
             {
                 foreach (var figure in _figures)
-                {
-                    FigureDrawer.DrawFigure(figure.Value, g);
+                {                    
+                    DrawerFacade.DrawFigure(figure.Value, g);
                 }
             }
 
@@ -396,7 +396,7 @@ namespace VectorEditor.FileManager
         private void MainForm_Load(object sender, EventArgs e)
         {
             KeyPreview = true;
-            OnToolPicked(ToolType.Cursor);
+            OnToolPicked("Cursor");
         }
 
         #region Обработчики нажатий по пунктам меню
@@ -452,7 +452,7 @@ namespace VectorEditor.FileManager
         {            
             if (_figures.Count == 0) return;
 
-            BitmapSaver bitmapSaver = new BitmapSaver();
+            BitmapSaver bitmapSaver = new BitmapSaver(DrawerFacade);
 
             bitmapSaver.SaveImage(pbCanvas.Size, _figures);
         }
@@ -560,6 +560,23 @@ namespace VectorEditor.FileManager
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+        }
+
+        private void CursorButtonClicked(object sender, EventArgs e)
+        {
+            OnToolPicked("Cursor");
+        }
+
+        private void cbFigures_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            OnToolPicked((string)
+                cbFigures.Items[cbFigures.SelectedIndex]);
+        }
+
+        private void checkBoxIsFilled_CheckedChanged(object sender, EventArgs e)
+        {
+            _figureParameters.IsFilled = checkBoxIsFilled.Checked;
+            ParametersChanged?.Invoke(this, _figureParameters);
         }
     }
 }

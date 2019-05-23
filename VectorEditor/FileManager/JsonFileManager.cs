@@ -1,8 +1,8 @@
 ﻿using Newtonsoft.Json;
+using SDK;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using VectorEditor.Figures;
 using VectorEditor.UndoRedo;
 
 namespace VectorEditor.FileManager

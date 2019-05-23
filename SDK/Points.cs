@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 
-namespace VectorEditor.Figures
+namespace SDK
 {
     /// <summary>
     /// Класс для точек фигуры

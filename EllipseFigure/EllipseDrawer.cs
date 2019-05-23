@@ -1,15 +1,15 @@
-﻿using System;
+﻿using SDK;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
-using VectorEditor.Figures;
 
-namespace VectorEditor.Drawers
+namespace EllipseFigure
 {
     /// <inheritdoc />
     /// <summary>
-    /// Класс-рисовальщик для окружности
+    /// Класс-рисовальщик для эллипса
     /// </summary>
-    public class CircleDrawer : BaseDrawer
+    public class EllipseDrawer : BaseDrawer
     {
         /// <inheritdoc />
         /// <summary>
@@ -19,24 +19,67 @@ namespace VectorEditor.Drawers
         /// <param name="canvas">Канва</param>
         public override void DrawFigure(BaseFigure figure, Graphics canvas)
         {
-            FillableFigure circle;
+
+
+            if (!GetFillableFigure(figure,
+                                   out FillableFigure ellipse,
+                                   out IReadOnlyList<PointF> points))
+            {
+                return;
+            }
+
+            var ellipseRectangle= MakeRectangle(
+                points[0], points[1]);
+
+            Color fillColor;
+
+            fillColor = ellipse.FillProperty.IsFilled ?
+                ellipse.FillProperty.FillColor : Color.Transparent;
+
+            Brush brush = new SolidBrush(fillColor);
+
+            canvas.FillEllipse(brush, ellipseRectangle);
+
+            brush.Dispose();
+
+            var pen = new Pen(ellipse.LineProperties.Color,
+                               ellipse.LineProperties.Thickness)
+                { DashStyle = ellipse.LineProperties.Style};
+
+            canvas.DrawEllipse(pen, ellipseRectangle);
+
+            pen.Dispose();
+        }
+
+        /// <inheritdoc />
+        /// <summary>
+        /// Нарисовать маркеры
+        /// </summary>
+        /// <param name="figure">Рисуемая фигура</param>
+        /// <param name="canvas">Канва</param>
+        public override void DrawSelection(BaseFigure figure, Graphics canvas)
+        {
+            FillableFigure ellipse;
 
             IReadOnlyList<PointF> points;
 
-            if (!GetFillableFigure(figure, out circle, out points)) return;
+            if (!GetFillableFigure(figure, 
+                                   out ellipse, 
+                                   out points))
+            {
+                return;
+            }
+            
+            DrawSelectionRoundShapes(points, canvas);
 
-            var circleRect = MakeRectangle(points[0], points[1], 
-                RoundShapeType.Circle);
+            var rectangle = MakeRectangle(
+                points[0], points[1]);
 
-            Brush brush = new SolidBrush(circle.FillProperty.FillColor);
-            canvas.FillEllipse(brush, circleRect);
-            brush.Dispose();
+            var pen = new Pen(Color.Black, 1)
+                          { DashStyle = System.Drawing.Drawing2D.DashStyle.Dash};
 
-            var pen = new Pen(circle.LineProperties.Color,
-                              circle.LineProperties.Thickness)
-                { DashStyle = circle.LineProperties.Style};
+            canvas.DrawRectangle(pen, rectangle);
 
-            canvas.DrawEllipse(pen, circleRect);
             pen.Dispose();
         }
 
@@ -45,23 +88,17 @@ namespace VectorEditor.Drawers
         /// </summary>
         /// <param name="pointA">Левая верхняя точка</param>
         /// <param name="pointB">Нижнаяя правая точка</param>
-        /// <param name="shapeType">Тип фигуры</param>
         /// <returns></returns>
-        public static Rectangle MakeRectangle(PointF pointA, 
-            PointF pointB, 
-            RoundShapeType shapeType)
+        private Rectangle MakeRectangle(PointF pointA,
+            PointF pointB)
         {
-            var width = (int) Math.Abs(pointA.X - pointB.X);
-            var height = (int) Math.Abs(pointA.Y - pointB.Y);
-
-            var radius = Math.Max(width, height);
+            var width = (int)Math.Abs(pointA.X - pointB.X);
+            var height = (int)Math.Abs(pointA.Y - pointB.Y);
 
             var x = (int)Math.Min(pointA.X, pointB.X);
             var y = (int)Math.Min(pointA.Y, pointB.Y);
 
-            return shapeType == 
-                   RoundShapeType.Circle ? new Rectangle(x, y, radius, radius) : 
-                                           new Rectangle(x, y, width, height);
+            return new Rectangle(x, y, width, height);
         }
 
         /// <summary>
@@ -69,8 +106,8 @@ namespace VectorEditor.Drawers
         /// </summary>
         /// <param name="points">Точки</param>
         /// <param name="canvas">Канва</param>
-        public static void DrawSelectionRoundShapes(IReadOnlyCollection<PointF> points, 
-                                                    Graphics canvas)
+        private void DrawSelectionRoundShapes(IReadOnlyCollection<PointF> points,
+                                              Graphics canvas)
         {
             foreach (var pt in points)
             {
@@ -82,33 +119,6 @@ namespace VectorEditor.Drawers
             }
         }
 
-        /// <inheritdoc />
-        /// <summary>
-        /// Нарисовать маркеры
-        /// </summary>
-        /// <param name="figure">Рисуемая фигура</param>
-        /// <param name="canvas">Канва</param>
-        public override void DrawSelection(BaseFigure figure, Graphics canvas)
-        {
-            FillableFigure circle;
-
-            IReadOnlyList<PointF> points;
-
-            if (!GetFillableFigure(figure, out circle, out points)) return;
-
-            DrawSelectionRoundShapes(points, canvas);
-
-            var circleRect = MakeRectangle(points[0], points[1], 
-                RoundShapeType.Circle);
-
-            var pen = new Pen(Color.Black, 1)
-                          { DashStyle = System.Drawing.Drawing2D.DashStyle.Dash};
-
-            canvas.DrawRectangle(pen, circleRect);
-
-            pen.Dispose();
-        }
-
         /// <summary>
         /// Получить заливаемую фигуру и его точки
         /// </summary>
@@ -116,7 +126,7 @@ namespace VectorEditor.Drawers
         /// <param name="outFigure">Заполняемая фигура</param>
         /// <param name="points">Точки фигуры</param>
         /// <returns></returns>
-        public static bool GetFillableFigure(BaseFigure inFigure,
+        private static bool GetFillableFigure(BaseFigure inFigure,
                                        out FillableFigure outFigure,
                                        out IReadOnlyList<PointF> points)
         {
@@ -126,7 +136,7 @@ namespace VectorEditor.Drawers
                 outFigure = fillableFigure;
                 points = fillableFigure.Points.GetPoints();
                 if (points.Count != 2)
-                {                   
+                {
                     return false;
                 }
                 return true;

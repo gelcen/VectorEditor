@@ -1,8 +1,8 @@
 ﻿using Newtonsoft.Json;
+using SDK;
 using System.Collections.Generic;
-using VectorEditor.Figures;
-using VectorEditor.Model;
 using VectorEditor.FileManager;
+using VectorEditor.Model;
 
 namespace VectorEditor.UndoRedo
 {
@@ -116,9 +116,7 @@ namespace VectorEditor.UndoRedo
         /// <returns></returns>
         public static bool IsFigureFillable(BaseFigure figure)
         {
-            if (figure.GetType() == typeof(Circle) ||
-                figure.GetType() == typeof(Ellipse) ||
-                figure.GetType() == typeof(Polygon))
+            if (figure is FillableFigure)
             {
                 return true;
             }

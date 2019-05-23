@@ -1,5 +1,5 @@
 ﻿using Newtonsoft.Json;
-using VectorEditor.Figures;
+using SDK;
 using VectorEditor.Model;
 
 namespace VectorEditor.UndoRedo

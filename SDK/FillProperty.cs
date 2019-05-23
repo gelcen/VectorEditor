@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Drawing;
 
-namespace VectorEditor.Figures
+namespace SDK
 {
     /// <summary>
     /// Класс для свойства "Цвет заполнения"
@@ -19,20 +19,31 @@ namespace VectorEditor.Figures
         }
 
         /// <summary>
+        /// Заполнять фигуру?
+        /// </summary>
+        public bool IsFilled
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
         /// Конструктор без аргументов
         /// </summary>
         public FillProperty()
         {
             FillColor = Color.Transparent;
+            IsFilled = false;
         }
 
         /// <summary>
         /// Конструктор с аргументами
         /// </summary>
         /// <param name="fillColor">Цвет заливки</param>
-        public FillProperty(Color fillColor)
+        public FillProperty(Color fillColor, bool isFilled)
         {
             FillColor = fillColor;
+            IsFilled = IsFilled;
         }
     }
 }

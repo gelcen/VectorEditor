@@ -1,8 +1,8 @@
-﻿using System.Drawing;
+﻿using SDK;
+using System.Drawing;
 using System.Linq;
-using VectorEditor.Figures;
 
-namespace VectorEditor.Drawers
+namespace PolygonFigure
 {
     /// <summary>
     /// Класс для рисовки полигона
@@ -17,13 +17,17 @@ namespace VectorEditor.Drawers
         /// <param name="canvas">Канва</param>
         public override void DrawFigure(BaseFigure figure, Graphics canvas)
         {
-            var polygon = figure as FillableFigure;
-            if (polygon == null) return;
+            if (!(figure is FillableFigure polygon)) return;
 
             var points = polygon.Points.GetPoints();
             if (points.Count < 2) return;
 
-            Brush brush = new SolidBrush(polygon.FillProperty.FillColor);
+            Color fillColor;
+
+            fillColor = polygon.FillProperty.IsFilled ?
+                polygon.FillProperty.FillColor : Color.Transparent;
+
+            Brush brush = new SolidBrush(fillColor);
             canvas.FillPolygon(brush, points.ToArray());
             brush.Dispose();
 
@@ -44,7 +48,15 @@ namespace VectorEditor.Drawers
         /// <param name="canvas">Канва</param>
         public override void DrawSelection(BaseFigure figure, Graphics canvas)
         {
-            LineDrawer.DrawLineSelection(figure, canvas);
+            var points = figure.Points.GetPoints();
+            foreach (var pt in points)
+            {
+                var rect = new Rectangle(
+                    (int)pt.X - ObjectRadius, (int)pt.Y - ObjectRadius,
+                    2 * ObjectRadius + 1, 2 * ObjectRadius + 1);
+                canvas.FillEllipse(Brushes.White, rect);
+                canvas.DrawEllipse(Pens.Black, rect);
+            }
         }
     }
 }

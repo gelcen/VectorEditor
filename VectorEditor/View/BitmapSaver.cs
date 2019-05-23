@@ -1,9 +1,9 @@
-﻿using System;
+﻿using SDK;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using VectorEditor.Drawers;
-using VectorEditor.Figures;
 
 namespace VectorEditor.FileManager
 {
@@ -12,6 +12,17 @@ namespace VectorEditor.FileManager
     /// </summary>
     public class BitmapSaver
     {
+        public IDrawerFacade DrawerFacade
+        {
+            get;
+            set;
+        }
+
+        public BitmapSaver(IDrawerFacade drawerFacade)
+        {
+            DrawerFacade = drawerFacade;
+        }
+
         public void SaveImage(Size size, Dictionary<int, BaseFigure> figures)
         {
             var pictureBox = new PictureBox { Size = size };
@@ -20,7 +31,7 @@ namespace VectorEditor.FileManager
 
             foreach (var figure in figures)
             {
-                FigureDrawer.DrawFigure(figure.Value, bitmapGraphics);
+                DrawerFacade.DrawFigure(figure.Value, bitmapGraphics);
             }
 
             pictureBox.BackColor = Color.White;

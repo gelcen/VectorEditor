@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SDK;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
@@ -110,7 +111,7 @@ namespace VectorEditor.Presenter
                 foreach (var figure in _cursorHandler.SelectedFigures)
                 {
                     var key = figure.Key;
-                    _oldFiguresState?.Add(key, FigureFactory.CreateCopy(figure.Value));
+                    _oldFiguresState?.Add(key, (BaseFigure)figure.Value.Clone());
                 }
 
                 _handler.MouseMove -= MouseMove;
@@ -143,8 +144,8 @@ namespace VectorEditor.Presenter
                 _oldMarkerState?.Clear();
 
                 _oldMarkerState.Add(_pickedFigureId,
-                    FigureFactory.CreateCopy(
-                        _presenter.GetFigures()[_pickedFigureId]));
+                    (BaseFigure)
+                    _presenter.GetFigures()[_pickedFigureId].Clone());
 
                 _offsetX = _pickedPoint.X - e.X;
                 _offsetY = _pickedPoint.Y - e.Y;
@@ -272,7 +273,7 @@ namespace VectorEditor.Presenter
                 foreach (var figure in _cursorHandler.SelectedFigures)
                 {                                        
                     newState.Add(figure.Key, 
-                        FigureFactory.CreateCopy(figure.Value));
+                        (BaseFigure)figure.Value.Clone());
                 }
 
                 _cursorHandler.FiguresMoved?.Invoke(_oldFiguresState,
@@ -304,8 +305,8 @@ namespace VectorEditor.Presenter
             if (WasItMove(_beginPoint, e.Location))
             {
                 newMarkerState.Add(_pickedFigureId,
-                    FigureFactory.CreateCopy(
-                        _cursorHandler.SelectedFigures[_pickedFigureId]));
+                        (BaseFigure)
+                        _cursorHandler.SelectedFigures[_pickedFigureId].Clone());
 
                 _cursorHandler.MarkerMoved?.Invoke(
                     _oldMarkerState, newMarkerState);

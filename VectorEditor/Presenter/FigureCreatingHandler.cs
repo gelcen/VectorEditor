@@ -1,9 +1,9 @@
-﻿using System;
+﻿using SDK;
+using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 using VectorEditor.Drawers;
-using VectorEditor.Figures;
 using VectorEditor.FileManager;
 
 namespace VectorEditor.Presenter
@@ -35,7 +35,19 @@ namespace VectorEditor.Presenter
         /// <summary>
         /// Текущий инструмент(фигура)
         /// </summary>
-        public ToolType CurrentTool { get; set; }
+        public string CurrentFigure { get; set; }
+
+        public IDrawerFacade DrawerFacade
+        {
+            get;
+            set;
+        }
+
+        public IFactory<BaseFigure> FigureFactory
+        {
+            get;
+            set;
+        }
 
         /// <summary>
         /// Конструктор класса 
@@ -43,15 +55,19 @@ namespace VectorEditor.Presenter
         /// <param name="canvasRefresh">Ссылка на делегат обновления канвы</param>
         /// <param name="figureParameters">Параметры фигуры</param>
         /// <param name="handler">Ссылка на обработчик</param>
-        public FigureCreatingHandler(Action canvasRefresh, FigureParameters figureParameters, 
-                      IHandler handler)
+        public FigureCreatingHandler(Action canvasRefresh, 
+                                     FigureParameters figureParameters, 
+                                     IHandler handler,
+                                     IFactory<BaseFigure> figureFactory,
+                                     IDrawerFacade drawerFacade)
         {
+            FigureFactory = figureFactory;
+            DrawerFacade = drawerFacade;
             _handler = handler;
             _handler.CanvasRefresh = canvasRefresh;
             FigureParameters = figureParameters;            
 
             _createdFigure = null;
-            CurrentTool = ToolType.Cursor;
 
             _handler.MouseDown += MouseDownHandler;
             _handler.MouseUp += MouseUpHandler;
@@ -68,10 +84,11 @@ namespace VectorEditor.Presenter
         {
             if (_createdFigure == null)
             {
-                _createdFigure = FigureFactory.CreateFigure(CurrentTool);
+                _createdFigure = FigureFactory.CreateInstance(CurrentFigure);
                 if (_createdFigure is FillableFigure fillable)
                 {
                     fillable.FillProperty.FillColor = FigureParameters.FillColor;
+                    fillable.FillProperty.IsFilled = FigureParameters.IsFilled;
                     SetLineProperties(fillable);
                 }
                 else
@@ -176,8 +193,8 @@ namespace VectorEditor.Presenter
         public void DrawHandler(Graphics g)
         {
             if (_createdFigure != null)
-            {
-                FigureDrawer.DrawFigure(_createdFigure, g);
+            {                
+                DrawerFacade.DrawFigure(_createdFigure, g);
             }
         }
 

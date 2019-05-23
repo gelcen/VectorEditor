@@ -29,14 +29,13 @@
         private void InitializeComponent()
         {
             this.gpFigures = new System.Windows.Forms.GroupBox();
+            this.label5 = new System.Windows.Forms.Label();
             this.buttonClearCanvas = new System.Windows.Forms.Button();
-            this.buttonEllipse = new System.Windows.Forms.Button();
-            this.buttonCircle = new System.Windows.Forms.Button();
-            this.buttonPolygone = new System.Windows.Forms.Button();
-            this.buttonLine = new System.Windows.Forms.Button();
-            this.buttonPolyLine = new System.Windows.Forms.Button();
+            this.cbFigures = new System.Windows.Forms.ComboBox();
             this.buttonCursor = new System.Windows.Forms.Button();
             this.gpProps = new System.Windows.Forms.GroupBox();
+            this.checkBoxIsFilled = new System.Windows.Forms.CheckBox();
+            this.label6 = new System.Windows.Forms.Label();
             this.cbLineType = new System.Windows.Forms.ComboBox();
             this.buttonFillColor = new System.Windows.Forms.Button();
             this.buttonLineColor = new System.Windows.Forms.Button();
@@ -74,86 +73,47 @@
             // gpFigures
             // 
             this.gpFigures.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.gpFigures.Controls.Add(this.label5);
             this.gpFigures.Controls.Add(this.buttonClearCanvas);
-            this.gpFigures.Controls.Add(this.buttonEllipse);
-            this.gpFigures.Controls.Add(this.buttonCircle);
-            this.gpFigures.Controls.Add(this.buttonPolygone);
-            this.gpFigures.Controls.Add(this.buttonLine);
-            this.gpFigures.Controls.Add(this.buttonPolyLine);
+            this.gpFigures.Controls.Add(this.cbFigures);
             this.gpFigures.Controls.Add(this.buttonCursor);
             this.gpFigures.Location = new System.Drawing.Point(619, 29);
             this.gpFigures.Margin = new System.Windows.Forms.Padding(2);
             this.gpFigures.Name = "gpFigures";
             this.gpFigures.Padding = new System.Windows.Forms.Padding(2);
-            this.gpFigures.Size = new System.Drawing.Size(227, 154);
+            this.gpFigures.Size = new System.Drawing.Size(227, 103);
             this.gpFigures.TabIndex = 1;
             this.gpFigures.TabStop = false;
             this.gpFigures.Text = "Инструменты";
             // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label5.Location = new System.Drawing.Point(5, 60);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(89, 16);
+            this.label5.TabIndex = 10;
+            this.label5.Text = "Тип фигуры:";
+            // 
             // buttonClearCanvas
             // 
-            this.buttonClearCanvas.Location = new System.Drawing.Point(5, 121);
+            this.buttonClearCanvas.Location = new System.Drawing.Point(116, 16);
             this.buttonClearCanvas.Name = "buttonClearCanvas";
-            this.buttonClearCanvas.Size = new System.Drawing.Size(107, 31);
+            this.buttonClearCanvas.Size = new System.Drawing.Size(106, 31);
             this.buttonClearCanvas.TabIndex = 6;
             this.buttonClearCanvas.Text = "Очистить канву";
             this.buttonClearCanvas.UseVisualStyleBackColor = true;
             this.buttonClearCanvas.Click += new System.EventHandler(this.ButtonClearCanvas_Click);
             // 
-            // buttonEllipse
+            // cbFigures
             // 
-            this.buttonEllipse.Location = new System.Drawing.Point(117, 51);
-            this.buttonEllipse.Margin = new System.Windows.Forms.Padding(2);
-            this.buttonEllipse.Name = "buttonEllipse";
-            this.buttonEllipse.Size = new System.Drawing.Size(107, 31);
-            this.buttonEllipse.TabIndex = 5;
-            this.buttonEllipse.Text = "Эллипс";
-            this.buttonEllipse.UseVisualStyleBackColor = true;
-            this.buttonEllipse.Click += new System.EventHandler(this.ToolButton_Click);
-            // 
-            // buttonCircle
-            // 
-            this.buttonCircle.Location = new System.Drawing.Point(4, 85);
-            this.buttonCircle.Margin = new System.Windows.Forms.Padding(2);
-            this.buttonCircle.Name = "buttonCircle";
-            this.buttonCircle.Size = new System.Drawing.Size(107, 31);
-            this.buttonCircle.TabIndex = 4;
-            this.buttonCircle.Text = "Окружность";
-            this.buttonCircle.UseVisualStyleBackColor = true;
-            this.buttonCircle.Click += new System.EventHandler(this.ToolButton_Click);
-            // 
-            // buttonPolygone
-            // 
-            this.buttonPolygone.Location = new System.Drawing.Point(115, 85);
-            this.buttonPolygone.Margin = new System.Windows.Forms.Padding(2);
-            this.buttonPolygone.Name = "buttonPolygone";
-            this.buttonPolygone.Size = new System.Drawing.Size(107, 31);
-            this.buttonPolygone.TabIndex = 3;
-            this.buttonPolygone.Text = "Многоугольник";
-            this.buttonPolygone.UseVisualStyleBackColor = true;
-            this.buttonPolygone.Click += new System.EventHandler(this.ToolButton_Click);
-            // 
-            // buttonLine
-            // 
-            this.buttonLine.Location = new System.Drawing.Point(117, 16);
-            this.buttonLine.Margin = new System.Windows.Forms.Padding(2);
-            this.buttonLine.Name = "buttonLine";
-            this.buttonLine.Size = new System.Drawing.Size(107, 31);
-            this.buttonLine.TabIndex = 2;
-            this.buttonLine.Text = "Линия";
-            this.buttonLine.UseVisualStyleBackColor = true;
-            this.buttonLine.Click += new System.EventHandler(this.ToolButton_Click);
-            // 
-            // buttonPolyLine
-            // 
-            this.buttonPolyLine.Location = new System.Drawing.Point(4, 51);
-            this.buttonPolyLine.Margin = new System.Windows.Forms.Padding(2);
-            this.buttonPolyLine.Name = "buttonPolyLine";
-            this.buttonPolyLine.Size = new System.Drawing.Size(107, 31);
-            this.buttonPolyLine.TabIndex = 1;
-            this.buttonPolyLine.Text = "Полилиния";
-            this.buttonPolyLine.UseVisualStyleBackColor = true;
-            this.buttonPolyLine.Click += new System.EventHandler(this.ToolButton_Click);
+            this.cbFigures.FormattingEnabled = true;
+            this.cbFigures.Location = new System.Drawing.Point(115, 60);
+            this.cbFigures.Name = "cbFigures";
+            this.cbFigures.Size = new System.Drawing.Size(107, 21);
+            this.cbFigures.TabIndex = 9;
+            this.cbFigures.SelectedIndexChanged += new System.EventHandler(this.cbFigures_SelectedIndexChanged);
             // 
             // buttonCursor
             // 
@@ -164,11 +124,13 @@
             this.buttonCursor.TabIndex = 0;
             this.buttonCursor.Text = "Указатель";
             this.buttonCursor.UseVisualStyleBackColor = true;
-            this.buttonCursor.Click += new System.EventHandler(this.ToolButton_Click);
+            this.buttonCursor.Click += new System.EventHandler(this.CursorButtonClicked);
             // 
             // gpProps
             // 
             this.gpProps.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.gpProps.Controls.Add(this.checkBoxIsFilled);
+            this.gpProps.Controls.Add(this.label6);
             this.gpProps.Controls.Add(this.cbLineType);
             this.gpProps.Controls.Add(this.buttonFillColor);
             this.gpProps.Controls.Add(this.buttonLineColor);
@@ -177,14 +139,33 @@
             this.gpProps.Controls.Add(this.label3);
             this.gpProps.Controls.Add(this.label2);
             this.gpProps.Controls.Add(this.label1);
-            this.gpProps.Location = new System.Drawing.Point(619, 187);
+            this.gpProps.Location = new System.Drawing.Point(619, 136);
             this.gpProps.Margin = new System.Windows.Forms.Padding(2);
             this.gpProps.Name = "gpProps";
             this.gpProps.Padding = new System.Windows.Forms.Padding(2);
-            this.gpProps.Size = new System.Drawing.Size(227, 155);
+            this.gpProps.Size = new System.Drawing.Size(227, 172);
             this.gpProps.TabIndex = 2;
             this.gpProps.TabStop = false;
             this.gpProps.Text = "Свойства ";
+            // 
+            // checkBoxIsFilled
+            // 
+            this.checkBoxIsFilled.AutoSize = true;
+            this.checkBoxIsFilled.Location = new System.Drawing.Point(66, 139);
+            this.checkBoxIsFilled.Name = "checkBoxIsFilled";
+            this.checkBoxIsFilled.Size = new System.Drawing.Size(15, 14);
+            this.checkBoxIsFilled.TabIndex = 9;
+            this.checkBoxIsFilled.UseVisualStyleBackColor = true;
+            this.checkBoxIsFilled.CheckedChanged += new System.EventHandler(this.checkBoxIsFilled_CheckedChanged);
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(13, 139);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(53, 13);
+            this.label6.TabIndex = 8;
+            this.label6.Text = "Заливка:";
             // 
             // cbLineType
             // 
@@ -195,7 +176,7 @@
             "Dot",
             "DashDot",
             "DashDotDot"});
-            this.cbLineType.Location = new System.Drawing.Point(95, 111);
+            this.cbLineType.Location = new System.Drawing.Point(94, 46);
             this.cbLineType.Margin = new System.Windows.Forms.Padding(2);
             this.cbLineType.Name = "cbLineType";
             this.cbLineType.Size = new System.Drawing.Size(79, 21);
@@ -205,7 +186,7 @@
             // buttonFillColor
             // 
             this.buttonFillColor.BackColor = System.Drawing.SystemColors.Window;
-            this.buttonFillColor.Location = new System.Drawing.Point(95, 79);
+            this.buttonFillColor.Location = new System.Drawing.Point(94, 102);
             this.buttonFillColor.Margin = new System.Windows.Forms.Padding(2);
             this.buttonFillColor.Name = "buttonFillColor";
             this.buttonFillColor.Size = new System.Drawing.Size(78, 23);
@@ -216,7 +197,7 @@
             // buttonLineColor
             // 
             this.buttonLineColor.BackColor = System.Drawing.Color.Black;
-            this.buttonLineColor.Location = new System.Drawing.Point(95, 48);
+            this.buttonLineColor.Location = new System.Drawing.Point(94, 75);
             this.buttonLineColor.Margin = new System.Windows.Forms.Padding(2);
             this.buttonLineColor.Name = "buttonLineColor";
             this.buttonLineColor.Size = new System.Drawing.Size(78, 23);
@@ -251,7 +232,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(13, 111);
+            this.label4.Location = new System.Drawing.Point(13, 49);
             this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(62, 13);
@@ -261,7 +242,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(13, 84);
+            this.label3.Location = new System.Drawing.Point(10, 107);
             this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(80, 13);
@@ -271,7 +252,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(13, 53);
+            this.label2.Location = new System.Drawing.Point(13, 80);
             this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(68, 13);
@@ -342,28 +323,28 @@
             // newFileToolStripMenuItem
             // 
             this.newFileToolStripMenuItem.Name = "newFileToolStripMenuItem";
-            this.newFileToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
+            this.newFileToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
             this.newFileToolStripMenuItem.Text = "Создать";
             this.newFileToolStripMenuItem.Click += new System.EventHandler(this.NewFileToolStripMenuItem_Click);
             // 
             // openFileToolStripMenuItem
             // 
             this.openFileToolStripMenuItem.Name = "openFileToolStripMenuItem";
-            this.openFileToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
+            this.openFileToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
             this.openFileToolStripMenuItem.Text = "Открыть...";
             this.openFileToolStripMenuItem.Click += new System.EventHandler(this.OpenFileToolStripMenuItem_Click);
             // 
             // saveToolStripMenuItem1
             // 
             this.saveToolStripMenuItem1.Name = "saveToolStripMenuItem1";
-            this.saveToolStripMenuItem1.Size = new System.Drawing.Size(189, 22);
+            this.saveToolStripMenuItem1.Size = new System.Drawing.Size(162, 22);
             this.saveToolStripMenuItem1.Text = "Сохранить...";
             this.saveToolStripMenuItem1.Click += new System.EventHandler(this.SaveToolStripMenuItem1_Click);
             // 
             // exportToPngToolStripMenuItem
             // 
             this.exportToPngToolStripMenuItem.Name = "exportToPngToolStripMenuItem";
-            this.exportToPngToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.exportToPngToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
             this.exportToPngToolStripMenuItem.Text = "Сохранить как...";
             this.exportToPngToolStripMenuItem.Click += new System.EventHandler(this.ExportToPngToolStripMenuItem_Click);
             // 
@@ -460,6 +441,7 @@
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainForm_KeyDown);
             this.gpFigures.ResumeLayout(false);
+            this.gpFigures.PerformLayout();
             this.gpProps.ResumeLayout(false);
             this.gpProps.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudLineThickness)).EndInit();
@@ -473,11 +455,6 @@
 
         #endregion
         private System.Windows.Forms.GroupBox gpFigures;
-        private System.Windows.Forms.Button buttonEllipse;
-        private System.Windows.Forms.Button buttonCircle;
-        private System.Windows.Forms.Button buttonPolygone;
-        private System.Windows.Forms.Button buttonLine;
-        private System.Windows.Forms.Button buttonPolyLine;
         private System.Windows.Forms.Button buttonCursor;
         private System.Windows.Forms.GroupBox gpProps;
         private System.Windows.Forms.NumericUpDown nudLineThickness;
@@ -508,6 +485,10 @@
         private System.Windows.Forms.SaveFileDialog saveFileDialog;
         private System.Windows.Forms.OpenFileDialog openFileDialog;
         private System.Windows.Forms.PictureBox pbCanvas;
+        private System.Windows.Forms.ComboBox cbFigures;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.CheckBox checkBoxIsFilled;
+        private System.Windows.Forms.Label label6;
     }
 }
 

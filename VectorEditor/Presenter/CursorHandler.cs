@@ -1,13 +1,8 @@
-﻿using System;
+﻿using SDK;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using VectorEditor.Drawers;
-using VectorEditor.Figures;
 
 namespace VectorEditor.Presenter
 {
@@ -40,6 +35,8 @@ namespace VectorEditor.Presenter
 
         public Dictionary<int, BaseFigure> SelectedFigures { get; set; }
 
+        public IDrawerFacade DrawerFacade { get; set; }
+
         /// <summary>
         /// Конструктор класса
         /// </summary>
@@ -47,9 +44,12 @@ namespace VectorEditor.Presenter
         /// <param name="presenter">Презентер</param>
         /// <param name="handler">Обработчик</param>
         public CursorHandler(Action canvasRefresh, 
-                                Presenter presenter,
-                                IHandler handler)
+                             Presenter presenter,
+                             IHandler handler,
+                             IDrawerFacade drawerFacade)
         {
+            DrawerFacade = drawerFacade;
+
             _state = HandlingState.Selecting;
 
             SelectedFigures = new Dictionary<int, BaseFigure>();
@@ -68,7 +68,7 @@ namespace VectorEditor.Presenter
             {
                 foreach (var figure in SelectedFigures)
                 {
-                    FigureDrawer.DrawSelection(figure.Value, g);
+                    DrawerFacade.DrawSelection(figure.Value, g);
                 }
             }
         }

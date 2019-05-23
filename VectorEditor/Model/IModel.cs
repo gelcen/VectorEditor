@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using VectorEditor.Figures;
-using VectorEditor.Observer;
+﻿using SDK;
+using System.Collections.Generic;
 using VectorEditor.FileManager;
+using VectorEditor.Observer;
 
 namespace VectorEditor.Model
 {

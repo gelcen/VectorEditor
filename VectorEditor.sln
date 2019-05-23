@@ -1,9 +1,21 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.421
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VectorEditor", "VectorEditor\VectorEditor.csproj", "{D3FDF805-F5AE-4D9D-8038-19F9F0DACA99}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SDK", "SDK\SDK.csproj", "{769AC411-0B8D-456A-93A0-C5AD789D8524}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LineFigure", "LineFigure\LineFigure.csproj", "{5BED8DCF-9789-401C-9486-BDCA63904DE3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PolylineFigure", "PolylineFigure\PolylineFigure.csproj", "{6C684D60-4D25-49A0-AD24-2F6A1AE83FE5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CircleFigure", "CircleFigure\CircleFigure.csproj", "{62537A7B-BA57-406C-B00A-CCB0739CAFF1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EllipseFigure", "EllipseFigure\EllipseFigure.csproj", "{E5E267FE-29A1-4987-A238-8A4DAF439865}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PolygonFigure", "PolygonFigure\PolygonFigure.csproj", "{14EB0295-D48D-49E5-9598-F4D5B1340B7B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,8 +27,35 @@ Global
 		{D3FDF805-F5AE-4D9D-8038-19F9F0DACA99}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D3FDF805-F5AE-4D9D-8038-19F9F0DACA99}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D3FDF805-F5AE-4D9D-8038-19F9F0DACA99}.Release|Any CPU.Build.0 = Release|Any CPU
+		{769AC411-0B8D-456A-93A0-C5AD789D8524}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{769AC411-0B8D-456A-93A0-C5AD789D8524}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{769AC411-0B8D-456A-93A0-C5AD789D8524}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{769AC411-0B8D-456A-93A0-C5AD789D8524}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5BED8DCF-9789-401C-9486-BDCA63904DE3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5BED8DCF-9789-401C-9486-BDCA63904DE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5BED8DCF-9789-401C-9486-BDCA63904DE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5BED8DCF-9789-401C-9486-BDCA63904DE3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6C684D60-4D25-49A0-AD24-2F6A1AE83FE5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6C684D60-4D25-49A0-AD24-2F6A1AE83FE5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6C684D60-4D25-49A0-AD24-2F6A1AE83FE5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6C684D60-4D25-49A0-AD24-2F6A1AE83FE5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{62537A7B-BA57-406C-B00A-CCB0739CAFF1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{62537A7B-BA57-406C-B00A-CCB0739CAFF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{62537A7B-BA57-406C-B00A-CCB0739CAFF1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{62537A7B-BA57-406C-B00A-CCB0739CAFF1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E5E267FE-29A1-4987-A238-8A4DAF439865}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E5E267FE-29A1-4987-A238-8A4DAF439865}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E5E267FE-29A1-4987-A238-8A4DAF439865}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E5E267FE-29A1-4987-A238-8A4DAF439865}.Release|Any CPU.Build.0 = Release|Any CPU
+		{14EB0295-D48D-49E5-9598-F4D5B1340B7B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14EB0295-D48D-49E5-9598-F4D5B1340B7B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14EB0295-D48D-49E5-9598-F4D5B1340B7B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14EB0295-D48D-49E5-9598-F4D5B1340B7B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6E64CEDF-055A-45FD-ACE4-A71C4EEF1A5B}
 	EndGlobalSection
 EndGlobal

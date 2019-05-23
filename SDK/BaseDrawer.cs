@@ -1,7 +1,6 @@
 ﻿using System.Drawing;
-using VectorEditor.Figures;
 
-namespace VectorEditor.Drawers
+namespace SDK
 {
     /// <summary>
     /// Базовый класс для рисовальщиков
