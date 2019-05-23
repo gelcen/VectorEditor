@@ -6,7 +6,7 @@ using System.Windows.Forms;
 using VectorEditor.Drawers;
 using VectorEditor.FileManager;
 
-namespace VectorEditor.Presenter
+namespace VectorEditor.Presenter.Handlers.FigureInteractionsHandler
 {
     /// <summary>
     /// Класс-обработчик создания фигур

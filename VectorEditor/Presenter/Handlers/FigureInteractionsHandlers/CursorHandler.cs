@@ -3,8 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using VectorEditor.Drawers;
+using VectorEditor.Model;
 
-namespace VectorEditor.Presenter
+namespace VectorEditor.Presenter.Handlers.FigureInteractionsHandler
 {
     public enum HandlingState
     {
@@ -27,7 +28,7 @@ namespace VectorEditor.Presenter
         /// <summary>
         /// 
         /// </summary>
-        private Presenter _presenter;
+        private IModel _model;
 
         private CursorSelectingHandler _selectionHandler;
 
@@ -41,10 +42,10 @@ namespace VectorEditor.Presenter
         /// Конструктор класса
         /// </summary>
         /// <param name="canvasRefresh">Делегат для обновления канвы</param>
-        /// <param name="presenter">Презентер</param>
+        /// <param name="model">Презентер</param>
         /// <param name="handler">Обработчик</param>
         public CursorHandler(Action canvasRefresh, 
-                             Presenter presenter,
+                             IModel model,
                              IHandler handler,
                              IDrawerFacade drawerFacade)
         {
@@ -54,7 +55,7 @@ namespace VectorEditor.Presenter
 
             SelectedFigures = new Dictionary<int, BaseFigure>();
 
-            _presenter = presenter;
+            _model = model;
 
             _handler = handler;
             _handler.CanvasRefresh = canvasRefresh;
@@ -83,13 +84,13 @@ namespace VectorEditor.Presenter
             switch (state)
             {
                 case HandlingState.Selecting:
-                    _selectionHandler = new CursorSelectingHandler(_presenter,
+                    _selectionHandler = new CursorSelectingHandler(_model,
                                                             _handler,
                                                             this, 
                                                             new Selector());
                     break;
                 case HandlingState.Editing:
-                    _editingHandler = new CursorEditingHandler(_presenter,
+                    _editingHandler = new CursorEditingHandler(_model,
                                                             _handler,
                                                             this,
                                                             new Selector());

@@ -3,13 +3,13 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
-using VectorEditor.Figures;
+using VectorEditor.Model;
 
-namespace VectorEditor.Presenter
+namespace VectorEditor.Presenter.Handlers.FigureInteractionsHandler
 {
     public class CursorEditingHandler
     {
-        private Presenter _presenter;
+        private IModel _model;
         private IHandler _handler;
         private CursorHandler _cursorHandler;
         private IFigureSelector _selector;
@@ -73,7 +73,7 @@ namespace VectorEditor.Presenter
 
         private bool _isMouseDown;
 
-        public CursorEditingHandler(Presenter presenter,
+        public CursorEditingHandler(IModel model,
                                 IHandler handler,
                                 CursorHandler cursorHandler,
                                 IFigureSelector selector)
@@ -82,7 +82,7 @@ namespace VectorEditor.Presenter
             _oldFiguresState = new Dictionary<int, BaseFigure>();
             _oldMarkerState = new Dictionary<int, BaseFigure>();
 
-            _presenter = presenter;
+            _model = model;
             _handler = handler;
             _cursorHandler = cursorHandler;
 
@@ -145,7 +145,7 @@ namespace VectorEditor.Presenter
 
                 _oldMarkerState.Add(_pickedFigureId,
                     (BaseFigure)
-                    _presenter.GetFigures()[_pickedFigureId].Clone());
+                    _model.GetFigureList()[_pickedFigureId].Clone());
 
                 _offsetX = _pickedPoint.X - e.X;
                 _offsetY = _pickedPoint.Y - e.Y;
