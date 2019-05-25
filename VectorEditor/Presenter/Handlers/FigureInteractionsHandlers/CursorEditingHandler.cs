@@ -3,15 +3,32 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
-using VectorEditor.Figures;
+using VectorEditor.Model;
 
-namespace VectorEditor.Presenter
+namespace VectorEditor.Presenter.Handlers.FigureInteractionsHandler
 {
     public class CursorEditingHandler
     {
-        private Presenter _presenter;
+        /// <summary>
+        ///  Ссылка на модель
+        /// </summary>
+        private IModel _model;
+
+        /// <summary>
+        /// Ссылка на обработчик 
+        /// действий
+        /// </summary>
         private IHandler _handler;
+
+        /// <summary>
+        /// Ссылка на обработчик 
+        /// курсора
+        /// </summary>
         private CursorHandler _cursorHandler;
+
+        /// <summary>
+        /// Ссылка на селектор фигур
+        /// </summary>
         private IFigureSelector _selector;
 
         /// <summary>
@@ -45,12 +62,24 @@ namespace VectorEditor.Presenter
         /// </summary>
         private int _pickedMarkerId;
 
+        /// <summary>
+        /// Расстояние перемещения по X
+        /// </summary>
         private float _offsetX;
 
+        /// <summary>
+        /// Расстояние перемещения по Y
+        /// </summary>
         private float _offsetY;
 
+        /// <summary>
+        /// Выбранная точка
+        /// </summary>
         private PointF _pickedPoint;
 
+        /// <summary>
+        /// Выбранная фигура
+        /// </summary>
         private BaseFigure _selectedFigure;
 
         /// <summary>
@@ -71,9 +100,20 @@ namespace VectorEditor.Presenter
         /// </summary>
         private const double _dragTreshold = 5;
 
+        /// <summary>
+        /// Мышка нажата?
+        /// </summary>
         private bool _isMouseDown;
 
-        public CursorEditingHandler(Presenter presenter,
+        /// <summary>
+        /// Конструктор класса обработки
+        /// редактирования фигур
+        /// </summary>
+        /// <param name="model">Модель</param>
+        /// <param name="handler">Обработчик</param>
+        /// <param name="cursorHandler">Обработчик курсора</param>
+        /// <param name="selector">Селектор</param>
+        public CursorEditingHandler(IModel model,
                                 IHandler handler,
                                 CursorHandler cursorHandler,
                                 IFigureSelector selector)
@@ -82,16 +122,20 @@ namespace VectorEditor.Presenter
             _oldFiguresState = new Dictionary<int, BaseFigure>();
             _oldMarkerState = new Dictionary<int, BaseFigure>();
 
-            _presenter = presenter;
+            _model = model;
             _handler = handler;
             _cursorHandler = cursorHandler;
 
-            _handler.Draw += DrawHandler;
             _handler.MouseDown += MouseDown;
             _handler.MouseUp += MouseUp;
             _handler.MouseMove += MouseMove;
         }
 
+        /// <summary>
+        /// Обработка нажатия курсора
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MouseDown(object sender, MouseEventArgs e)
         {            
             _beginPoint = new Point(e.X, e.Y);
@@ -145,7 +189,7 @@ namespace VectorEditor.Presenter
 
                 _oldMarkerState.Add(_pickedFigureId,
                     (BaseFigure)
-                    _presenter.GetFigures()[_pickedFigureId].Clone());
+                    _model.GetFigureList()[_pickedFigureId].Clone());
 
                 _offsetX = _pickedPoint.X - e.X;
                 _offsetY = _pickedPoint.Y - e.Y;
@@ -156,6 +200,11 @@ namespace VectorEditor.Presenter
             }
         }
 
+        /// <summary>
+        /// Обработка отжатия мышки
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MouseUp(object sender, MouseEventArgs e)
         {
             if (_isMouseDown)
@@ -179,7 +228,6 @@ namespace VectorEditor.Presenter
         /// </summary>
         private void Unsubscribe()
         {
-            _handler.Draw -= DrawHandler;
             _handler.MouseDown -= MouseDown;
             _handler.MouseUp -= MouseUp;
             _handler.MouseMove -= MouseMove;
@@ -190,6 +238,11 @@ namespace VectorEditor.Presenter
             _handler.CanvasRefresh?.Invoke();
         }
 
+        /// <summary>
+        /// Обработка движения курсора
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MouseMove(object sender, MouseEventArgs e)
         {
             Cursor newCursor;
@@ -220,6 +273,11 @@ namespace VectorEditor.Presenter
             }
         }                
 
+        /// <summary>
+        /// Обработка перемещения фигуры
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MouseMoveFigure(object sender, MouseEventArgs e)
         {
             if (!WasItMove(_beginPoint, e.Location)) return;
@@ -260,6 +318,12 @@ namespace VectorEditor.Presenter
             _handler.CanvasRefresh?.Invoke();
         }
 
+        /// <summary>
+        /// Обработка отжатия мышки 
+        /// после перемещения фигуры
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MouseUpFigure(object sender, MouseEventArgs e)
         {
             _handler.MouseMove += MouseMove;
@@ -283,6 +347,11 @@ namespace VectorEditor.Presenter
             _handler.CanvasRefresh?.Invoke();
         }
 
+        /// <summary>
+        /// Обработка перемещения маркера
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MouseMoveMarker(object sender, MouseEventArgs e)
         {
             if (!WasItMove(_beginPoint, e.Location)) return;
@@ -294,6 +363,12 @@ namespace VectorEditor.Presenter
             _handler.CanvasRefresh?.Invoke();
         }
 
+        /// <summary>
+        /// Обработка отжатия мышки 
+        /// после перемещения маркера
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MouseUpMarker(object sender, MouseEventArgs e)
         {
             _handler.MouseMove += MouseMove;
@@ -313,11 +388,6 @@ namespace VectorEditor.Presenter
             }
 
             _handler.CanvasRefresh?.Invoke();
-        }
-
-        private void DrawHandler(Graphics obj)
-        {
-            
         }
 
         /// <summary>

@@ -4,8 +4,9 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
+using VectorEditor.Model;
 
-namespace VectorEditor.Presenter
+namespace VectorEditor.Presenter.Handlers.FigureInteractionsHandler
 {
     /// <summary>
     /// Класс-обработчик для 
@@ -19,9 +20,9 @@ namespace VectorEditor.Presenter
         private IHandler _handler;
 
         /// <summary>
-        /// Ссылка на Презентер
+        /// Ссылка на модель
         /// </summary>
-        private Presenter _presenter;
+        private IModel _model;
 
         /// <summary>
         /// Селектор
@@ -79,16 +80,16 @@ namespace VectorEditor.Presenter
         /// <summary>
         /// Конструктор класса
         /// </summary>
-        /// <param name="presenter">Презентер</param>
+        /// <param name="model">Презентер</param>
         /// <param name="handler">Обработчик</param>
         /// <param name="cursorHandler">Обработчик курсора</param>
-        public CursorSelectingHandler(Presenter presenter,
+        public CursorSelectingHandler(IModel model,
                                 IHandler handler,
                                 CursorHandler cursorHandler,
                                 IFigureSelector selector)
         {
             _selector = selector;
-            _presenter = presenter;
+            _model = model;
             _handler = handler;
             _cursorHandler = cursorHandler;
 
@@ -101,7 +102,7 @@ namespace VectorEditor.Presenter
         }
 
         /// <summary>
-        /// Рисовка 
+        /// Рисовка прямоугольника выборки
         /// </summary>
         /// <param name="g"></param>
         private void DrawHandler(Graphics g)
@@ -200,9 +201,9 @@ namespace VectorEditor.Presenter
         /// <param name="point">Точка выбора</param>
         private void SingleSelect(Point point)
         {
-            if (_presenter.GetFigures() == null) return;
+            if (_model.GetFigureList() == null) return;
 
-            var figures = _presenter.GetFigures();
+            var figures = _model.GetFigureList();
 
             int key = _selector.GetFigurePointOn(point, figures);
 
@@ -217,13 +218,13 @@ namespace VectorEditor.Presenter
         /// </summary>
         private void GroupSelect()
         {
-            if (_presenter.GetFigures() == null)
+            if (_model.GetFigureList() == null)
             {
                 _selectionRectangle = new Rectangle();
                 return;
             }
 
-            _selectedFigures = _selector.GetFiguresInRect(_presenter.GetFigures(),
+            _selectedFigures = _selector.GetFiguresInRect(_model.GetFigureList(),
                                                     _selectionRectangle);
 
             _selectionRectangle = new Rectangle();
