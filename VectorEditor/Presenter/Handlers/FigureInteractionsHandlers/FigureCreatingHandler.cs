@@ -35,34 +35,36 @@ namespace VectorEditor.Presenter.Handlers.FigureInteractionsHandler
         /// <summary>
         /// Текущий инструмент(фигура)
         /// </summary>
-        public string CurrentFigure { get; set; }
-
-        public IDrawerFacade DrawerFacade
-        {
-            get;
-            set;
-        }
-
-        public IFactory<BaseFigure> FigureFactory
-        {
-            get;
-            set;
-        }
+        public string CurrentFigureName { get; set; }
 
         /// <summary>
-        /// Конструктор класса 
+        /// Ссылка на фасад рисовальщика фигур
         /// </summary>
-        /// <param name="canvasRefresh">Ссылка на делегат обновления канвы</param>
+        private IDrawerFacade _drawerFacade;        
+
+        /// <summary>
+        /// Ссылка на фабрику фигур
+        /// </summary>
+        private IFactory<BaseFigure> _figureFactory;
+
+
+        /// <summary>
+        /// Конструктор класса-обработчика 
+        /// создания фигур
+        /// </summary>
+        /// <param name="canvasRefresh">Делегат для обновления канвы</param>
         /// <param name="figureParameters">Параметры фигуры</param>
-        /// <param name="handler">Ссылка на обработчик</param>
+        /// <param name="handler">Обработчик действий</param>
+        /// <param name="figureFactory">Фабрика фигур</param>
+        /// <param name="drawerFacade">Фасад рисовальщика</param>
         public FigureCreatingHandler(Action canvasRefresh, 
                                      FigureParameters figureParameters, 
                                      IHandler handler,
                                      IFactory<BaseFigure> figureFactory,
                                      IDrawerFacade drawerFacade)
         {
-            FigureFactory = figureFactory;
-            DrawerFacade = drawerFacade;
+            _figureFactory = figureFactory;
+            _drawerFacade = drawerFacade;
             _handler = handler;
             _handler.CanvasRefresh = canvasRefresh;
             FigureParameters = figureParameters;            
@@ -84,7 +86,7 @@ namespace VectorEditor.Presenter.Handlers.FigureInteractionsHandler
         {
             if (_createdFigure == null)
             {
-                _createdFigure = FigureFactory.CreateInstance(CurrentFigure);
+                _createdFigure = _figureFactory.CreateInstance(CurrentFigureName);
                 if (_createdFigure is FillableFigure fillable)
                 {
                     fillable.FillProperty.FillColor = FigureParameters.FillColor;
@@ -194,7 +196,7 @@ namespace VectorEditor.Presenter.Handlers.FigureInteractionsHandler
         {
             if (_createdFigure != null)
             {                
-                DrawerFacade.DrawFigure(_createdFigure, g);
+                _drawerFacade.DrawFigure(_createdFigure, g);
             }
         }
 

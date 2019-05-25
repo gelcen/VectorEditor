@@ -6,15 +6,44 @@ using VectorEditor.UndoRedo;
 
 namespace VectorEditor.Presenter.Handlers
 {
+    /// <summary>
+    /// Класс для обработки 
+    /// событий нажатий на кнопки
+    /// Undo, Redo
+    /// </summary>
     public class UndoRedoActionsHandler
     {
+        /// <summary>
+        /// Ссылка на менеджер отмены и 
+        /// возврата операций
+        /// </summary>
         private UndoRedoManager _undoRedoManager;
 
+        /// <summary>
+        /// Ссылка на представление
+        /// </summary>
         private IView _view;
 
+        /// <summary>
+        /// Ссылка на модель
+        /// </summary>
         private readonly IModel _model;
+
+        /// <summary>
+        /// Ссылка на обработчик курсора
+        /// </summary>
         private CursorHandler _cursorHandler;
 
+        /// <summary>
+        /// Конструктор класса для обработки 
+        /// событий нажатий на кнопки
+        /// Undo, Redo
+        /// </summary>
+        /// <param name="undoRedoMangaer">менеджер отмены и 
+        /// возврата операций</param>
+        /// <param name="view">Представление</param>
+        /// <param name="model">Модель</param>
+        /// <param name="cursorHandler">Обработчик курсора</param>
         public UndoRedoActionsHandler(UndoRedoManager undoRedoMangaer,
                                       IView view,
                                       IModel model,

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using VectorEditor.Drawers;
 using VectorEditor.FileManager;
+using VectorEditor.Model;
 using VectorEditor.Observer;
 using VectorEditor.Presenter.Handlers;
 using VectorEditor.Presenter.Handlers.FigureInteractionsHandlers;
@@ -24,7 +25,7 @@ namespace VectorEditor.Presenter
         /// <summary>
         /// Ссылка на модель
         /// </summary>
-        private readonly Model.IModel _model;
+        private readonly IModel _model;
 
         /// <summary>
         /// Файловый менеджер
@@ -46,10 +47,24 @@ namespace VectorEditor.Presenter
         /// </summary>
         private SaveState _saveState;
 
+        /// <summary>
+        /// Класс обработки событий, связанных
+        /// с открытием сохранением
+        /// </summary>
         private FileManagingHandler _fileManagingHandler;
 
+        /// <summary>
+        /// Класс для обработки событий 
+        /// нажатий на кнопки отмены и 
+        /// возвращения команд. 
+        /// </summary>
         private UndoRedoActionsHandler _undoRedoActionsHandler;
 
+        /// <summary>
+        /// Класс для обработки событий, связанных
+        /// с взаимодействиями с фигурами (создание,
+        /// изменения, удаления, копирования, чистки).
+        /// </summary>
         private FigureInteractionsHandler _figureInteractionsHandler;
 
 
@@ -59,8 +74,11 @@ namespace VectorEditor.Presenter
         /// <param name="view">Представление</param>
         /// <param name="model">Модель</param>
         /// <param name="fileManager">File Manager</param>
-        public Presenter(IView view, Model.IModel model, IFileManager fileManager, 
-                         IFactory<BaseFigure> figureFactory, IDrawerFacade drawerFacade)
+        public Presenter(IView view, 
+                         IModel model, 
+                         IFileManager fileManager, 
+                         IFactory<BaseFigure> figureFactory, 
+                         IDrawerFacade drawerFacade)
         {
             _undoRedoManager = new UndoRedoManager();
 

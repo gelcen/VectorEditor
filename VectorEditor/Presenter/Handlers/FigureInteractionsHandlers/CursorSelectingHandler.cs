@@ -20,7 +20,7 @@ namespace VectorEditor.Presenter.Handlers.FigureInteractionsHandler
         private IHandler _handler;
 
         /// <summary>
-        /// Ссылка на Презентер
+        /// Ссылка на модель
         /// </summary>
         private IModel _model;
 
@@ -102,7 +102,7 @@ namespace VectorEditor.Presenter.Handlers.FigureInteractionsHandler
         }
 
         /// <summary>
-        /// Рисовка 
+        /// Рисовка прямоугольника выборки
         /// </summary>
         /// <param name="g"></param>
         private void DrawHandler(Graphics g)

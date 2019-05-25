@@ -7,12 +7,20 @@ using VectorEditor.Model;
 
 namespace VectorEditor.Presenter.Handlers.FigureInteractionsHandler
 {
+    /// <summary>
+    /// Перечисление состояний
+    /// обработчика курсора
+    /// </summary>
     public enum HandlingState
     {
         Selecting,
         Editing
     }
 
+    /// <summary>
+    /// Класс для обработки 
+    /// действий с курсором
+    /// </summary>
     public class CursorHandler
     {
         /// <summary>
@@ -26,17 +34,31 @@ namespace VectorEditor.Presenter.Handlers.FigureInteractionsHandler
         private IHandler _handler;
 
         /// <summary>
-        /// 
+        /// Ссылка на модель
         /// </summary>
         private IModel _model;
 
+        /// <summary>
+        /// Ссылка на обработчик
+        /// выбора фигур
+        /// </summary>
         private CursorSelectingHandler _selectionHandler;
 
+        /// <summary>
+        /// Ссылка на обработчик
+        /// редактирования фигур
+        /// </summary>
         private CursorEditingHandler _editingHandler;
 
+        /// <summary>
+        /// Выбранные фигуры
+        /// </summary>
         public Dictionary<int, BaseFigure> SelectedFigures { get; set; }
 
-        public IDrawerFacade DrawerFacade { get; set; }
+        /// <summary>
+        /// Ссылка на фасад рисования фигур
+        /// </summary>
+        private IDrawerFacade _drawerFacade;
 
         /// <summary>
         /// Конструктор класса
@@ -49,7 +71,7 @@ namespace VectorEditor.Presenter.Handlers.FigureInteractionsHandler
                              IHandler handler,
                              IDrawerFacade drawerFacade)
         {
-            DrawerFacade = drawerFacade;
+            _drawerFacade = drawerFacade;
 
             _state = HandlingState.Selecting;
 
@@ -63,13 +85,17 @@ namespace VectorEditor.Presenter.Handlers.FigureInteractionsHandler
             SetState(_state);
         }
 
+        /// <summary>
+        /// Рисовка маркеров выбранных фигур
+        /// </summary>
+        /// <param name="g">Поверхность рисования</param>
         private void DrawHandler(Graphics g)
         {
             if (SelectedFigures.Count != 0)
             {
                 foreach (var figure in SelectedFigures)
                 {
-                    DrawerFacade.DrawSelection(figure.Value, g);
+                    _drawerFacade.DrawSelection(figure.Value, g);
                 }
             }
         }
@@ -100,19 +126,25 @@ namespace VectorEditor.Presenter.Handlers.FigureInteractionsHandler
             }
         }
 
+        /// <summary>
+        /// Событие перемещения фигур
+        /// </summary>
         public Action<Dictionary<int, BaseFigure>,
                       Dictionary<int, BaseFigure>> FiguresMoved;
 
+        /// <summary>
+        /// Событие перемещения маркера
+        /// </summary>
         public Action<Dictionary<int, BaseFigure>,
                       Dictionary<int, BaseFigure>> MarkerMoved;
 
         /// <summary>
-        /// Очистить выборку фигур
+        /// Очистить список
+        /// выбранных фигур
         /// </summary>
         public void ClearSelectedFigures()
         {
             SelectedFigures.Clear();
-            //_selectedFigure = null;
         }
     }
 }

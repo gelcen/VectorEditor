@@ -11,27 +11,67 @@ namespace VectorEditor.Presenter.Handlers.FigureInteractionsHandlers
 {
     public class FigureInteractionsHandler
     {
+        /// <summary>
+        /// Ссылка на представление
+        /// </summary>
         private readonly IView _view;
 
+        /// <summary>
+        /// Ссылка на модель
+        /// </summary>
         private readonly IModel _model;
 
+        /// <summary>
+        /// Ссылка на класс файлового менеджера
+        /// </summary>
         private readonly IFileManager _fileManager;
 
+        /// <summary>
+        /// Ссылка на фабрику фигур
+        /// </summary>
         private readonly IFactory<BaseFigure> _figureFactory;
 
+        /// <summary>
+        /// Ссылка на фасад рисования фигур
+        /// </summary>
         private readonly IDrawerFacade _drawerFacade;
 
+        /// <summary>
+        /// Ссылка на обработчик курсора
+        /// </summary>
         private CursorHandler _cursorHandler;
 
+        /// <summary>
+        /// Свойство для обработчика курсора
+        /// </summary>
         public CursorHandler CursorHandler
         {
             get => _cursorHandler;
         }
 
+        /// <summary>
+        /// Ссылка на обработчик, создающий
+        /// фигуры
+        /// </summary>
         private FigureCreatingHandler _figureCreatingHandler;
 
+        /// <summary>
+        /// Ссылка на менеджер отмены и 
+        /// возврата операций
+        /// </summary>
         private UndoRedoManager _undoRedoManager;
 
+        /// <summary>
+        /// Конструктор класса-обработчика 
+        /// событий, связанных с взаимодействиями
+        /// с фигурами
+        /// </summary>
+        /// <param name="view">Представление</param>
+        /// <param name="model">Модель</param>
+        /// <param name="fileManager">Файловый менеджер</param>
+        /// <param name="figureFactory">Фабрика фигур</param>
+        /// <param name="drawerFacade">Фасад рисовальщика</param>
+        /// <param name="undoRedoManager">Менеджер Undo Redo</param>
         public FigureInteractionsHandler(IView view,
                                          IModel model, 
                                          IFileManager fileManager,
@@ -71,10 +111,14 @@ namespace VectorEditor.Presenter.Handlers.FigureInteractionsHandlers
                 _cursorHandler.FiguresMoved += CursorHandlerFiguresMoved;
                 _cursorHandler.MarkerMoved += CursorHandlerMarkerMoved;
             }
-            else SetHandler(name);
+            else SetFigureHandler(name);
         }
 
-        private void SetHandler(string figureName)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="figureName"></param>
+        private void SetFigureHandler(string figureName)
         {
             _figureCreatingHandler = new FigureCreatingHandler(_view.CanvasRefresh,
                                                     _view.FigureParameters,
@@ -82,7 +126,7 @@ namespace VectorEditor.Presenter.Handlers.FigureInteractionsHandlers
                                                     _figureFactory,
                                                     _drawerFacade)
             {
-                CurrentFigure = figureName
+                CurrentFigureName = figureName
             };
             _figureCreatingHandler.FigureCreated += _currentHandler_FigureCreated;
         }
