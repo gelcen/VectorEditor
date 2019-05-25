@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EllipseFigure", "EllipseFig
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PolygonFigure", "PolygonFigure\PolygonFigure.csproj", "{14EB0295-D48D-49E5-9598-F4D5B1340B7B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VectorEditorUnitTests", "VectorEditorUnitTests\VectorEditorUnitTests.csproj", "{925B61B1-AC89-47E6-8B7D-0B0EF5ABF0D3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{14EB0295-D48D-49E5-9598-F4D5B1340B7B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{14EB0295-D48D-49E5-9598-F4D5B1340B7B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{14EB0295-D48D-49E5-9598-F4D5B1340B7B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{925B61B1-AC89-47E6-8B7D-0B0EF5ABF0D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{925B61B1-AC89-47E6-8B7D-0B0EF5ABF0D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{925B61B1-AC89-47E6-8B7D-0B0EF5ABF0D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{925B61B1-AC89-47E6-8B7D-0B0EF5ABF0D3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
