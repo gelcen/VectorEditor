@@ -115,6 +115,7 @@ namespace VectorEditor.Models
             if (figure is FillableFigure fillable)
             {
                 fillable.FillProperty.FillColor = newParameters.FillColor;
+                fillable.FillProperty.IsFilled = newParameters.IsFilled;
             }
             
             HasChanged();
