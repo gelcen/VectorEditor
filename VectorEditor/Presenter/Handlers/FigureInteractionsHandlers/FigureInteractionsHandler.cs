@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using VectorEditor.Drawers;
 using VectorEditor.FileManager;
-using VectorEditor.Model;
+using VectorEditor.Models;
 using VectorEditor.Presenter.Handlers.FigureInteractionsHandler;
 using VectorEditor.UndoRedo;
 

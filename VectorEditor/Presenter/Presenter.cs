@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using VectorEditor.Drawers;
 using VectorEditor.FileManager;
-using VectorEditor.Model;
+using VectorEditor.Models;
 using VectorEditor.Observer;
 using VectorEditor.Presenter.Handlers;
 using VectorEditor.Presenter.Handlers.FigureInteractionsHandlers;

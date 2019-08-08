@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using VectorEditor.FileManager;
-using VectorEditor.Model;
+using VectorEditor.Models;
 using VectorEditor.UndoRedo;
 
 namespace VectorEditor.Presenter.Handlers
@@ -12,7 +12,7 @@ namespace VectorEditor.Presenter.Handlers
     {
         private readonly IFileManager _fileManager;
 
-        private readonly Model.IModel _model;
+        private readonly IModel _model;
 
         private readonly UndoRedoManager _undoRedoManager;
 
@@ -20,7 +20,7 @@ namespace VectorEditor.Presenter.Handlers
 
 
         public FileManagingHandler(IFileManager fileManager,
-                                   Model.IModel model,
+                                   IModel model,
                                    UndoRedoManager undoRedoManager,
                                    IView view)
         {

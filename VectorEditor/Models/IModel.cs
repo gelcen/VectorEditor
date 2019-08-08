@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using VectorEditor.FileManager;
 using VectorEditor.Observer;
 
-namespace VectorEditor.Model
+namespace VectorEditor.Models
 {
     /// <inheritdoc />
     /// <summary>

@@ -6,7 +6,7 @@ using VectorEditor.Observer;
 using VectorEditor.FileManager;
 using SDK;
 
-namespace VectorEditor.Model
+namespace VectorEditor.Models
 {
     /// <inheritdoc />
     /// <summary>

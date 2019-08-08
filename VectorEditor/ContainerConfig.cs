@@ -3,7 +3,7 @@ using SDK;
 using VectorEditor.Drawers;
 using VectorEditor.Figures;
 using VectorEditor.FileManager;
-using VectorEditor.Model;
+using VectorEditor.Models;
 
 namespace VectorEditor
 {
